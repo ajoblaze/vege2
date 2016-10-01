@@ -11,8 +11,9 @@ import com.imajiku.vegefinder.fragment.PlacesFragment;
 import com.imajiku.vegefinder.fragment.RecommendFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements RecommendFragment.RecommendListener, PlacesFragment.PlacesListener
-        , ArticlesFragment.ArticlesListener {
+        implements RecommendFragment.RecommendListener,
+        PlacesFragment.PlacesListener,
+        ArticlesFragment.ArticlesListener {
 
     private String TAG = "exc";
     private boolean isLogin;

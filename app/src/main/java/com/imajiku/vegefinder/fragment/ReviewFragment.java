@@ -15,15 +15,21 @@ import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.adapter.ReviewListAdapter;
 import com.imajiku.vegefinder.pojo.Review;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class ReviewFragment extends Fragment {
     private ReviewListener mListener;
     private RecyclerView recyclerView;
     private ReviewListAdapter adapter;
     private ArrayList<Review> list;
-    private int now;
+    private String now;
     private String TAG="exc";
 
     public ReviewFragment() {
@@ -82,9 +88,9 @@ public class ReviewFragment extends Fragment {
         void onReview(Uri uri);
     }
     
-    private int getNow(){
-        Calendar c = Calendar.getInstance();
-        return c.get(Calendar.SECOND);
+    public static String getNow(){
+        LocalDateTime d2 = new LocalDateTime(new DateTime());
+        return d2.toString("yyyy-MM-dd HH:mm:ss");
     }
 
     public void populate(){

@@ -21,13 +21,13 @@ import java.util.ArrayList;
 public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.ReviewListViewHolder> {
     private ArrayList<Review> list;
     private Context context;
-    private int now;
+    private String now;
     private String TAG = "exc";
 
     /**
      * empty adapter
      */
-    public ReviewListAdapter(Context context, int now) {
+    public ReviewListAdapter(Context context, String now) {
         this.context = context;
         this.now = now;
         list = new ArrayList<>();
@@ -38,7 +38,6 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
      */
     public void setData(ArrayList<Review> list) {
         this.list = list;
-        this.now = now;
         notifyDataSetChanged();
     }
 
