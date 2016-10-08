@@ -3,8 +3,11 @@
     package="com.imajiku.vegefinder">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -19,6 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.RestaurantActivity" />
+        <activity android:name=".activity.BrowseActivity"></activity>
     </application>
 
 </manifest>

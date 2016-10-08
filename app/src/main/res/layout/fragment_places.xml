@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/translucentOrange75"
-    tools:context="com.imajiku.vegefinder.fragment.RecommendFragment"
+    tools:context="com.imajiku.vegefinder.fragment.PlacesFragment"
     android:orientation="vertical">
 
     <TextView

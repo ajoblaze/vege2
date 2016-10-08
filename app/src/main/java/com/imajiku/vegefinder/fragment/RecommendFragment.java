@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +14,7 @@ import android.view.ViewGroup;
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.adapter.ImageListAdapter;
 
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.Hours;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.Minutes;
-import org.joda.time.Seconds;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class RecommendFragment extends Fragment implements ImageListAdapter.ImageListListener {
     private RecommendListener mListener;
@@ -54,6 +41,7 @@ public class RecommendFragment extends Fragment implements ImageListAdapter.Imag
         adapter = new ImageListAdapter(getContext(), this, false);
         adapter.setData(list);
         recyclerView.setAdapter(adapter);
+
         return v;
     }
 
@@ -82,16 +70,6 @@ public class RecommendFragment extends Fragment implements ImageListAdapter.Imag
 
     @Override
     public void onImageTouch(int position) {
-//        String d0 = "2016-09-28 21:55:55";
-//        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-//        DateTime jodatime = dtf.parseDateTime(d0);
-//        LocalDateTime d2 = new LocalDateTime(new DateTime());
-//        LocalDateTime d1 = new LocalDateTime(jodatime);
-//        int seconds = Seconds.secondsBetween(d1, d2).getSeconds() % 60;
-//        int minutes = Minutes.minutesBetween(d1, d2).getMinutes() % 60;
-//        int hours = Hours.hoursBetween(d1, d2).getHours() % 24;
-//        int days = Days.daysBetween(d1, d2).getDays();
-//        Log.e(TAG, "now: "+d2.toString("yyyy-MM-dd HH:mm:ss") + " " + days + " " + hours + " " + minutes + " " + seconds);
     }
 
     public interface RecommendListener {

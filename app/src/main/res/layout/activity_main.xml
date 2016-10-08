@@ -29,7 +29,7 @@
             android:text="Find Specific Place" />
 
         <Button
-            android:id="@+id/nearby_places"
+            android:id="@+id/browse_nearby"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/find_specific"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             tools:layout="@layout/fragment_recommend"
-            android:layout_below="@id/nearby_places" />
+            android:layout_below="@id/browse_nearby" />
 
         <fragment
             android:id="@+id/places_fragment"
