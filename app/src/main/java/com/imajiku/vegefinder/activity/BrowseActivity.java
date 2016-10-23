@@ -32,9 +32,12 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.fragment.RestoListFragment;
 
-public class BrowseActivity extends AppCompatActivity implements RestoListFragment.RestoListListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener{
+public class BrowseActivity extends AppCompatActivity implements
+        RestoListFragment.RestoListListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener
+{
 
     private static final int REQUEST_CHECK_SETTINGS = 8008;
     private RestoListFragment restoListFragment;

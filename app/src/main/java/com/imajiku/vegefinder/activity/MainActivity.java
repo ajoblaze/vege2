@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity
     private PlacesFragment placesFragment;
     private ArticlesFragment articlesFragment;
     private Button browse;
+    private String loginMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         isLogin = getIntent().getBooleanExtra("isLogin", false);
+        if(isLogin){
+            loginMethod = getIntent().getStringExtra("loginMethod");
+        }
         recommendFragment = (RecommendFragment) getSupportFragmentManager().findFragmentById(R.id.recommend_fragment);
         placesFragment = (PlacesFragment) getSupportFragmentManager().findFragmentById(R.id.places_fragment);
         articlesFragment = (ArticlesFragment) getSupportFragmentManager().findFragmentById(R.id.articles_fragment);

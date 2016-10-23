@@ -2,4 +2,48 @@
     <string name="app_name">VegeFinder</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="facebook_app_id">910588845712421</string>
+
+    <!--title strings-->
+    <string name="profile_title">Your Profile</string>
+    <string name="contact_us_title">Contact Us</string>
+
+    <!--layout strings-->
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="new_password">New Password</string>
+    <string name="forgot">Forgot Password?</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="fb_login">Facebook Login</string>
+    <string name="gplus_login">Google+ Login</string>
+    <string name="skip_login">Skip Login</string>
+    <string name="confirm_pass">Confirm Password</string>
+    <string name="confirm_new_pass">Confirm New Password</string>
+    <string name="email">Email</string>
+    <string name="country">Country</string>
+    <string name="province">Province</string>
+    <string name="city">City</string>
+    <string name="sex">Gender</string>
+    <string name="pref">Preference</string>
+    <string name="save">Save</string>
+    <string name="verify_code">Confirmation Code</string>
+    <string name="verify_error">Code is incorrect. Please try again.</string>
+    <string name="confirm">Confirm</string>
+    <string name="confirm_code">Confirmation Code</string>
+    <string name="title_register">Register New Account</string>
+    <string name="title_verify">Enter Confirmation Code</string>
+    <string name="subtitle_verify">We sent you an email with a six-digit confirmation code. Enter the code below to confirm your registration.</string>
+    <string name="title_forgot">Recover Password</string>
+    <string name="subtitle_forgot">To reset your password, enter the username or email address you used to sign in.</string>
+    <string name="username_or_email">Username or Email</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="subtitle_verify_forgot">We sent you an email with a six-digit confirmation code. Enter the code along with your new password below to continue.</string>
+    <string name="change_password">Change Password</string>
+    <string name="phone">Phone Number</string>
+    <string name="name">Name</string>
+    <string name="subject">Subject</string>
+    <string name="message">Write your message…</string>
+    <string name="submit">Submit…</string>
 </resources>

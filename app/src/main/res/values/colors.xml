@@ -4,9 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="textColor">#FDFDFD</color>
-    <color name="textColorDark">#424242</color>
-    <color name="textColorGray">#757575</color>
-    <color name="textColorLessDark">#9E9E9E</color>
+    <color name="darkGrey">#424242</color>
+    <color name="lightDarkGray">#757575</color>
+    <color name="lighterDarkGray">#9E9E9E</color>
     <color name="selectedGray">#EEEEEE</color>
     <color name="selectedGrayLilDarker">#E0E0E0</color>
     <color name="selectedGrayDarker">#AEAEAE</color>
