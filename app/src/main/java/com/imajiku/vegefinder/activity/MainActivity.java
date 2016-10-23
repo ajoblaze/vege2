@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
     private RecommendFragment recommendFragment;
     private PlacesFragment placesFragment;
     private ArticlesFragment articlesFragment;
-    private Button browse;
+    private Button find, browse;
     private String loginMethod;
 
     @Override
@@ -54,7 +54,9 @@ public class MainActivity extends AppCompatActivity
             ft.commit();
         }
 
+        find = (Button) findViewById(R.id.find_specific);
         browse = (Button) findViewById(R.id.browse_nearby);
+        find.setOnClickListener(this);
         browse.setOnClickListener(this);
     }
 
@@ -76,6 +78,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.find_specific:
+                startActivity(new Intent(MainActivity.this, FindPlaceActivity.class));
+                break;
             case R.id.browse_nearby:
                 startActivity(new Intent(MainActivity.this, BrowseActivity.class));
                 break;

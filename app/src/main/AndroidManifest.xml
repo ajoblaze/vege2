@@ -38,7 +38,8 @@
         <activity android:name=".activity.VerifyForgotActivity" />
         <activity android:name=".activity.RegisterProfileActivity" />
         <activity android:name=".activity.ForgotActivity" />
-        <activity android:name=".activity.ContactUsActivity"></activity>
+        <activity android:name=".activity.ContactUsActivity" />
+        <activity android:name=".activity.FindPlaceActivity"></activity>
     </application>
 
 </manifest>

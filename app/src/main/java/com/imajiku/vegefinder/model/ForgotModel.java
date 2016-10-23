@@ -27,7 +27,7 @@ public class ForgotModel {
 //            @Override
 //            public void onResponse(Call<ForgotResponse> call, Response<ForgotResponse> response) {
 //                if (response.isSuccessful()) {
-//                    presenter.successGetCity(response.body().getCities());
+//                    presenter.successGetCity(response.body().getCityNames());
 //                    ForgotView.successForgot(response.body().getSessionId());
 //                } else {
 //                    try {

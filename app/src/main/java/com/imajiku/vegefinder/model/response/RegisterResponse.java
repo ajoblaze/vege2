@@ -1,9 +1,6 @@
 package com.imajiku.vegefinder.model.response;
 
 import com.google.gson.annotations.SerializedName;
-import com.imajiku.vegefinder.pojo.City;
-
-import java.util.ArrayList;
 
 /**
  * Created by Alvin on 2016-10-08.

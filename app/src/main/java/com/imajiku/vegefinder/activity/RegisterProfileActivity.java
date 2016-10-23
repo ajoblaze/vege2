@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,8 +18,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
+import com.imajiku.vegefinder.model.RegionModel;
 import com.imajiku.vegefinder.model.RegisterProfileModel;
+import com.imajiku.vegefinder.model.presenter.RegionPresenter;
 import com.imajiku.vegefinder.model.presenter.RegisterProfilePresenter;
+import com.imajiku.vegefinder.model.presenter.view.RegionView;
 import com.imajiku.vegefinder.model.presenter.view.RegisterProfileView;
 import com.imajiku.vegefinder.utility.CircularImageView;
 import com.imajiku.vegefinder.utility.Utility;
@@ -27,22 +31,21 @@ import java.util.ArrayList;
 
 public class RegisterProfileActivity extends AppCompatActivity implements
         View.OnClickListener,
-        RegisterProfileView {
+        RegisterProfileView, RegionView, AdapterView.OnItemSelectedListener {
 
-    public static final int PROVINCE = 10;
-    public static final int CITY = 11;
     private static final int RESULT_LOAD_IMAGE = 5;
     private static final int REQUEST_VERIFY = 98;
     private static final int RESULT_VERIFY = 99;
     private static final String TAG = "exc";
     private CircularImageView profPic, camera;
-    private Spinner country, province, city, sex, pref;
+    private Spinner countrySpinner, provinceSpinner, citySpinner, sex, pref;
     private Button save;
-    private ArrayList<String> countryArray, sexArray, prefArray;
+    private ArrayList<String> sexArray, prefArray;
     private RegisterProfilePresenter presenter;
-    private ArrayAdapter<String> provinceDataAdapter;
-    private ArrayAdapter<String> cityDataAdapter;
+    private ArrayAdapter<String> countryDataAdapter, provinceDataAdapter, cityDataAdapter;
     private String username, email, password;
+    private RegionPresenter regionPresenter;
+    private String currProvince, currCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,10 @@ public class RegisterProfileActivity extends AppCompatActivity implements
         RegisterProfileModel model = new RegisterProfileModel(presenter);
         presenter.setModel(model);
 
+        regionPresenter = new RegionPresenter(this);
+        RegionModel regionModel = new RegionModel(regionPresenter);
+        regionPresenter.setModel(regionModel);
+
         username = getIntent().getStringExtra("username");
         email = getIntent().getStringExtra("email");
         password = getIntent().getStringExtra("password");
@@ -60,18 +67,18 @@ public class RegisterProfileActivity extends AppCompatActivity implements
         camera = (CircularImageView) findViewById(R.id.iv_camera);
         camera.setOnClickListener(this);
 
-        country = (Spinner) findViewById(R.id.country_spinner);
-        province = (Spinner) findViewById(R.id.province_spinner);
-        city = (Spinner) findViewById(R.id.city_spinner);
+        countrySpinner = (Spinner) findViewById(R.id.country_spinner);
+        provinceSpinner = (Spinner) findViewById(R.id.province_spinner);
+        citySpinner = (Spinner) findViewById(R.id.city_spinner);
         sex = (Spinner) findViewById(R.id.sex_spinner);
         pref = (Spinner) findViewById(R.id.pref_spinner);
 
-        presenter.getProvince();
+        regionPresenter.getCountry();
 
         initArray();
 
-        ArrayAdapter<String> countryDataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, countryArray);
+        countryDataAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, new ArrayList<String>());
         provinceDataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, new ArrayList<String>());
         cityDataAdapter = new ArrayAdapter<>(this,
@@ -87,41 +94,30 @@ public class RegisterProfileActivity extends AppCompatActivity implements
         sexDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         prefDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        country.setAdapter(countryDataAdapter);
-        province.setAdapter(provinceDataAdapter);
-        city.setAdapter(cityDataAdapter);
+        countrySpinner.setAdapter(countryDataAdapter);
+        provinceSpinner.setAdapter(provinceDataAdapter);
+        citySpinner.setAdapter(cityDataAdapter);
         sex.setAdapter(sexDataAdapter);
         pref.setAdapter(prefDataAdapter);
 
-//        String selectedCountry = country.getSelectedItem().toString();
-//        String selectedProvince = province.getSelectedItem().toString();
-//        String selectedCity = city.getSelectedItem().toString();
+//        String selectedCountry = countrySpinner.getSelectedItem().toString();
+//        String selectedProvince = provinceSpinner.getSelectedItem().toString();
+//        String selectedCity = citySpinner.getSelectedItem().toString();
 //        String selectedSex = sex.getSelectedItem().toString();
 //        String selectedPref = pref.getSelectedItem().toString();
 
-        province.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                presenter.getCity(provinceDataAdapter.getItem(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        countrySpinner.setOnItemSelectedListener(this);
+        provinceSpinner.setOnItemSelectedListener(this);
+        citySpinner.setOnItemSelectedListener(this);
 
         save = (Button) findViewById(R.id.save_button);
         save.setOnClickListener(this);
     }
 
     private void initArray() {
-        countryArray = new ArrayList<>();
         sexArray = new ArrayList<>();
         prefArray = new ArrayList<>();
 
-        countryArray.add("Country1");
-        countryArray.add("Country2");
         sexArray.add("Male");
         sexArray.add("Female");
         prefArray.add("Vege");
@@ -167,10 +163,18 @@ public class RegisterProfileActivity extends AppCompatActivity implements
     @Override
     public void updateDropdown(int type, ArrayList<String> content) {
         ArrayAdapter<String> adapter;
-        if(type == PROVINCE){
+        if(type == RegionPresenter.COUNTRY){
+            adapter = countryDataAdapter;
+        } else if(type == RegionPresenter.PROVINCE){
             adapter = provinceDataAdapter;
-        } else if(type == CITY) {
+            if(content.size() > 0) {
+                content.add(0, "Choose Province..");
+            }
+        } else if(type == RegionPresenter.CITY) {
             adapter = cityDataAdapter;
+            if(content.size() > 0) {
+                content.add(0, "Choose City..");
+            }
         } else {
             return;
         }
@@ -181,6 +185,29 @@ public class RegisterProfileActivity extends AppCompatActivity implements
     @Override
     public void sendActivationCode(String code, String email) {
         new SendRegisterCodeTask(code, email).execute();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (parent.getId()) {
+            case R.id.country_spinner:
+                regionPresenter.getProvince(countryDataAdapter.getItem(position));
+                provinceSpinner.setSelection(0);
+                break;
+            case R.id.province_spinner:
+                currProvince = provinceDataAdapter.getItem(position);
+                regionPresenter.getCity(provinceDataAdapter.getItem(position));
+                citySpinner.setSelection(0);
+                break;
+            case R.id.city_spinner:
+                currCity = cityDataAdapter.getItem(position);
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     class SendRegisterCodeTask extends AsyncTask<Void, Void, Void> {

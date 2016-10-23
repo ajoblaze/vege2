@@ -1,11 +1,13 @@
 package com.imajiku.vegefinder.service;
 
-import com.imajiku.vegefinder.model.request.CityRequest;
 import com.imajiku.vegefinder.model.request.ContactUsRequest;
+import com.imajiku.vegefinder.model.request.FindPlaceRequest;
 import com.imajiku.vegefinder.model.request.LoginRequest;
 import com.imajiku.vegefinder.model.request.RegisterRequest;
 import com.imajiku.vegefinder.model.response.CityResponse;
 import com.imajiku.vegefinder.model.response.ContactUsResponse;
+import com.imajiku.vegefinder.model.response.CountryResponse;
+import com.imajiku.vegefinder.model.response.FindPlaceResponse;
 import com.imajiku.vegefinder.model.response.LoginResponse;
 import com.imajiku.vegefinder.model.response.ProvinceResponse;
 import com.imajiku.vegefinder.model.response.RegisterResponse;
@@ -13,7 +15,7 @@ import com.imajiku.vegefinder.model.response.RegisterResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
+import retrofit2.http.Path;
 import retrofit2.http.GET;
 
 /**
@@ -22,11 +24,14 @@ import retrofit2.http.GET;
 public interface ApiService {
 
     //    REGIONAL
-    @GET("place/province")
-    Call<ProvinceResponse> getProvince();
+    @GET("province/getCountry")
+    Call<CountryResponse> getCountry();
 
-    @POST("place/city")
-    Call<CityResponse> getCity(@Body CityRequest request);
+    @GET("province/getProvince/{countryId}")
+    Call<ProvinceResponse> getProvince(@Path ("countryId") int countryId);
+
+    @GET("province/getCity/{provinceId}")
+    Call<CityResponse> getCity(@Path ("provinceId") int provinceId);
 
     //    MEMBER
     @POST("users/login")
@@ -37,6 +42,9 @@ public interface ApiService {
 
     //    CONTACT
     @POST("contact/sendMessage")
-    Call<ContactUsResponse> sendMessage(ContactUsRequest request);
+    Call<ContactUsResponse> sendMessage(@Body ContactUsRequest request);
+
+    @POST("contact/search_region")
+    Call<FindPlaceResponse> findPlace(@Body FindPlaceRequest request);
 //    Call<ProvinceResponse> getCity(@Query("session_id") String sessionId);
 }

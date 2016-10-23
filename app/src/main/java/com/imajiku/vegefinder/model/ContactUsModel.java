@@ -1,14 +1,8 @@
 package com.imajiku.vegefinder.model;
 
 import com.imajiku.vegefinder.model.presenter.ContactUsPresenter;
-import com.imajiku.vegefinder.model.presenter.RegisterProfilePresenter;
-import com.imajiku.vegefinder.model.request.CityRequest;
 import com.imajiku.vegefinder.model.request.ContactUsRequest;
-import com.imajiku.vegefinder.model.request.RegisterRequest;
-import com.imajiku.vegefinder.model.response.CityResponse;
 import com.imajiku.vegefinder.model.response.ContactUsResponse;
-import com.imajiku.vegefinder.model.response.ProvinceResponse;
-import com.imajiku.vegefinder.model.response.RegisterResponse;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;
 

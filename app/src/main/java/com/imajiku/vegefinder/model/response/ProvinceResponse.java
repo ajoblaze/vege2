@@ -1,36 +1,73 @@
 package com.imajiku.vegefinder.model.response;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
-import com.imajiku.vegefinder.pojo.Province;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Alvin on 2016-10-08.
  */
 public class ProvinceResponse {
     @SerializedName("data")
-    private ArrayList<Province> data;
+    private ProvinceResponseBody data;
 
-    public ArrayList<Province> getData() {
+    public ProvinceResponseBody getData() {
         return data;
     }
 
-    public ArrayList<String> getProvinces(){
-        ArrayList<String> provinces = new ArrayList<>();
-        for(Province p : data){
-            provinces.add(p.getProvince());
+    public class ProvinceResponseBody {
+        @SerializedName("data")
+        private ArrayList<Province> data;
+        @SerializedName("status")
+        private String status;
+
+        public String getStatus() {
+            return status;
         }
-        return provinces;
+
+        public ArrayList<Province> getProvinces() {
+            return data;
+        }
+
+        public ArrayList<String> getProvinceNames() {
+            ArrayList<String> provinces = new ArrayList<>();
+            for (Province p : data) {
+                provinces.add(p.getProvince());
+            }
+            return provinces;
+        }
+
+        public int getProvinceId(String province) {
+            for (Province p : getProvinces()) {
+                if (p.getProvince().equals(province)) {
+                    return p.getId();
+                }
+            }
+            Log.e("excP", "getProvinceId: "+province);
+            return -1;
+        }
     }
 
-    public int getProvinceId(String province) {
-        for(Province p : getData()){
-            if(p.getProvince().equals(province)){
-                return p.getId();
-            }
+    public class Province {
+        @SerializedName("id")
+        private int id;
+        @SerializedName("country_id")
+        private int countryId;
+        @SerializedName("province")
+        private String province;
+
+        public int getId() {
+            return id;
         }
-        return -1;
+
+        public int getCountryId() {
+            return countryId;
+        }
+
+        public String getProvince() {
+            return province;
+        }
     }
 }
