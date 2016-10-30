@@ -1,4 +1,4 @@
-package com.imajiku.vegefinder.model;
+package com.imajiku.vegefinder.model.model;
 
 import com.imajiku.vegefinder.model.request.RegisterRequest;
 import com.imajiku.vegefinder.model.response.CityResponse;
@@ -26,8 +26,7 @@ public class RegisterProfileModel {
         retrofit = Utility.buildRetrofit();
     }
 
-    public void register(String username, String email, String password) {
-        RegisterRequest request = new RegisterRequest(username, email, password);
+    public void register(RegisterRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
         Call<RegisterResponse> call = svc.register(request);
         call.enqueue(new Callback<RegisterResponse>() {

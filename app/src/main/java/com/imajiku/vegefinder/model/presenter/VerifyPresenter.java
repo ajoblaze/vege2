@@ -4,6 +4,7 @@ package com.imajiku.vegefinder.model.presenter;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.imajiku.vegefinder.model.VerifyModel;
 import com.imajiku.vegefinder.model.presenter.view.VerifyView;
 
 /**
@@ -11,7 +12,7 @@ import com.imajiku.vegefinder.model.presenter.view.VerifyView;
  */
 public class VerifyPresenter {
     private VerifyView view;
-    private static final String VERIFY_PREF = "verify_pref";
+    private VerifyModel model;
 
     public VerifyPresenter(VerifyView v) {
         this.view =v;
@@ -21,22 +22,20 @@ public class VerifyPresenter {
         return view;
     }
 
-    public void putFlag(String email) {
-        SharedPreferences preferences = getContext().getSharedPreferences(VERIFY_PREF, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(email, true);
-        editor.apply();
+    public void setModel(VerifyModel model) {
+        this.model = model;
     }
 
-    public void removeFlag(String email) {
-        SharedPreferences preferences = getContext().getSharedPreferences(VERIFY_PREF, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.remove(email);
-        editor.apply();
+    public void submit(String s) {
+        model.submitCode(s);
     }
 
-    private Context getContext(){
-        return (Context) view;
+    public void successVerify() {
+        view.successVerify();
+    }
+
+    public void failedVerify() {
+        view.showError("Code is incorrect. Please try again.");
     }
 }
 

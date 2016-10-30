@@ -1,5 +1,6 @@
 package com.imajiku.vegefinder.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,7 +58,6 @@ public class LoginActivity extends AppCompatActivity implements
     private GoogleApiClient googleApiClient;
     private String TAG = "exc";
     private CallbackManager callbackManager;
-    private String code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +103,6 @@ public class LoginActivity extends AppCompatActivity implements
             ab.setDisplayShowHomeEnabled(true);
         }
         ImageView iv = (ImageView) mToolbar.findViewById(R.id.toolbar_image);
-
     }
 
     private String getString(EditText et){
@@ -111,6 +111,7 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
+        hideKeyboard();
         switch (v.getId()) {
             case R.id.login_button:
                 if(!getString(username).equals("") && !getString(pass).equals("")){
@@ -146,6 +147,15 @@ public class LoginActivity extends AppCompatActivity implements
                 Log.e(TAG, "gplus login");
                 signIn();
                 break;
+        }
+    }
+
+    private void hideKeyboard() {
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 

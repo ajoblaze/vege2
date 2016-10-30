@@ -54,7 +54,32 @@
             android:layout_height="1dp"
             android:background="@color/borderGray" />
 
-        <!--1. country-->
+        <!--country-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="start"
+                android:text="@string/name" />
+
+            <EditText
+                android:id="@+id/name_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/borderGray" />
+
+        <!--country-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,7 +104,7 @@
             android:layout_height="1dp"
             android:background="@color/borderGray" />
 
-        <!--2. province-->
+        <!--province-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -104,7 +129,7 @@
             android:layout_height="1dp"
             android:background="@color/borderGray" />
 
-        <!--3. city-->
+        <!--city-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -129,7 +154,7 @@
             android:layout_height="1dp"
             android:background="@color/borderGray" />
 
-        <!--4. sex-->
+        <!--sex-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -154,7 +179,7 @@
             android:layout_height="1dp"
             android:background="@color/borderGray" />
 
-        <!--5. pref-->
+        <!--pref-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

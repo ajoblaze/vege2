@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -44,13 +45,14 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        hideKeyboard();
+        switch (v.getId()) {
             case R.id.reset_btn:
                 String emailContent = email.getText().toString();
-                if(emailContent.length()==0){
+                if (emailContent.length() == 0) {
                     Toast.makeText(ForgotActivity.this, "Please insert email or username", Toast.LENGTH_SHORT).show();
-                }else{
-                    new SendForgetCodeTask(emailContent).execute();
+                } else {
+                    presenter.forget(emailContent);
                 }
                 break;
             case R.id.register:
@@ -62,36 +64,23 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private Context self(){
-        return ForgotActivity.this;
+    @Override
+    public void successForgot() {
+        Intent i = new Intent(ForgotActivity.this, VerifyForgotActivity.class);
+        startActivity(i);
     }
 
-    class SendForgetCodeTask extends AsyncTask<Void, Void, Void> {
+    @Override
+    public void failedForgot() {
+        Toast.makeText(ForgotActivity.this, "Invalid email", Toast.LENGTH_SHORT).show();
+    }
 
-        private String emailTo, code;
-
-        public SendForgetCodeTask(String emailTo) {
-            this.emailTo = emailTo;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            code = Utility.generateCode();
-            Utility.sendEmail(self(), emailTo, "Subject des", "Code des: "+code);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Intent i = new Intent(ForgotActivity.this, VerifyForgotActivity.class);
-            i.putExtra("code", code);
-            startActivity(i);
+    private void hideKeyboard() {
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 }

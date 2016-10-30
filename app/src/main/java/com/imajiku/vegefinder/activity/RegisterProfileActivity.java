@@ -3,17 +3,21 @@ package com.imajiku.vegefinder.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -24,9 +28,11 @@ import com.imajiku.vegefinder.model.presenter.RegionPresenter;
 import com.imajiku.vegefinder.model.presenter.RegisterProfilePresenter;
 import com.imajiku.vegefinder.model.presenter.view.RegionView;
 import com.imajiku.vegefinder.model.presenter.view.RegisterProfileView;
+import com.imajiku.vegefinder.model.request.RegisterRequest;
 import com.imajiku.vegefinder.utility.CircularImageView;
 import com.imajiku.vegefinder.utility.Utility;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class RegisterProfileActivity extends AppCompatActivity implements
@@ -46,6 +52,8 @@ public class RegisterProfileActivity extends AppCompatActivity implements
     private String username, email, password;
     private RegionPresenter regionPresenter;
     private String currProvince, currCity;
+    private EditText name;
+    private String picturePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +75,7 @@ public class RegisterProfileActivity extends AppCompatActivity implements
         camera = (CircularImageView) findViewById(R.id.iv_camera);
         camera.setOnClickListener(this);
 
+        name = (EditText) findViewById(R.id.name_et);
         countrySpinner = (Spinner) findViewById(R.id.country_spinner);
         provinceSpinner = (Spinner) findViewById(R.id.province_spinner);
         citySpinner = (Spinner) findViewById(R.id.city_spinner);
@@ -100,12 +109,6 @@ public class RegisterProfileActivity extends AppCompatActivity implements
         sex.setAdapter(sexDataAdapter);
         pref.setAdapter(prefDataAdapter);
 
-//        String selectedCountry = countrySpinner.getSelectedItem().toString();
-//        String selectedProvince = provinceSpinner.getSelectedItem().toString();
-//        String selectedCity = citySpinner.getSelectedItem().toString();
-//        String selectedSex = sex.getSelectedItem().toString();
-//        String selectedPref = pref.getSelectedItem().toString();
-
         countrySpinner.setOnItemSelectedListener(this);
         provinceSpinner.setOnItemSelectedListener(this);
         citySpinner.setOnItemSelectedListener(this);
@@ -120,8 +123,9 @@ public class RegisterProfileActivity extends AppCompatActivity implements
 
         sexArray.add("Male");
         sexArray.add("Female");
-        prefArray.add("Vege");
-        prefArray.add("NonVege");
+        prefArray.add("Vegan");
+        prefArray.add("Vegetarian");
+        prefArray.add("Participant");
     }
 
     @Override
@@ -134,10 +138,10 @@ public class RegisterProfileActivity extends AppCompatActivity implements
             if (cursor != null) {
                 cursor.moveToFirst();
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                String picturePath = cursor.getString(columnIndex);
+                picturePath = cursor.getString(columnIndex);
                 cursor.close();
                 profPic.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            }else{
+            } else {
                 Toast.makeText(RegisterProfileActivity.this, "Image not found", Toast.LENGTH_SHORT).show();
             }
         }
@@ -145,34 +149,56 @@ public class RegisterProfileActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        hideKeyboard();
+        switch (v.getId()) {
             case R.id.iv_camera:
                 Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
                 break;
             case R.id.save_button:
-                presenter.submitRegister(username, email, password);
+                if (name.getText().toString().length() == 0) {
+                    Toast.makeText(RegisterProfileActivity.this, "Name must be filled", Toast.LENGTH_SHORT).show();
+                } else {
+                    submitRegister();
+                }
                 break;
         }
     }
 
-    private Context self(){
-        return RegisterProfileActivity.this;
+    private void submitRegister() {
+        // TODO: finish this
+        String selectedCountry = countrySpinner.getSelectedItem().toString();
+        String selectedProvince = provinceSpinner.getSelectedItem().toString();
+        String selectedCity = citySpinner.getSelectedItem().toString();
+        String selectedSex = sex.getSelectedItem().toString();
+        String selectedPref = pref.getSelectedItem().toString();
+        String imageCode = getImageCode();
+//        RegisterRequest request = new RegisterRequest();
+        presenter.submitRegister(username, email, password);
+    }
+
+    private void hideKeyboard() {
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override
     public void updateDropdown(int type, ArrayList<String> content) {
         ArrayAdapter<String> adapter;
-        if(type == RegionPresenter.COUNTRY){
+        if (type == RegionPresenter.COUNTRY) {
             adapter = countryDataAdapter;
-        } else if(type == RegionPresenter.PROVINCE){
+        } else if (type == RegionPresenter.PROVINCE) {
             adapter = provinceDataAdapter;
-            if(content.size() > 0) {
+            if (content.size() > 0) {
                 content.add(0, "Choose Province..");
             }
-        } else if(type == RegionPresenter.CITY) {
+        } else if (type == RegionPresenter.CITY) {
             adapter = cityDataAdapter;
-            if(content.size() > 0) {
+            if (content.size() > 0) {
                 content.add(0, "Choose City..");
             }
         } else {
@@ -180,11 +206,15 @@ public class RegisterProfileActivity extends AppCompatActivity implements
         }
         adapter.clear();
         adapter.addAll(content);
+        if(type==RegionPresenter.COUNTRY){
+            countrySpinner.setSelection(adapter.getPosition("Indonesia"));
+        }
     }
 
     @Override
-    public void sendActivationCode(String code, String email) {
-        new SendRegisterCodeTask(code, email).execute();
+    public void successRegister(String code, String email) {
+        Intent i = new Intent(RegisterProfileActivity.this, VerifyActivity.class);
+        startActivityForResult(i, REQUEST_VERIFY);
     }
 
     @Override
@@ -210,33 +240,12 @@ public class RegisterProfileActivity extends AppCompatActivity implements
 
     }
 
-    class SendRegisterCodeTask extends AsyncTask<Void, Void, Void> {
+    private String getImageCode() {
+        Bitmap bm = BitmapFactory.decodeFile(picturePath);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        byte[] b = baos.toByteArray();
 
-        private String code, email;
-
-        public SendRegisterCodeTask(String code, String email) {
-            this.code = code;
-            this.email = email;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            Utility.sendEmail(self(), email, "Subject", "Code : "+code);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Intent i = new Intent(RegisterProfileActivity.this, VerifyActivity.class);
-            i.putExtra("code", code);
-            i.putExtra("email", email);
-            startActivityForResult(i, REQUEST_VERIFY);
-        }
+        return Base64.encodeToString(b, Base64.DEFAULT);
     }
 }

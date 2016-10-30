@@ -30,7 +30,7 @@ public class ContactUsPresenter {
     }
 
     public void successSendMessage(String s) {
-        Log.e("exc", "successSendMessage: "+s);
+        view.successSendMessage();
     }
 }
 

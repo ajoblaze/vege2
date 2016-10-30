@@ -1,4 +1,4 @@
-package com.imajiku.vegefinder.model;
+package com.imajiku.vegefinder.model.model;
 
 import com.imajiku.vegefinder.model.presenter.FindPlacePresenter;
 import com.imajiku.vegefinder.model.request.FindPlaceRequest;

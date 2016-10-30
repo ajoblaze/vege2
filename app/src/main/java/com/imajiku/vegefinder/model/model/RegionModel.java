@@ -1,4 +1,4 @@
-package com.imajiku.vegefinder.model;
+package com.imajiku.vegefinder.model.model;
 
 import android.util.Log;
 

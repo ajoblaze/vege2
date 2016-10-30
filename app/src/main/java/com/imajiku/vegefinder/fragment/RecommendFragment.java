@@ -78,8 +78,8 @@ public class RecommendFragment extends Fragment implements ImageListAdapter.Imag
 
     public void populate(){
         list = new ArrayList<>();
-        list.add("http://i.imgur.com/DvpvklR.png");
-        list.add("https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-9/14479524_1130535670315230_6310861083410001029_n.jpg?oh=f831fb6b9393d7d7a855ea30d0a9cdcb&oe=5884F8B3");
-        list.add("https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-0/s526x395/14457356_147592955697506_7082025653667303706_n.jpg?oh=083cda12082001e881e89e9bc2c9af86&oe=58672C1F");
+        list.add("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg");
+        list.add("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg");
+        list.add("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg");
     }
 }

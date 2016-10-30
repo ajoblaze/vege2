@@ -40,7 +40,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/verify_code"
         android:layout_marginTop="10dp"
-        android:text=""
         android:textColor="#F00" />
 
     <Button

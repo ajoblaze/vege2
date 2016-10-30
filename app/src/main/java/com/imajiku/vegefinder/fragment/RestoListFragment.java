@@ -91,11 +91,11 @@ public class RestoListFragment extends Fragment implements ImageListAdapter.Imag
 
     public void populate(){
         list = new ArrayList<>();
-        list.add(new Resto("https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-9/14492410_1429600360387536_9172225207056049335_n.jpg?oh=b476b85a0a8019e9063060b998d6a8fb&oe=587AB0C5", "Shigure", (float)2, 100000));
-        list.add(new Resto("https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-9/14523122_1430351520312420_4483740540657843801_n.jpg?oh=0e5794c25a59c346e6b25427d0b1f700&oe=5876AAEF", "Kongou", (float)4.8, 90000));
-        list.add(new Resto("https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-9/14462724_1428972547116984_875808623472915473_n.jpg?oh=701f89b822678f9e072ecef053209505&oe=587ADA92", "Yahagi", 5, 120000));
-        list.add(new Resto("https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-9/14463050_1427746467239592_4052477395478439910_n.jpg?oh=642e9939fee48bc9fd836330473940e4&oe=587C51DE", "U-511", (float)2.5, 80000));
-        list.add(new Resto("https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-9/14517413_1427609660586606_4275927304837092098_n.jpg?oh=26c5b9994fbbe7aca54c46c892960ca6&oe=58655924", "Kaga Akagi", 5, 9999999));
+        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato1", (float)2, 100000));
+        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato2", (float)4.8, 90000));
+        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato3", 5, 120000));
+        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato4", (float)2.5, 80000));
+        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato5", 5, 9999999));
         //footer
         list.add(new Resto());
     }

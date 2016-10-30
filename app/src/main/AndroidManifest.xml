@@ -39,7 +39,9 @@
         <activity android:name=".activity.RegisterProfileActivity" />
         <activity android:name=".activity.ForgotActivity" />
         <activity android:name=".activity.ContactUsActivity" />
-        <activity android:name=".activity.FindPlaceActivity"></activity>
+        <activity android:name=".activity.FindPlaceActivity" />
+        <activity android:name=".activity.FindPlaceResultActivity" />
+        <activity android:name=".activity.RecommendActivity"></activity>
     </application>
 
 </manifest>

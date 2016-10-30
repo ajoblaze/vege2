@@ -45,7 +45,7 @@
     <string name="name">Name</string>
     <string name="subject">Subject</string>
     <string name="message">Write your message…</string>
-    <string name="submit">Submit…</string>
+    <string name="submit">Submit</string>
     <string name="find_specific_place">Find Specific Place</string>
     <string name="browse_nearby_places">Browse Nearby Places</string>
     <string name="my_account">My Account</string>

@@ -1,10 +1,10 @@
-package com.imajiku.vegefinder.model.presenter.view;
+package com.imajiku.vegefinder.model.view;
 
 import java.util.ArrayList;
 
 /**
  * Created by Alvin on 2016-10-08.
  */
-public interface FindPlaceView {
+public interface RegionView {
     void updateDropdown(int type, ArrayList<String> content);
 }

@@ -1,8 +1,8 @@
-package com.imajiku.vegefinder.model;
+package com.imajiku.vegefinder.model.model;
 
-import com.imajiku.vegefinder.model.request.LoginRequest;
-import com.imajiku.vegefinder.model.response.LoginResponse;
-import com.imajiku.vegefinder.model.presenter.LoginPresenter;
+import com.imajiku.vegefinder.model.presenter.VerifyPresenter;
+import com.imajiku.vegefinder.model.request.VerifyRequest;
+import com.imajiku.vegefinder.model.response.VerifyResponse;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;
 
@@ -14,27 +14,34 @@ import retrofit2.Retrofit;
 /**
  * Created by Alvin on 2016-10-08.
  */
-public class LoginModel {
+public class VerifyModel {
 
-    private LoginPresenter presenter;
+    private VerifyPresenter presenter;
     private Retrofit retrofit;
 
-    public LoginModel(LoginPresenter presenter) {
+    public VerifyModel(VerifyPresenter presenter) {
         this.presenter = presenter;
         retrofit = Utility.buildRetrofit();
     }
 
-    public void login(String email, String password) {
-        LoginRequest request = new LoginRequest(email, password);
+    public void submitCode(String code) {
+        VerifyRequest request = new VerifyRequest(code);
         ApiService svc = retrofit.create(ApiService.class);
-        Call<LoginResponse> call = svc.login(request);
-        call.enqueue(new Callback<LoginResponse>() {
+        Call<VerifyResponse> call = svc.confirmCode(request);
+        call.enqueue(new Callback<VerifyResponse>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
                 if (response.isSuccessful()) {
-                    presenter.successLogin();
+                    if (response.body().getData().getStatus() != null) {
+                        if (response.body().getData().getStatus().toLowerCase().equals("success")) {
+                            presenter.successVerify();
+                        }
+                    } else {
+                        presenter.failedVerify();
+                    }
 //                    LoginView.successLogin(response.body().getSessionId());
                 } else {
+                    presenter.failedVerify();
 //                    try {
 //                        if(response.code()==500){
 //                            mIAccountView.showToast("Internal server error. Please try again later.");
@@ -50,7 +57,7 @@ public class LoginModel {
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onFailure(Call<VerifyResponse> call, Throwable t) {
 //                mIAccountView.showToast("Login failed. Please check your connection.");
 //                mIAccountView.failedLogin();
             }

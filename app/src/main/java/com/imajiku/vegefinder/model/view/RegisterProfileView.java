@@ -1,4 +1,4 @@
-package com.imajiku.vegefinder.model.presenter.view;
+package com.imajiku.vegefinder.model.view;
 
 import java.util.ArrayList;
 
@@ -8,5 +8,5 @@ import java.util.ArrayList;
 public interface RegisterProfileView {
     void updateDropdown(int type, ArrayList<String> content);
 
-    void sendActivationCode(String code, String email);
+    void successRegister(String code, String email);
 }

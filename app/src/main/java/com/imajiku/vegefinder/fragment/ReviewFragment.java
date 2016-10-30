@@ -95,7 +95,7 @@ public class ReviewFragment extends Fragment {
 
     public void populate(){
         list = new ArrayList<>();
-        list.add(new Review("https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-9/14390955_1149333328485543_6086096477922428324_n.jpg?oh=0ad3720d056a840f1070ee16542603ed&oe=58672AF9", "AJ", "Dev", now, "4", "gud"));
-        list.add(new Review("https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-0/s526x395/14391015_1426439520703620_4072477585853414696_n.jpg?oh=40d1dee22863dc7027e4eae45a4a3109&oe=586A5D28", "AJ2", "Dev2", now, "2", "meh"));
+        list.add(new Review("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Pot", "ato", now, "4", "gud"));
+        list.add(new Review("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Pot2", "ato2", now, "2", "meh"));
     }
 }

@@ -1,4 +1,4 @@
-package com.imajiku.vegefinder.model.presenter.view;
+package com.imajiku.vegefinder.model.view;
 
 /**
  * Created by Alvin on 2016-10-08.

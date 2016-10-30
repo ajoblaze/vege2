@@ -20,7 +20,7 @@
         android:id="@+id/forget_subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/subtitle_verify_forgot"
+        android:text="@string/subtitle_forgot"
         android:layout_below="@id/forget_title"
         android:textSize="12sp" />
 

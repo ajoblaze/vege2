@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,7 +17,6 @@ import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.model.ContactUsModel;
 import com.imajiku.vegefinder.model.presenter.ContactUsPresenter;
 import com.imajiku.vegefinder.model.presenter.view.ContactUsView;
-import com.imajiku.vegefinder.utility.Utility;
 
 public class ContactUsActivity extends AppCompatActivity implements View.OnClickListener, ContactUsView {
 
@@ -44,6 +44,7 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
+        hideKeyboard();
         switch (v.getId()) {
             case R.id.submit:
                 if(getString(name).length() == 0){
@@ -64,7 +65,6 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
                             getString(subject),
                             getString(message)
                     );
-//                    new SendContactUsTask().execute();
                 }
         }
     }
@@ -89,26 +89,17 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
         Toast.makeText(ContactUsActivity.this, s, Toast.LENGTH_SHORT).show();
     }
 
-    private Context self(){
-        return ContactUsActivity.this;
+    @Override
+    public void successSendMessage() {
+        finish();
     }
 
-    class SendContactUsTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            Utility.sendEmail(self(), getString(email), getString(subject), getString(message));
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+    private void hideKeyboard() {
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 }

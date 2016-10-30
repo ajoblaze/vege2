@@ -11,18 +11,17 @@ import com.imajiku.vegefinder.model.presenter.view.LoginView;
  * Created by Alvin on 2016-10-08.
  */
 public class LoginPresenter {
-    private LoginView v;
+    private LoginView view;
     private LoginModel model;
     private static final String LOGIN_PREF = "login_pref";
-    private static final String VERIFY_PREF = "verify_pref";
     private static final String LOGIN_KEY = "login";
 
-    public LoginPresenter(LoginView v) {
-        this.v=v;
+    public LoginPresenter(LoginView view) {
+        this.view = view;
     }
 
     public LoginView getView() {
-        return v;
+        return view;
     }
 
     public void setModel(LoginModel model) {
@@ -34,16 +33,7 @@ public class LoginPresenter {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(LOGIN_KEY, method);
         editor.apply();
-        if(checkFlag(email)){
-            model.login(email, pass);
-        }else{
-            getView().failedLogin();
-        }
-    }
-
-    private boolean checkFlag(String email) {
-        SharedPreferences preferences = getContext().getSharedPreferences(VERIFY_PREF, Context.MODE_PRIVATE);
-        return preferences.getBoolean(email, false);
+        model.login(email, pass);
     }
 
     public void logout() {
@@ -59,11 +49,15 @@ public class LoginPresenter {
     }
 
     private Context getContext(){
-        return (Context) v;
+        return (Context) view;
     }
 
     public void successLogin() {
-        getView().successLogin();
+        view.successLogin();
+    }
+
+    public void failedLogin() {
+        view.failedLogin();
     }
 }
 

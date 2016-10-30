@@ -83,9 +83,9 @@ public class PhotoFragment extends Fragment implements ImageListAdapter.ImageLis
 
     public void populate(){
         list = new ArrayList<>();
-        list.add("https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-0/s526x395/14433204_1148221801930029_8539085987530312700_n.jpg?oh=5bbc179a196690183b2ab21a368c8477&oe=587AC9D5");
-        list.add("https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-9/14462931_1839981636236993_624893567931667219_n.jpg?oh=3078bb436695c35a2c2047ec56438541&oe=587008FD");
-        list.add("https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-9/14502685_1863455243885009_5590750929699740658_n.jpg?oh=68c64b65e69351d7d7903a3eedd6e6e6&oe=58ADE355");
-        list.add("https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-0/s526x395/14485039_1099652940111095_3170367858410649794_n.jpg?oh=a9e0f97c78e458255d2b965932b3f946&oe=58661893");
+        list.add("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg");
+        list.add("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg");
+        list.add("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg");
+        list.add("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg");
     }
 }

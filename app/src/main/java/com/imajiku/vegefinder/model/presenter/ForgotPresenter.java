@@ -24,5 +24,17 @@ public class ForgotPresenter {
     public void setModel(ForgotModel model) {
         this.model = model;
     }
+
+    public void successForgot() {
+        view.successForgot();
+    }
+
+    public void forget(String emailContent) {
+        model.forgotPassword(emailContent);
+    }
+
+    public void failedForgot() {
+        view.failedForgot();
+    }
 }
 
