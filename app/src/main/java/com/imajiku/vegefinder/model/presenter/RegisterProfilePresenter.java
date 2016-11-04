@@ -1,8 +1,9 @@
 package com.imajiku.vegefinder.model.presenter;
 
 
-import com.imajiku.vegefinder.model.RegisterProfileModel;
-import com.imajiku.vegefinder.model.presenter.view.RegisterProfileView;
+import com.imajiku.vegefinder.model.model.RegisterProfileModel;
+import com.imajiku.vegefinder.model.view.RegisterProfileView;
+import com.imajiku.vegefinder.model.request.RegisterRequest;
 
 /**
  * Created by Alvin on 2016-10-08.
@@ -23,8 +24,8 @@ public class RegisterProfilePresenter {
         this.model = model;
     }
 
-    public void submitRegister(String username, String email, String password) {
-        model.register(username, email, password);
+    public void submitRegister(RegisterRequest request) {
+        model.register(request);
     }
 
     public void successRegister(String code, String email) {

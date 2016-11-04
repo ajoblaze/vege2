@@ -51,4 +51,25 @@
     <string name="my_account">My Account</string>
     <string name="name_optional">Name [optional]</string>
     <string name="find_now">Find Now</string>
+    <string name="filter">Filter</string>
+    <string name="sort">Sort</string>
+    <string name="select_all">Select All</string>
+    <string name="clear">Clear</string>
+    <string name="open_now">Open Now</string>
+    <string name="rated_8">Rated 8+</string>
+    <string name="bookmarked">Bookmarked</string>
+    <string name="vegan">Vegan</string>
+    <string name="been_here">Been Here</string>
+    <string name="vegetarian">Vegetarian</string>
+    <string name="show_result">Show Result</string>
+    <string name="alphabet">Alphabet</string>
+    <string name="distance">Distance</string>
+    <string name="date">Date</string>
+    <string name="price">Price</string>
+    <string name="ascending">Ascending</string>
+    <string name="descending">Descending</string>
+    <string name="news_label">News and Ideas</string>
+    <string name="see_more">See more</string>
+    <string name="places_label">Your Saved Places</string>
+    <string name="recommend_label">You Might Like</string>
 </resources>

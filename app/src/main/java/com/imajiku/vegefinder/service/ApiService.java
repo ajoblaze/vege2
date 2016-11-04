@@ -13,6 +13,7 @@ import com.imajiku.vegefinder.model.response.CountryResponse;
 import com.imajiku.vegefinder.model.response.FindPlaceResponse;
 import com.imajiku.vegefinder.model.response.ForgotResponse;
 import com.imajiku.vegefinder.model.response.LoginResponse;
+import com.imajiku.vegefinder.model.response.NewsResponse;
 import com.imajiku.vegefinder.model.response.ProvinceResponse;
 import com.imajiku.vegefinder.model.response.RegisterResponse;
 import com.imajiku.vegefinder.model.response.VerifyForgotResponse;
@@ -61,5 +62,8 @@ public interface ApiService {
 
     @POST("contact/search_region")
     Call<FindPlaceResponse> findPlace(@Body FindPlaceRequest request);
-//    Call<ProvinceResponse> getCity(@Query("session_id") String sessionId);
+
+    //    NEWS
+    @GET("news/generate_news")
+    Call<NewsResponse> generateNews();
 }

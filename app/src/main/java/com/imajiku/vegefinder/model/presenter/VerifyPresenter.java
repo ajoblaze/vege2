@@ -1,11 +1,8 @@
 package com.imajiku.vegefinder.model.presenter;
 
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import com.imajiku.vegefinder.model.VerifyModel;
-import com.imajiku.vegefinder.model.presenter.view.VerifyView;
+import com.imajiku.vegefinder.model.model.VerifyModel;
+import com.imajiku.vegefinder.model.view.VerifyView;
 
 /**
  * Created by Alvin on 2016-10-08.

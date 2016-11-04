@@ -10,13 +10,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
+import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -36,18 +39,25 @@ public class BrowseActivity extends AppCompatActivity implements
         RestoListFragment.RestoListListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener
-{
+        LocationListener, View.OnClickListener {
 
     private static final int REQUEST_CHECK_SETTINGS = 8008;
+    private static final int FILTER_BOX_QTY = 6;
+    private static final int SORT_BUTTON_QTY = 4;
     private RestoListFragment restoListFragment;
-    private Spinner filter, sort;
+    private Button filter, sort;
     private String TAG = "exc";
-    private String[] filterArray = {"Filter 1", "Filter 2", "Filter 3"};
-    private String[] sortArray = {"Sort 1", "Sort 2", "Sort 3"};
     private GoogleApiClient googleApiClient;
     private boolean isRequestingLocationUpdates;
     private LocationRequest mLocationRequest;
+    private ExpandableRelativeLayout filterLayout, sortLayout;
+    private Button selectAll, clear, submitFilter, submitSort;
+    private CheckBox[] filterBox;
+    private RadioGroup orderGroup;
+    private RadioButton desc;
+    private boolean[] sortSelected;
+    private Button[] sortButton;
+    private int currSelectedSort = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,28 +71,158 @@ public class BrowseActivity extends AppCompatActivity implements
         }
         setContentView(R.layout.activity_browse);
         restoListFragment = (RestoListFragment) getSupportFragmentManager().findFragmentById(R.id.resto_list_fragment);
-        filter = (Spinner) findViewById(R.id.filter);
-        sort = (Spinner) findViewById(R.id.sort);
+        filter = (Button) findViewById(R.id.filter_btn);
+        sort = (Button) findViewById(R.id.sort_btn);
+        filterLayout = (ExpandableRelativeLayout) findViewById(R.id.layout_filter);
+        sortLayout = (ExpandableRelativeLayout) findViewById(R.id.layout_sort);
+        filter.setOnClickListener(this);
+        sort.setOnClickListener(this);
+        filterBox = new CheckBox[FILTER_BOX_QTY];
+        sortButton = new Button[SORT_BUTTON_QTY];
+        sortSelected = new boolean[]{false, false, false, false};
 
-        ArrayAdapter<String> filterDataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, filterArray);
-        ArrayAdapter<String> sortDataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, sortArray);
-        filterDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sortDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        filter.setAdapter(filterDataAdapter);
-        sort.setAdapter(sortDataAdapter);
-        filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.e(TAG, parent.getItemAtPosition(position).toString());
+        // filter
+        selectAll = (Button) findViewById(R.id.select_all);
+        clear = (Button) findViewById(R.id.clear);
+        filterBox[0] = (CheckBox) findViewById(R.id.open_now);
+        filterBox[1] = (CheckBox) findViewById(R.id.rate_8);
+        filterBox[2] = (CheckBox) findViewById(R.id.bookmarked);
+        filterBox[3] = (CheckBox) findViewById(R.id.vegan);
+        filterBox[4] = (CheckBox) findViewById(R.id.been_here);
+        filterBox[5] = (CheckBox) findViewById(R.id.vege);
+        submitFilter = (Button) findViewById(R.id.submit_filter);
+
+        //sort
+        sortButton[0] = (Button) findViewById(R.id.alpha);
+        sortButton[1] = (Button) findViewById(R.id.distance);
+        sortButton[2] = (Button) findViewById(R.id.date);
+        sortButton[3] = (Button) findViewById(R.id.price);
+        orderGroup = (RadioGroup) findViewById(R.id.sort_order);
+        submitSort = (Button) findViewById(R.id.submit_sort);
+
+        // filter
+        selectAll.setOnClickListener(this);
+        clear.setOnClickListener(this);
+        submitFilter.setOnClickListener(this);
+
+        //sort
+        for (int i = 0; i < SORT_BUTTON_QTY; i++) {
+            sortButton[i].setOnClickListener(this);
+        }
+        submitSort.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.filter_btn:
+                sortLayout.collapse();
+                filterLayout.toggle();
+                break;
+            case R.id.sort_btn:
+                filterLayout.collapse();
+                sortLayout.toggle();
+                break;
+            case R.id.select_all:
+                for (int i = 0; i < FILTER_BOX_QTY; i++) {
+                    filterBox[i].setSelected(true);
+                }
+                break;
+            case R.id.clear:
+                for (int i = 0; i < FILTER_BOX_QTY; i++) {
+                    filterBox[i].setSelected(false);
+                }
+                break;
+            case R.id.alpha:
+                if (currSelectedSort != 0) {
+                    if (currSelectedSort == -1) {
+                        sortSelected[currSelectedSort] = false;
+                    }
+                    sortSelected[0] = true;
+                } else {
+                    sortSelected[0] = false;
+                }
+                currSelectedSort = 0;
+                changeSortButton();
+                break;
+            case R.id.distance:
+                if (currSelectedSort != 1) {
+                    if (currSelectedSort == -1) {
+                        sortSelected[currSelectedSort] = false;
+                    }
+                    sortSelected[1] = true;
+                } else {
+                    sortSelected[1] = false;
+                }
+                currSelectedSort = 1;
+                changeSortButton();
+                break;
+            case R.id.date:
+                if (currSelectedSort != 2) {
+                    if (currSelectedSort == -1) {
+                        sortSelected[currSelectedSort] = false;
+                    }
+                    sortSelected[2] = true;
+                } else {
+                    sortSelected[2] = false;
+                }
+                currSelectedSort = 2;
+                changeSortButton();
+                break;
+            case R.id.price:
+                if (currSelectedSort != 3) {
+                    if (currSelectedSort == -1) {
+                        sortSelected[currSelectedSort] = false;
+                    }
+                    sortSelected[3] = true;
+                } else {
+                    sortSelected[3] = false;
+                }
+                currSelectedSort = 3;
+                changeSortButton();
+                break;
+            case R.id.submit_filter:
+                filterLayout.collapse();
+//                restoListFragment.filter(getFilterResult());
+                break;
+            case R.id.submit_sort:
+                sortLayout.collapse();
+//                restoListFragment.sort(getSortResult());
+                break;
+        }
+    }
+
+    private int[] getSortResult() {
+        int[] sortResult = new int[2];
+        for (int i = 0; i < SORT_BUTTON_QTY; i++) {
+            if(filterBox[i].isSelected()) {
+                sortResult[0] = i;
+                break;
             }
+        }
+        sortResult[1] =
+                (orderGroup.getCheckedRadioButtonId() == R.id.asc) ? 0 : 1;
+        return sortResult;
+    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+    private boolean[] getFilterResult() {
+        boolean[] filterResult = new boolean[FILTER_BOX_QTY];
+        for (int i = 0; i < FILTER_BOX_QTY; i++) {
+            filterResult[i] = filterBox[i].isSelected();
+        }
+        return filterResult;
+    }
 
+    private void changeSortButton() {
+        int color;
+        for (int i = 0; i < SORT_BUTTON_QTY; i++) {
+            if (sortSelected[i]) {
+                color = ContextCompat.getColor(this, R.color.translucentGreen75);
+            } else {
+                color = ContextCompat.getColor(this, R.color.translucentRed75);
             }
-        });
+            sortButton[i].setBackgroundColor(color);
+        }
     }
 
     @Override
@@ -115,7 +255,8 @@ public class BrowseActivity extends AppCompatActivity implements
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{
                         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -133,8 +274,8 @@ public class BrowseActivity extends AppCompatActivity implements
             testLocation.setLongitude(106.9175735);
             String mLatitudeText = String.valueOf(mLastLocation.getLatitude());
             String mLongitudeText = String.valueOf(mLastLocation.getLongitude());
-            Log.e(TAG, mLatitudeText+" "+mLongitudeText);
-            Log.e(TAG, String.valueOf(mLastLocation.distanceTo(testLocation))+" meters");
+            Log.e(TAG, mLatitudeText + " " + mLongitudeText);
+            Log.e(TAG, String.valueOf(mLastLocation.distanceTo(testLocation)) + " meters");
         }
 
         if (isRequestingLocationUpdates) {
@@ -153,7 +294,7 @@ public class BrowseActivity extends AppCompatActivity implements
             }
             return;
         }
-        if(mLocationRequest != null) {
+        if (mLocationRequest != null) {
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     googleApiClient, mLocationRequest, (LocationListener) this);
         }
@@ -161,9 +302,9 @@ public class BrowseActivity extends AppCompatActivity implements
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch(requestCode){
+        switch (requestCode) {
             case 10:
-                if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // can start listening to location changes
                 }
                 break;
@@ -171,7 +312,7 @@ public class BrowseActivity extends AppCompatActivity implements
     }
 
     protected void stopLocationUpdates() {
-        if(mLocationRequest != null) {
+        if (mLocationRequest != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(
                     googleApiClient, (LocationListener) this);
         }
@@ -187,7 +328,7 @@ public class BrowseActivity extends AppCompatActivity implements
         Log.e(TAG, "u3");
     }
 
-    private void createLocationRequest(){
+    private void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
         mLocationRequest.setFastestInterval(5000);

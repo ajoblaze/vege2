@@ -12,10 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
-import com.imajiku.vegefinder.model.VerifyForgotModel;
-import com.imajiku.vegefinder.model.presenter.LoginPresenter;
+import com.imajiku.vegefinder.model.model.VerifyForgotModel;
 import com.imajiku.vegefinder.model.presenter.VerifyForgotPresenter;
-import com.imajiku.vegefinder.model.presenter.view.VerifyForgotView;
+import com.imajiku.vegefinder.model.view.VerifyForgotView;
 
 public class VerifyForgotActivity extends AppCompatActivity implements View.OnClickListener, VerifyForgotView {
 

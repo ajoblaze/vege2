@@ -1,20 +1,22 @@
 package com.imajiku.vegefinder.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.imajiku.vegefinder.R;
-import com.imajiku.vegefinder.model.FindPlaceModel;
-import com.imajiku.vegefinder.model.RegionModel;
-import com.imajiku.vegefinder.model.presenter.FindPlacePresenter;
+import com.imajiku.vegefinder.model.model.RegionModel;
 import com.imajiku.vegefinder.model.presenter.RegionPresenter;
-import com.imajiku.vegefinder.model.presenter.view.FindPlaceView;
-import com.imajiku.vegefinder.model.presenter.view.RegionView;
+import com.imajiku.vegefinder.model.view.FindPlaceView;
+import com.imajiku.vegefinder.model.view.RegionView;
 
 import java.util.ArrayList;
 
@@ -22,29 +24,26 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
 
     private Spinner countrySpinner, provinceSpinner, citySpinner;
     private ArrayAdapter<String> countryDataAdapter, provinceDataAdapter, cityDataAdapter;
-    private FindPlacePresenter presenter;
-    private RegionPresenter regionPresenter;
-    private Button search;
+    private RegionPresenter presenter;
+    private Button findRegion, findKeyword;
     private String currProvince, currCity;
+    private EditText keyword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_place);
 
-        presenter = new FindPlacePresenter(this);
-        FindPlaceModel model = new FindPlaceModel(presenter);
+        presenter = new RegionPresenter(this);
+        RegionModel model = new RegionModel(presenter);
         presenter.setModel(model);
-
-        regionPresenter = new RegionPresenter(this);
-        RegionModel regionModel = new RegionModel(regionPresenter);
-        regionPresenter.setModel(regionModel);
 
         countrySpinner = (Spinner) findViewById(R.id.country_spinner);
         provinceSpinner = (Spinner) findViewById(R.id.province_spinner);
         citySpinner = (Spinner) findViewById(R.id.city_spinner);
+        keyword = (EditText) findViewById(R.id.keyword);
 
-        regionPresenter.getCountry();
+        presenter.getCountry();
 
         countryDataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, new ArrayList<String>());
@@ -64,8 +63,10 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
         provinceSpinner.setOnItemSelectedListener(this);
         citySpinner.setOnItemSelectedListener(this);
 
-        search = (Button) findViewById(R.id.find_button);
-        search.setOnClickListener(this);
+        findRegion = (Button) findViewById(R.id.find_region);
+        findKeyword = (Button) findViewById(R.id.find_keyword);
+        findRegion.setOnClickListener(this);
+        findKeyword.setOnClickListener(this);
     }
 
     @Override
@@ -92,16 +93,38 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
         }
         adapter.clear();
         adapter.addAll(content);
+        if(type==RegionPresenter.COUNTRY){
+            countrySpinner.setSelection(adapter.getPosition("Indonesia"));
+        }
     }
 
     @Override
     public void onClick(View v) {
+        hideKeyboard();
+        Intent i  = new Intent(FindPlaceActivity.this, FindPlaceResultActivity.class);
         switch(v.getId()){
-            case R.id.find_button:
-                int provinceId = regionPresenter.getProvinceId(currProvince);
-                int cityId = regionPresenter.getCityId(currCity);
-                presenter.findPlace(provinceId, cityId);
+            case R.id.find_region:
+                i.putExtra("type", "region");
+                i.putExtra("province", presenter.getProvinceId(currProvince));
+                i.putExtra("city", presenter.getCityId(currCity));
+//                startActivity(i);
+//                presenter.findPlace(provinceId, cityId);
                 break;
+            case R.id.find_keyword:
+                i.putExtra("type", "keyword");
+                i.putExtra("keyword", keyword.getText().toString());
+//                startActivity(i);
+//                presenter.findPlace(provinceId, cityId);
+                break;
+        }
+    }
+
+    private void hideKeyboard() {
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
@@ -109,12 +132,12 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.country_spinner:
-                regionPresenter.getProvince(countryDataAdapter.getItem(position));
-                provinceSpinner.setSelection(0);
+                presenter.getProvince(countryDataAdapter.getItem(position));
+                provinceSpinner.setSelection(countryDataAdapter.getPosition("Indonesia"));
                 break;
             case R.id.province_spinner:
                 currProvince = provinceDataAdapter.getItem(position);
-                regionPresenter.getCity(provinceDataAdapter.getItem(position));
+                presenter.getCity(provinceDataAdapter.getItem(position));
                 citySpinner.setSelection(0);
                 break;
             case R.id.city_spinner:

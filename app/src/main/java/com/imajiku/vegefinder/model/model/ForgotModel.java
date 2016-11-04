@@ -1,13 +1,10 @@
 package com.imajiku.vegefinder.model.model;
 
 import com.imajiku.vegefinder.model.presenter.ForgotPresenter;
-import com.imajiku.vegefinder.model.presenter.view.ForgotView;
 import com.imajiku.vegefinder.model.request.ForgotRequest;
 import com.imajiku.vegefinder.model.response.ForgotResponse;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;
-
-import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;

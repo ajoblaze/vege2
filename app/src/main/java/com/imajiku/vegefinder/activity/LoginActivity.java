@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,9 +34,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.imajiku.vegefinder.R;
-import com.imajiku.vegefinder.model.LoginModel;
+import com.imajiku.vegefinder.model.model.LoginModel;
 import com.imajiku.vegefinder.model.presenter.LoginPresenter;
-import com.imajiku.vegefinder.model.presenter.view.LoginView;
+import com.imajiku.vegefinder.model.view.LoginView;
 
 import java.util.Arrays;
 
@@ -50,7 +51,9 @@ public class LoginActivity extends AppCompatActivity implements
     private static final int RC_SIGN_IN = 7;
     private Button login;
     private EditText username, pass;
-    private TextView skip, register, forgot;
+    private LinearLayout skip;
+    private TextView register;
+    private TextView forgot;
     private Button fbLogin;
     private Button gplusLogin;
     private LoginPresenter presenter;
@@ -78,7 +81,7 @@ public class LoginActivity extends AppCompatActivity implements
         login = (Button) findViewById(R.id.login_button);
         fbLogin = (Button) findViewById(R.id.fb_button);
         gplusLogin = (Button) findViewById(R.id.gplus_button);
-        skip = (TextView) findViewById(R.id.skip_login);
+        skip = (LinearLayout) findViewById(R.id.skip_login);
         forgot = (TextView) findViewById(R.id.forgot_password);
         register = (TextView) findViewById(R.id.register);
 

@@ -1,15 +1,10 @@
 package com.imajiku.vegefinder.model.presenter;
 
 
-import android.content.Context;
-
-import com.imajiku.vegefinder.activity.FindPlaceActivity;
-import com.imajiku.vegefinder.model.FindPlaceModel;
-import com.imajiku.vegefinder.model.presenter.view.FindPlaceView;
+import com.imajiku.vegefinder.model.model.FindPlaceModel;
+import com.imajiku.vegefinder.model.view.FindPlaceView;
 import com.imajiku.vegefinder.model.response.CountryResponse;
 import com.imajiku.vegefinder.model.response.ProvinceResponse;
-
-import java.util.ArrayList;
 
 /**
  * Created by Alvin on 2016-10-08.

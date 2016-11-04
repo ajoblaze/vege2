@@ -46,13 +46,13 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
         notifyDataSetChanged();
     }
 
-    private boolean isPositionLast(int position){
-        return position == list.size()-1;
+    private boolean isPositionLast(int position) {
+        return position == list.size() - 1;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(isPositionLast(position)){
+        if (isPositionLast(position)) {
             return FOOTER;
         }
         return NORMAL;
@@ -61,10 +61,10 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
     @Override
     public RestoListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-        if(viewType == NORMAL) {
+        if (viewType == NORMAL) {
             v = LayoutInflater.from(context).inflate(R.layout.item_resto, parent, false);
             return new RestoListViewHolder(v, false);
-        }else{
+        } else {
             v = LayoutInflater.from(context).inflate(R.layout.item_resto_footer, parent, false);
             return new RestoListViewHolder(v, true);
         }
@@ -72,23 +72,25 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
 
     @Override
     public void onBindViewHolder(RestoListViewHolder holder, int position) {
-        if(isPositionLast(position)){
+        if (isPositionLast(position)) {
             holder.loadMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onLoadMore();
                 }
             });
-        }else {
+        } else {
+            Resto r = list.get(position);
             Picasso.with(context)
                     .load(list.get(position).getImgPath())
                     .resize(90, 90)
                     .centerCrop()
                     .into(holder.image);
-            holder.name.setText(list.get(position).getName());
-            holder.distance.setText(list.get(position).getDistance() + " km dari lokasi Anda");
-            holder.price.setText("start dari Rp" + list.get(position).getPrice());
-            holder.ratingBar.setRating(list.get(position).getRating());
+            holder.name.setText(r.getName());
+            holder.distance.setText(r.getDistance() + " km from your location");
+            holder.price.setText("starts from Rp" + r.getPrice());
+            holder.rating.setText(list.get(position).getAverageRate() + " of 10");
+//            holder.ratingBar.setRating(list.get(position).getRating());
         }
     }
 
@@ -104,20 +106,21 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
     class RestoListViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView image;
-        public TextView name, distance, price;
-        public RatingBar ratingBar;
+        public TextView name, distance, price, rating;
+        //        public RatingBar ratingBar;
         public Button loadMore;
 
         public RestoListViewHolder(View itemView, boolean isFooter) {
             super(itemView);
-            if(isFooter){
+            if (isFooter) {
                 loadMore = (Button) itemView.findViewById(R.id.load_more);
-            }else {
+            } else {
                 image = (ImageView) itemView.findViewById(R.id.image);
                 name = (TextView) itemView.findViewById(R.id.name);
                 distance = (TextView) itemView.findViewById(R.id.distance);
                 price = (TextView) itemView.findViewById(R.id.price);
-                ratingBar = (RatingBar) itemView.findViewById(R.id.rating_bar);
+                rating = (TextView) itemView.findViewById(R.id.rating);
+//                ratingBar = (RatingBar) itemView.findViewById(R.id.rating_bar);
             }
         }
     }

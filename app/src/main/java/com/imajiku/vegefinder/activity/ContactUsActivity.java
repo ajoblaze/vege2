@@ -1,7 +1,6 @@
 package com.imajiku.vegefinder.activity;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,9 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
-import com.imajiku.vegefinder.model.ContactUsModel;
+import com.imajiku.vegefinder.model.model.ContactUsModel;
 import com.imajiku.vegefinder.model.presenter.ContactUsPresenter;
-import com.imajiku.vegefinder.model.presenter.view.ContactUsView;
+import com.imajiku.vegefinder.model.view.ContactUsView;
 
 public class ContactUsActivity extends AppCompatActivity implements View.OnClickListener, ContactUsView {
 

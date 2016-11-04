@@ -78,6 +78,12 @@ public class PlacesFragment extends Fragment implements ImageListAdapter.ImageLi
         }
     }
 
+    public void setData(ArrayList<String> list) {
+        if(adapter!=null){
+            adapter.setData(list);
+        }
+    }
+
     public interface PlacesListener {
         void onPlaces(Uri uri);
     }

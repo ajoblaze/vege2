@@ -1,9 +1,70 @@
 package com.imajiku.vegefinder.pojo;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Alvin on 2016-10-01.
  */
 public class Resto {
+    @SerializedName("id")
+    private int id;
+    @SerializedName("user_id")
+    private int userId;
+    @SerializedName("country_id")
+    private int countryId;
+    @SerializedName("province_id")
+    private int provinceId;
+    @SerializedName("city_id")
+    private int cityId;
+    @SerializedName("slug")
+    private String slug;
+    @SerializedName("meta_title")
+    private String metaTitle;
+    @SerializedName("meta_keywords")
+    private String metaKeywords;
+    @SerializedName("meta_description")
+    private String metaDescription;
+    @SerializedName("latitude")
+    private String latitude;
+    @SerializedName("longitude")
+    private String longitude;
+    @SerializedName("address")
+    private String address;
+    @SerializedName("price_start")
+    private String priceStart;
+    @SerializedName("price_rate")
+    private int priceRate;
+    @SerializedName("image")
+    private String image;
+    @SerializedName("youtube_url")
+    private String youtubeUrl;
+    @SerializedName("open")
+    private String open;
+    @SerializedName("date_post")
+    private String datePost;
+    @SerializedName("status")
+    private int status;
+    @SerializedName("hits")
+    private int hits;
+    @SerializedName("wifi")
+    private int wifi;
+    @SerializedName("buffet")
+    private int buffet;
+    @SerializedName("delivery")
+    private int delivery;
+    @SerializedName("type")
+    private int type;
+    @SerializedName("sorting")
+    private int sorting;
+    @SerializedName("place_id")
+    private int placeId;
+    @SerializedName("title")
+    private String title;
+    @SerializedName("content")
+    private String content;
+    @SerializedName("average_rate")
+    private int averageRate;
+
     String imgPath;
     String name;
     float distance;
@@ -41,23 +102,119 @@ public class Resto {
         return price;
     }
 
-    public void setImgPath(String imgPath) {
-        this.imgPath = imgPath;
+    public int getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setDistance(float distance) {
-        this.distance = distance;
+    public int getCountryId() {
+        return countryId;
     }
 
-    public void setRating(float rating) {
-        this.rating = rating;
+    public int getProvinceId() {
+        return provinceId;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public int getCityId() {
+        return cityId;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public String getMetaTitle() {
+        return metaTitle;
+    }
+
+    public String getMetaKeywords() {
+        return metaKeywords;
+    }
+
+    public String getMetaDescription() {
+        return metaDescription;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPriceStart() {
+        return priceStart;
+    }
+
+    public int getPriceRate() {
+        return priceRate;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getYoutubeUrl() {
+        return youtubeUrl;
+    }
+
+    public String getOpen() {
+        return open;
+    }
+
+    public String getDatePost() {
+        return datePost;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public int getHits() {
+        return hits;
+    }
+
+    public int getWifi() {
+        return wifi;
+    }
+
+    public int getBuffet() {
+        return buffet;
+    }
+
+    public int getDelivery() {
+        return delivery;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public int getSorting() {
+        return sorting;
+    }
+
+    public int getPlaceId() {
+        return placeId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public int getAverageRate() {
+        return averageRate;
     }
 }

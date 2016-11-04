@@ -4,8 +4,8 @@ package com.imajiku.vegefinder.model.presenter;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.imajiku.vegefinder.model.LoginModel;
-import com.imajiku.vegefinder.model.presenter.view.LoginView;
+import com.imajiku.vegefinder.model.model.LoginModel;
+import com.imajiku.vegefinder.model.view.LoginView;
 
 /**
  * Created by Alvin on 2016-10-08.

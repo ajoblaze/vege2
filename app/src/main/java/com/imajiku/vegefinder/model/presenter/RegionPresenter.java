@@ -2,8 +2,8 @@ package com.imajiku.vegefinder.model.presenter;
 
 import android.util.Log;
 
-import com.imajiku.vegefinder.model.RegionModel;
-import com.imajiku.vegefinder.model.presenter.view.RegionView;
+import com.imajiku.vegefinder.model.model.RegionModel;
+import com.imajiku.vegefinder.model.view.RegionView;
 import com.imajiku.vegefinder.model.response.CityResponse;
 import com.imajiku.vegefinder.model.response.CountryResponse;
 import com.imajiku.vegefinder.model.response.ProvinceResponse;

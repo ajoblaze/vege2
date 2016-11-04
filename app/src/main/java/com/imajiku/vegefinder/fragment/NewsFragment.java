@@ -18,21 +18,21 @@ import com.imajiku.vegefinder.adapter.ImageListAdapter;
 
 import java.util.ArrayList;
 
-public class ArticlesFragment extends Fragment implements ImageListAdapter.ImageListListener {
-    private ArticlesListener mListener;
+public class NewsFragment extends Fragment implements ImageListAdapter.ImageListListener {
+    private NewsListener mListener;
     private RecyclerView recyclerView;
     private ImageListAdapter adapter;
     private ArrayList<String> list;
     private String TAG="exc";
 
-    public ArticlesFragment() {
+    public NewsFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_articles, container, false);
+        View v = inflater.inflate(R.layout.fragment_news, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager((Context) mListener, 2, LinearLayoutManager.VERTICAL, false));
         RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
@@ -49,18 +49,18 @@ public class ArticlesFragment extends Fragment implements ImageListAdapter.Image
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onArticles(uri);
+            mListener.onNews(uri);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof ArticlesListener) {
-            mListener = (ArticlesListener) context;
+        if (context instanceof NewsListener) {
+            mListener = (NewsListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement ArticlesListener");
+                    + " must implement NewsListener");
         }
     }
 
@@ -70,13 +70,19 @@ public class ArticlesFragment extends Fragment implements ImageListAdapter.Image
         mListener = null;
     }
 
+    public void setData(ArrayList<String> list) {
+        if(adapter!=null){
+            adapter.setData(list);
+        }
+    }
+
     @Override
     public void onImageTouch(int position) {
         Log.e(TAG, "onImageTouch3: "+position);
     }
 
-    public interface ArticlesListener {
-        void onArticles(Uri uri);
+    public interface NewsListener {
+        void onNews(Uri uri);
     }
 
     public void populate(){

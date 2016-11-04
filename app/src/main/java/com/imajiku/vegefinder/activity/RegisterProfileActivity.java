@@ -6,12 +6,10 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -22,15 +20,14 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
-import com.imajiku.vegefinder.model.RegionModel;
-import com.imajiku.vegefinder.model.RegisterProfileModel;
+import com.imajiku.vegefinder.model.model.RegionModel;
+import com.imajiku.vegefinder.model.model.RegisterProfileModel;
 import com.imajiku.vegefinder.model.presenter.RegionPresenter;
 import com.imajiku.vegefinder.model.presenter.RegisterProfilePresenter;
-import com.imajiku.vegefinder.model.presenter.view.RegionView;
-import com.imajiku.vegefinder.model.presenter.view.RegisterProfileView;
+import com.imajiku.vegefinder.model.view.RegionView;
+import com.imajiku.vegefinder.model.view.RegisterProfileView;
 import com.imajiku.vegefinder.model.request.RegisterRequest;
 import com.imajiku.vegefinder.utility.CircularImageView;
-import com.imajiku.vegefinder.utility.Utility;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -173,8 +170,9 @@ public class RegisterProfileActivity extends AppCompatActivity implements
         String selectedSex = sex.getSelectedItem().toString();
         String selectedPref = pref.getSelectedItem().toString();
         String imageCode = getImageCode();
-//        RegisterRequest request = new RegisterRequest();
-        presenter.submitRegister(username, email, password);
+        RegisterRequest request = new RegisterRequest(username, email, password);
+        // add other data
+        presenter.submitRegister(request);
     }
 
     private void hideKeyboard() {

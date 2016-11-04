@@ -12,9 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
-import com.imajiku.vegefinder.model.VerifyModel;
+import com.imajiku.vegefinder.model.model.VerifyModel;
 import com.imajiku.vegefinder.model.presenter.VerifyPresenter;
-import com.imajiku.vegefinder.model.presenter.view.VerifyView;
+import com.imajiku.vegefinder.model.view.VerifyView;
 
 public class VerifyActivity extends AppCompatActivity implements View.OnClickListener, VerifyView {
     private EditText editCode;

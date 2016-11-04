@@ -1,9 +1,9 @@
 package com.imajiku.vegefinder.model.presenter;
 
 
-import com.imajiku.vegefinder.model.ForgotModel;
+import com.imajiku.vegefinder.model.model.ForgotModel;
 import com.imajiku.vegefinder.model.response.ProvinceResponse;
-import com.imajiku.vegefinder.model.presenter.view.ForgotView;
+import com.imajiku.vegefinder.model.view.ForgotView;
 
 /**
  * Created by Alvin on 2016-10-08.

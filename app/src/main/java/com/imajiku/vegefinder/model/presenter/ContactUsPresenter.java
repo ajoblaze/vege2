@@ -1,10 +1,8 @@
 package com.imajiku.vegefinder.model.presenter;
 
 
-import android.util.Log;
-
-import com.imajiku.vegefinder.model.ContactUsModel;
-import com.imajiku.vegefinder.model.presenter.view.ContactUsView;
+import com.imajiku.vegefinder.model.model.ContactUsModel;
+import com.imajiku.vegefinder.model.view.ContactUsView;
 
 /**
  * Created by Alvin on 2016-10-08.

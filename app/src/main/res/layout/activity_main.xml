@@ -6,74 +6,77 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#a4d"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context=".activity.MainActivity">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@color/translucentCyan75" />
-
-        <Button
-            android:id="@+id/find_specific"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/rounded_edittext"
-            android:padding="8dip"
-            android:text="@string/find_specific_place" />
-
-        <Button
-            android:id="@+id/browse_nearby"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/find_specific"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/rounded_disabled"
-            android:padding="8dip"
-            android:text="@string/browse_nearby_places"
-            android:textColor="#AAA" />
-
-        <Button
-            android:id="@+id/account"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/browse_nearby"
-            android:layout_marginTop="12dp"
-            android:padding="8dip"
-            android:text="@string/my_account"
-            android:textColor="#AAA" />
-
-        <fragment
-            android:id="@+id/recommend_fragment"
-            android:name="com.imajiku.vegefinder.fragment.RecommendFragment"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            tools:layout="@layout/fragment_recommend"
-            android:layout_below="@id/account" />
+            android:layout_below="@+id/app_bar"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            tools:context=".activity.MainActivity">
 
-        <fragment
-            android:id="@+id/places_fragment"
-            android:name="com.imajiku.vegefinder.fragment.PlacesFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            tools:layout="@layout/fragment_places"
-            android:layout_below="@id/recommend_fragment" />
+            <Button
+                android:id="@+id/find_specific"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/rounded_edittext"
+                android:padding="8dip"
+                android:text="@string/find_specific_place" />
 
-        <fragment
-            android:id="@+id/articles_fragment"
-            android:name="com.imajiku.vegefinder.fragment.ArticlesFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            tools:layout="@layout/fragment_articles"
-            android:layout_below="@id/places_fragment" />
+            <Button
+                android:id="@+id/browse_nearby"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/find_specific"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/rounded_edittext"
+                android:padding="8dip"
+                android:text="@string/browse_nearby_places" />
+
+            <Button
+                android:id="@+id/my_account"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/browse_nearby"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/rounded_disabled"
+                android:padding="8dip"
+                android:text="@string/my_account"
+                android:textColor="#AAA" />
+
+            <fragment
+                android:id="@+id/recommend_fragment"
+                android:name="com.imajiku.vegefinder.fragment.RecommendFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/my_account"
+                android:layout_marginTop="12dp"
+                tools:layout="@layout/fragment_recommend" />
+
+            <fragment
+                android:id="@+id/places_fragment"
+                android:name="com.imajiku.vegefinder.fragment.PlacesFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recommend_fragment"
+                android:layout_marginTop="12dp"
+                tools:layout="@layout/fragment_places" />
+
+            <fragment
+                android:id="@+id/articles_fragment"
+                android:name="com.imajiku.vegefinder.fragment.NewsFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/places_fragment"
+                android:layout_marginTop="12dp"
+                tools:layout="@layout/fragment_news" />
+        </RelativeLayout>
+
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/toolbar_img" />
     </RelativeLayout>
 </ScrollView>

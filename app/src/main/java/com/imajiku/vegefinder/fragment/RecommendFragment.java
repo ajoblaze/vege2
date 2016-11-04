@@ -1,6 +1,7 @@
 package com.imajiku.vegefinder.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,13 +11,15 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.imajiku.vegefinder.R;
+import com.imajiku.vegefinder.activity.RecommendActivity;
 import com.imajiku.vegefinder.adapter.ImageListAdapter;
 
 import java.util.ArrayList;
 
-public class RecommendFragment extends Fragment implements ImageListAdapter.ImageListListener {
+public class RecommendFragment extends Fragment implements ImageListAdapter.ImageListListener, View.OnClickListener {
     private RecommendListener mListener;
     private RecyclerView recyclerView;
     private ImageListAdapter adapter;
@@ -31,6 +34,8 @@ public class RecommendFragment extends Fragment implements ImageListAdapter.Imag
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_recommend, container, false);
+        TextView seeMore = (TextView) v.findViewById(R.id.see_more);
+        seeMore.setOnClickListener(this);
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager((Context) mListener, LinearLayoutManager.HORIZONTAL, false));
         RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
@@ -70,6 +75,21 @@ public class RecommendFragment extends Fragment implements ImageListAdapter.Imag
 
     @Override
     public void onImageTouch(int position) {
+    }
+
+    public void setData(ArrayList<String> list) {
+        if(adapter!=null){
+            adapter.setData(list);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.see_more:
+//                startActivity(new Intent(getActivity(), RecommendActivity.class));
+                break;
+        }
     }
 
     public interface RecommendListener {

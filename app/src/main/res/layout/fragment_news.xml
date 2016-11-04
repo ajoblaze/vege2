@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.imajiku.vegefinder.fragment.RecommendFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".fragment.NewsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:text="@string/recommend_label" />
+            android:text="@string/news_label" />
 
         <TextView
             android:id="@+id/see_more"
@@ -27,9 +27,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="320dp"
         android:layout_margin="8dp"
-        android:scrollbars="horizontal"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:scrollbars="horizontal" />
 
 </LinearLayout>

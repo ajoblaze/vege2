@@ -2,7 +2,6 @@ package com.imajiku.vegefinder.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,10 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
-import com.imajiku.vegefinder.model.ForgotModel;
+import com.imajiku.vegefinder.model.model.ForgotModel;
 import com.imajiku.vegefinder.model.presenter.ForgotPresenter;
-import com.imajiku.vegefinder.model.presenter.view.ForgotView;
-import com.imajiku.vegefinder.utility.Utility;
+import com.imajiku.vegefinder.model.view.ForgotView;
 
 public class ForgotActivity extends AppCompatActivity implements View.OnClickListener, ForgotView {
 
