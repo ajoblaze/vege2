@@ -5,11 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.imajiku.vegefinder.activity.BrowseActivity">
+    tools:context=".activity.RestoListActivity">
 
     <ImageView
         android:layout_width="match_parent"
@@ -43,7 +39,8 @@
         android:background="@color/translucentRed25"
         app:ael_duration="200"
         app:ael_interpolator="accelerate"
-        app:ael_orientation="vertical">
+        app:ael_orientation="vertical"
+        android:visibility="invisible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,11 +100,11 @@
                     android:text="@string/bookmarked" />
 
                 <CheckBox
-                    android:id="@+id/vegan"
+                    android:id="@+id/been_here"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/vegan" />
+                    android:text="@string/been_here" />
             </LinearLayout>
 
             <!--line 3-->
@@ -117,11 +114,11 @@
                 android:orientation="horizontal">
 
                 <CheckBox
-                    android:id="@+id/been_here"
+                    android:id="@+id/vegan"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/been_here" />
+                    android:text="@string/vegan" />
 
                 <CheckBox
                     android:id="@+id/vege"
@@ -147,7 +144,8 @@
         android:background="@color/translucentOrange50"
         app:ael_duration="200"
         app:ael_interpolator="accelerate"
-        app:ael_orientation="vertical">
+        app:ael_orientation="vertical"
+        android:visibility="invisible">
 
         <LinearLayout
             android:layout_width="match_parent"

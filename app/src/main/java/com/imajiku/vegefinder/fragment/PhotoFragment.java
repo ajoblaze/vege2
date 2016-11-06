@@ -14,14 +14,14 @@ import android.view.ViewGroup;
 
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.activity.RestaurantActivity;
-import com.imajiku.vegefinder.adapter.ImageListAdapter;
+import com.imajiku.vegefinder.adapter.PreviewListAdapter;
 
 import java.util.ArrayList;
 
-public class PhotoFragment extends Fragment implements ImageListAdapter.ImageListListener {
+public class PhotoFragment extends Fragment implements PreviewListAdapter.PreviewListListener {
     private PhotoListener mListener;
     private RecyclerView recyclerView;
-    private ImageListAdapter adapter;
+    private PreviewListAdapter adapter;
     private ArrayList<String> list;
     private String TAG="exc";
 
@@ -39,9 +39,9 @@ public class PhotoFragment extends Fragment implements ImageListAdapter.ImageLis
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
-        populate();
-        adapter = new ImageListAdapter(getContext(), this, false);
-        adapter.setData(list);
+//        populate();
+        adapter = new PreviewListAdapter(getContext(), this, false);
+//        adapter.setData(list);
         recyclerView.setAdapter(adapter);
         return v;
     }
@@ -70,7 +70,7 @@ public class PhotoFragment extends Fragment implements ImageListAdapter.ImageLis
     }
 
     @Override
-    public void onImageTouch(int position) {
+    public void onItemTouch(int position) {
         if(position == 1) {
             Intent i = new Intent(getActivity(), RestaurantActivity.class);
             startActivity(i);

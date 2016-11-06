@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.imajiku.vegefinder.R;
+import com.imajiku.vegefinder.pojo.RestoPreview;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -15,9 +17,9 @@ import java.util.ArrayList;
 /**
  * Created by Alvin on 2016-09-26.
  */
-public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.ImageListViewHolder> {
-    private ImageListListener listener;
-    private ArrayList<String> list;
+public class PreviewListAdapter extends RecyclerView.Adapter<PreviewListAdapter.PreviewListViewHolder> {
+    private PreviewListListener listener;
+    private ArrayList<RestoPreview> list;
     private Context context;
     private int width, height;
     private boolean isGrid;
@@ -26,7 +28,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Imag
     /**
      * empty adapter
      */
-    public ImageListAdapter(Context context, ImageListListener listener, boolean isGrid) {
+    public PreviewListAdapter(Context context, PreviewListListener listener, boolean isGrid) {
         this.context = context;
         this.listener = listener;
         this.width = 90;
@@ -43,14 +45,15 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Imag
 
     /**
      * updates adapter with content
+     * @param list
      */
-    public void setData(ArrayList<String> list) {
+    public void setData(ArrayList<RestoPreview> list) {
         this.list = list;
         notifyDataSetChanged();
     }
 
     @Override
-    public ImageListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PreviewListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int layout;
         if(isGrid){
             layout = R.layout.item_grid;
@@ -58,20 +61,28 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Imag
             layout = R.layout.item_horizontal;
         }
         View v = LayoutInflater.from(context).inflate(layout, parent, false);
-        return new ImageListViewHolder(v);
+        return new PreviewListViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ImageListViewHolder holder, final int position) {
-        Picasso.with(context)
-                .load(list.get(position))
-                .resize(width, height)
-                .centerCrop()
-                .into(holder.img);
-        holder.img.setOnClickListener(new View.OnClickListener() {
+    public void onBindViewHolder(PreviewListViewHolder holder, final int position) {
+        final RestoPreview item = list.get(position);
+        View itemView = holder.itemView;
+        if(!item.getImage().equals("")) {
+            Picasso.with(context)
+                    .load(item.getImage())
+                    .resize(width, height)
+                    .centerCrop()
+                    .into(holder.img);
+        }
+        holder.title.setText(item.getTitle());
+        if(!isGrid){
+            holder.city.setText(item.getCity());
+        }
+        itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onImageTouch(position);
+                listener.onItemTouch(item.getId());
             }
         });
     }
@@ -81,21 +92,24 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Imag
         return list.size();
     }
 
-    class ImageListViewHolder extends RecyclerView.ViewHolder {
+    class PreviewListViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView img;
+        public TextView title, city;
 
-        public ImageListViewHolder(View itemView) {
+        public PreviewListViewHolder(View itemView) {
             super(itemView);
+            title = (TextView) itemView.findViewById(R.id.title);
             if(isGrid) {
                 img = (ImageView) itemView.findViewById(R.id.grid_img);
             }else{
                 img = (ImageView) itemView.findViewById(R.id.img);
+                city = (TextView) itemView.findViewById(R.id.city);
             }
         }
     }
 
-    public interface ImageListListener {
-        void onImageTouch(int position);
+    public interface PreviewListListener {
+        void onItemTouch(int id);
     }
 }

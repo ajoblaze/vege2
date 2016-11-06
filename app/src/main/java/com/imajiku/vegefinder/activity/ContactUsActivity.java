@@ -30,7 +30,7 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
         presenter = new ContactUsPresenter(this);
         ContactUsModel model = new ContactUsModel(presenter);
         presenter.setModel(model);
-        initToolbar();
+        initToolbar(getResources().getString(R.string.contact_us_title));
         name = (EditText) findViewById(R.id.name);
         email = (EditText) findViewById(R.id.email);
         phone = (EditText) findViewById(R.id.phone);
@@ -68,7 +68,7 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void initToolbar() {
+    public void initToolbar(String title) {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
         ActionBar ab = getSupportActionBar();
@@ -77,7 +77,7 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
             ab.setDisplayShowHomeEnabled(true);
         }
         TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
-        tv.setText(getResources().getString(R.string.contact_us_title));
+        tv.setText(title);
     }
 
     private String getString(EditText et){

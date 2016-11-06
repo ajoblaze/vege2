@@ -1,6 +1,7 @@
 package com.imajiku.vegefinder.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,37 +14,36 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.imajiku.vegefinder.R;
-import com.imajiku.vegefinder.adapter.RestoListAdapter;
-import com.imajiku.vegefinder.pojo.Resto;
+import com.imajiku.vegefinder.activity.NewsDetailActivity;
+import com.imajiku.vegefinder.adapter.NewsListAdapter;
+import com.imajiku.vegefinder.pojo.News;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class RestoListFragment extends Fragment implements RestoListAdapter.RestoListListener {
-    private RestoListListener mListener;
+public class NewsListFragment extends Fragment implements NewsListAdapter.NewsListListener {
+    private NewsListListener mListener;
     private RecyclerView recyclerView;
-    private RestoListAdapter adapter;
-    private ArrayList<Resto> list;
+    private NewsListAdapter adapter;
+    private ArrayList<News> list;
     private String TAG="exc";
 
-    public RestoListFragment() {
+    public NewsListFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_resto_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_news_list, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager((Context) mListener, LinearLayoutManager.VERTICAL, false));
         RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
-//        populate();
-        adapter = new RestoListAdapter(getContext(), this);
-//        adapter.setData(list);
+        adapter = new NewsListAdapter(getContext(), this);
         recyclerView.setAdapter(adapter);
         return v;
     }
@@ -51,11 +51,11 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof RestoListListener) {
-            mListener = (RestoListListener) context;
+        if (context instanceof NewsListListener) {
+            mListener = (NewsListListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement RestoListListener");
+                    + " must implement NewsListListener");
         }
     }
 
@@ -70,37 +70,29 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
 
     }
 
-    public void setData(ArrayList<Resto> list, boolean isSavedPlace) {
-        if(adapter!=null){
-            adapter.setData(list, isSavedPlace);
+    @Override
+    public void onReadMore(News n) {
+        Intent i = new Intent(getActivity(), NewsDetailActivity.class);
+        i.putExtra("news", n);
+        startActivity(i);
+    }
+
+    public void sort(ArrayList<News> NewsList, int[] sortResult) {
+        new NewsSortTask(NewsList, sortResult).execute();
+    }
+
+    private void setData(ArrayList<News> NewsList) {
+        if(adapter != null){
+            adapter.setData(NewsList);
         }
     }
 
-    public void filter(boolean[] filterResult, boolean isSavedPlace) {
-        new RestoFilterTask(filterResult, isSavedPlace).execute();
-    }
-
-    public void sort(ArrayList<Resto> restoList, int[] sortResult, boolean isSavedPlace) {
-        new RestoSortTask(restoList, sortResult, isSavedPlace).execute();
-    }
-
-    public interface RestoListListener {
-        void onRestoList(Uri uri);
-    }
-
-    public void populate(){
-        list = new ArrayList<>();
-        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato1", (float)2, 100000));
-        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato2", (float)4.8, 90000));
-        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato3", 5, 120000));
-        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato4", (float)2.5, 80000));
-        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato5", 5, 9999999));
-        //footer
-        list.add(new Resto());
+    public interface NewsListListener {
+        void onNewsList(Uri uri);
     }
 
     /**
-     * Filter the Resto list
+     * Filter the News list
      * parameter = boolean[] filterResult
      *
      * 0 => Open Now
@@ -110,14 +102,12 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
      * 4 => Vegan
      * 5 => Vegetarian
      */
-    class RestoFilterTask extends AsyncTask<Void, Void, ArrayList<Resto>> {
+    class NewsFilterTask extends AsyncTask<Void, Void, ArrayList<News>> {
 
         private final boolean[] filterResult;
-        private final boolean isSavedPlace;
 
-        public RestoFilterTask(boolean[] filterResult, boolean isSavedPlace) {
+        public NewsFilterTask(boolean[] filterResult) {
             this.filterResult = filterResult;
-            this.isSavedPlace = isSavedPlace;
         }
 
         @Override
@@ -127,17 +117,17 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
         }
 
         @Override
-        protected ArrayList<Resto> doInBackground(Void... params) {
-            ArrayList<Resto> filteredList = new ArrayList<>();
-            for(Resto r : list){
+        protected ArrayList<News> doInBackground(Void... params) {
+            ArrayList<News> filteredList = new ArrayList<>();
+            for(News r : list){
                 if(filterResult[0]){
                     //cek if open now
                 }
                 if(filterResult[1]){
                     //cek if rated 8+
-                    if(r.getRating() < 8){
-                        continue;
-                    }
+//                    if(r.getRating() < 8){
+//                        continue;
+//                    }
                 }
                 if(filterResult[2]){
                     //cek if bookmarked
@@ -157,15 +147,15 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Resto> restoList) {
-            super.onPostExecute(restoList);
+        protected void onPostExecute(ArrayList<News> NewsList) {
+            super.onPostExecute(NewsList);
             // hide loading spinner
-            setData(restoList, isSavedPlace);
+            setData(NewsList);
         }
     }
 
     /**
-     * Sort the Resto list
+     * Sort the News list
      * parameter = int[] sortResult
      *
      * index 0 => type of sort
@@ -177,16 +167,14 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
      * * 0 => ascending
      * * 1 => descending
      */
-    class RestoSortTask extends AsyncTask<Void, Void, ArrayList<Resto>> {
+    class NewsSortTask extends AsyncTask<Void, Void, ArrayList<News>> {
 
         private final int[] sortResult;
-        private final boolean isSavedPlace;
-        private ArrayList<Resto> sortedList;
+        private ArrayList<News> sortedList;
 
-        public RestoSortTask(ArrayList<Resto> list, int[] sortResult, boolean isSavedPlace) {
+        public NewsSortTask(ArrayList<News> list, int[] sortResult) {
             this.sortResult = sortResult;
             sortedList = list;
-            this.isSavedPlace = isSavedPlace;
         }
 
         @Override
@@ -196,11 +184,11 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
         }
 
         @Override
-        protected ArrayList<Resto> doInBackground(Void... params) {
-            Collections.sort(sortedList, new Comparator<Resto>() {
+        protected ArrayList<News> doInBackground(Void... params) {
+            Collections.sort(sortedList, new Comparator<News>() {
                 @Override
-                public int compare(Resto r1, Resto r2) {
-                    Resto a, b;
+                public int compare(News r1, News r2) {
+                    News a, b;
                     // order
                     if(sortResult[1] == 0){ // ascending
                         a = r1;
@@ -213,24 +201,25 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
                     if(sortResult[0] == 0) {
                         return a.getTitle().compareTo(b.getTitle());
                     } else if(sortResult[0] == 1) {
-                        return Float.valueOf(a.getDistance()).compareTo(b.getDistance());
+//                        return Float.valueOf(a.getDistance()).compareTo(b.getDistance());
                     } else if(sortResult[0] == 2) {
                         return a.getDatePost().compareTo(b.getDatePost());
                     } else if(sortResult[0] == 3) {
-                        return Integer.valueOf(a.getPriceStart()).compareTo(b.getPriceStart());
+//                        return Integer.valueOf(a.getPriceStart()).compareTo(b.getPriceStart());
                     } else {
                         throw new IllegalArgumentException("Invalid Parameter : "+sortResult[0]);
                     }
+                    return 0;
                 }
             });
             return sortedList;
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Resto> restoList) {
-            super.onPostExecute(restoList);
+        protected void onPostExecute(ArrayList<News> NewsList) {
+            super.onPostExecute(NewsList);
             // hide loading spinner
-            setData(restoList, isSavedPlace);
+            setData(NewsList);
         }
     }
 }

@@ -1,11 +1,15 @@
 package com.imajiku.vegefinder.pojo;
 
+import android.location.Location;
+
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 
 /**
  * Created by Alvin on 2016-10-01.
  */
-public class Resto {
+public class Resto implements Serializable{
     @SerializedName("id")
     private int id;
     @SerializedName("user_id")
@@ -31,7 +35,7 @@ public class Resto {
     @SerializedName("address")
     private String address;
     @SerializedName("price_start")
-    private String priceStart;
+    private int priceStart;
     @SerializedName("price_rate")
     private int priceRate;
     @SerializedName("image")
@@ -67,9 +71,18 @@ public class Resto {
 
     String imgPath;
     String name;
-    float distance;
+    private float distance;
     float rating;
     int price;
+    boolean bookmarked;
+
+    public boolean isBookmarked() {
+        return bookmarked;
+    }
+
+    public void setBookmarked(boolean bookmarked) {
+        this.bookmarked = bookmarked;
+    }
 
     public Resto(){
 
@@ -82,6 +95,13 @@ public class Resto {
         this.price = price;
     }
 
+    public void setDistance(Location location) {
+        Location store = new Location("");
+        store.setLongitude(Double.parseDouble(getLongitude()));
+        store.setLatitude(Double.parseDouble(getLatitude()));
+        distance = location.distanceTo(store);
+    }
+
     public String getImgPath() {
         return imgPath;
     }
@@ -91,7 +111,7 @@ public class Resto {
     }
 
     public float getDistance() {
-        return distance;
+        return distance/1000;
     }
 
     public float getRating() {
@@ -150,7 +170,7 @@ public class Resto {
         return address;
     }
 
-    public String getPriceStart() {
+    public int getPriceStart() {
         return priceStart;
     }
 

@@ -32,7 +32,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.RestaurantActivity" />
-        <activity android:name=".activity.BrowseActivity" />
+        <activity android:name=".activity.RestoListActivity" />
+        <activity android:name=".activity.NewsListActivity" />
         <activity android:name=".activity.VerifyActivity" />
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.VerifyForgotActivity" />
@@ -40,8 +41,7 @@
         <activity android:name=".activity.ForgotActivity" />
         <activity android:name=".activity.ContactUsActivity" />
         <activity android:name=".activity.FindPlaceActivity" />
-        <activity android:name=".activity.FindPlaceResultActivity" />
-        <activity android:name=".activity.RecommendActivity"></activity>
+        <activity android:name=".activity.NewsDetailActivity" />
     </application>
 
 </manifest>

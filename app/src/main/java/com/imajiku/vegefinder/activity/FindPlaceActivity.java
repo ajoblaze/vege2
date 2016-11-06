@@ -17,6 +17,7 @@ import com.imajiku.vegefinder.model.model.RegionModel;
 import com.imajiku.vegefinder.model.presenter.RegionPresenter;
 import com.imajiku.vegefinder.model.view.FindPlaceView;
 import com.imajiku.vegefinder.model.view.RegionView;
+import com.imajiku.vegefinder.pojo.Resto;
 
 import java.util.ArrayList;
 
@@ -76,18 +77,10 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
             adapter = countryDataAdapter;
         } else if(type == RegionPresenter.PROVINCE){
             adapter = provinceDataAdapter;
-            if(content.size() > 0) {
-                content.add(0, "Choose Province..");
-            }else{
-                content.add("Province");
-            }
+            content.add(0, "All Province");
         } else if(type == RegionPresenter.CITY) {
             adapter = cityDataAdapter;
-            if(content.size() > 0) {
-                content.add(0, "Choose City..");
-            }else{
-                content.add("City");
-            }
+            content.add(0, "All City");
         } else {
             return;
         }
@@ -101,20 +94,20 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
     @Override
     public void onClick(View v) {
         hideKeyboard();
-        Intent i  = new Intent(FindPlaceActivity.this, FindPlaceResultActivity.class);
+        Intent i  = new Intent(FindPlaceActivity.this, RestoListActivity.class);
         switch(v.getId()){
             case R.id.find_region:
+                i.putExtra("page", RestoListActivity.PAGE_SEARCH);
                 i.putExtra("type", "region");
                 i.putExtra("province", presenter.getProvinceId(currProvince));
                 i.putExtra("city", presenter.getCityId(currCity));
-//                startActivity(i);
-//                presenter.findPlace(provinceId, cityId);
+                startActivity(i);
                 break;
             case R.id.find_keyword:
+                i.putExtra("page", RestoListActivity.PAGE_SEARCH);
                 i.putExtra("type", "keyword");
                 i.putExtra("keyword", keyword.getText().toString());
-//                startActivity(i);
-//                presenter.findPlace(provinceId, cityId);
+                startActivity(i);
                 break;
         }
     }
@@ -148,6 +141,16 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public void successFindKeyword(ArrayList<Resto> data) {
+
+    }
+
+    @Override
+    public void successFindPlace(ArrayList<Resto> data) {
 
     }
 }

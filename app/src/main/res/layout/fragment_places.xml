@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/translucentOrange75"
     tools:context="com.imajiku.vegefinder.fragment.PlacesFragment"
     android:orientation="vertical">
 
@@ -19,7 +18,7 @@
 
         <TextView
             android:id="@+id/see_more"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
             android:text="@string/see_more" />
@@ -28,10 +27,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="140dp"
         android:layout_margin="8dp"
         android:scrollbars="horizontal"
-        android:background="@color/translucentBlue75"
         android:orientation="vertical" />
 
 </LinearLayout>

@@ -2,13 +2,12 @@ package com.imajiku.vegefinder.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RatingBar;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.imajiku.vegefinder.R;
@@ -25,6 +24,7 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
     private ArrayList<Resto> list;
     private Context context;
     private String TAG = "exc";
+    private boolean isSavedPlace;
 
     public static final int NORMAL = 1;
     public static final int FOOTER = 2;
@@ -41,8 +41,9 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
     /**
      * updates adapter with content
      */
-    public void setData(ArrayList<Resto> list) {
+    public void setData(ArrayList<Resto> list, boolean isSavedPlace) {
         this.list = list;
+        this.isSavedPlace = isSavedPlace;
         notifyDataSetChanged();
     }
 
@@ -65,7 +66,7 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
             v = LayoutInflater.from(context).inflate(R.layout.item_resto, parent, false);
             return new RestoListViewHolder(v, false);
         } else {
-            v = LayoutInflater.from(context).inflate(R.layout.item_resto_footer, parent, false);
+            v = LayoutInflater.from(context).inflate(R.layout.item_load_more, parent, false);
             return new RestoListViewHolder(v, true);
         }
     }
@@ -80,16 +81,33 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
                 }
             });
         } else {
-            Resto r = list.get(position);
-            Picasso.with(context)
-                    .load(list.get(position).getImgPath())
-                    .resize(90, 90)
-                    .centerCrop()
-                    .into(holder.image);
-            holder.name.setText(r.getName());
+            final Resto r = list.get(position);
+            // TODO: uncomment this
+//            Picasso.with(context)
+//                    .load(r.getImage())
+//                    .resize(90, 90)
+//                    .centerCrop()
+//                    .into(holder.image);
+            holder.name.setText(r.getTitle());
             holder.distance.setText(r.getDistance() + " km from your location");
-            holder.price.setText("starts from Rp" + r.getPrice());
-            holder.rating.setText(list.get(position).getAverageRate() + " of 10");
+            holder.price.setText("starts from Rp" + r.getPriceStart());
+            holder.rating.setText(r.getAverageRate() + " of 10");
+            if(isSavedPlace){
+                holder.flagLayout.setVisibility(View.GONE);
+            }else{
+                holder.flagLayout.setVisibility(View.VISIBLE);
+            }
+            holder.flag.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(r.isBookmarked()){
+                        ((ImageView)view).setImageResource(R.drawable.ic_bookmark_border_black_24dp_m);
+                    }else{
+                        ((ImageView)view).setImageResource(R.drawable.ic_bookmark_black_24dp_m);
+                    }
+                    r.setBookmarked(!r.isBookmarked());
+                }
+            });
 //            holder.ratingBar.setRating(list.get(position).getRating());
         }
     }
@@ -105,10 +123,11 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
 
     class RestoListViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView image;
+        public ImageView image, flag;
         public TextView name, distance, price, rating;
         //        public RatingBar ratingBar;
         public Button loadMore;
+        public LinearLayout flagLayout;
 
         public RestoListViewHolder(View itemView, boolean isFooter) {
             super(itemView);
@@ -120,6 +139,8 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
                 distance = (TextView) itemView.findViewById(R.id.distance);
                 price = (TextView) itemView.findViewById(R.id.price);
                 rating = (TextView) itemView.findViewById(R.id.rating);
+                flag = (ImageView) itemView.findViewById(R.id.flag);
+                flagLayout = (LinearLayout) itemView.findViewById(R.id.flag_layout);
 //                ratingBar = (RatingBar) itemView.findViewById(R.id.rating_bar);
             }
         }

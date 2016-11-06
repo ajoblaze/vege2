@@ -39,4 +39,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:9.6.1'
     compile 'com.github.yesidlazaro:GmailBackground:1.1'
     compile 'com.github.aakira:expandable-layout:1.6.0@aar'
+    compile 'com.github.deano2390:FlowTextView:2.0.5'
 }

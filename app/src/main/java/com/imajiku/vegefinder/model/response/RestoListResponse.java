@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by Alvin on 2016-10-23.
  */
-public class FindPlaceResponse {
+public class RestoListResponse {
     @SerializedName("data")
     private ArrayList<Resto> data;
 
