@@ -10,6 +10,7 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.adapter.ReviewListAdapter;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ReviewFragment extends Fragment {
+public class ReviewFragment extends Fragment implements View.OnClickListener {
     private ReviewListener mListener;
     private RecyclerView recyclerView;
     private ReviewListAdapter adapter;
@@ -40,6 +41,9 @@ public class ReviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_review, container, false);
+        TextView seeMore = (TextView) v.findViewById(R.id.see_more);
+        seeMore.setOnClickListener(this);
+
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager((Context) mListener, LinearLayoutManager.VERTICAL, false){
             @Override
@@ -52,11 +56,11 @@ public class ReviewFragment extends Fragment {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
         now = getNow();
-        if(list == null) {
-            populate();
-        }
+//        if(list == null) {
+//            populate();
+//        }
         adapter = new ReviewListAdapter(getContext(), now);
-        adapter.setData(list);
+//        adapter.setData(list);
         recyclerView.setAdapter(adapter);
         return v;
     }
@@ -84,18 +88,24 @@ public class ReviewFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.see_more: {
+//                Intent i = new Intent(getActivity(), RestoListActivity.class);
+//                i.putExtra("page", RestoListActivity.PAGE_SAVED);
+//                startActivity(i);
+            }
+            break;
+        }
+    }
+
     public interface ReviewListener {
         void onReview(Uri uri);
     }
     
     public static String getNow(){
         LocalDateTime d2 = new LocalDateTime(new DateTime());
-        return d2.toString("yyyy-MM-dd HH:mm:ss");
-    }
-
-    public void populate(){
-        list = new ArrayList<>();
-        list.add(new Review("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Pot", "ato", now, "4", "gud"));
-        list.add(new Review("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Pot2", "ato2", now, "2", "meh"));
+        return d2.toString("yyyy-MM-dd");
     }
 }

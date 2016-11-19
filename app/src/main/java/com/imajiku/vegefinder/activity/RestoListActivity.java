@@ -98,7 +98,6 @@ public class RestoListActivity extends AppCompatActivity implements
 
         Intent intent = getIntent();
         pageType = intent.getIntExtra("page", PAGE_BROWSE);
-        Log.e(TAG, "pageType: "+pageType);
         switch(pageType){
             case PAGE_RECOMMEND:
 //                presenter.recommend();

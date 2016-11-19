@@ -87,6 +87,13 @@ public class RegionPresenter {
         view.updateDropdown(COUNTRY, new ArrayList<String>());
     }
 
+    public int getCountryId(String country) {
+        if(countryResponse == null){
+            return -1;
+        }
+        return countryResponse.getData().getCountryId(country);
+    }
+
     public int getProvinceId(String province) {
         if(provinceResponse == null){
             return -1;

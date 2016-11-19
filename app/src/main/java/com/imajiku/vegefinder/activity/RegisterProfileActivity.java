@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -24,10 +25,12 @@ import com.imajiku.vegefinder.model.model.RegionModel;
 import com.imajiku.vegefinder.model.model.RegisterProfileModel;
 import com.imajiku.vegefinder.model.presenter.RegionPresenter;
 import com.imajiku.vegefinder.model.presenter.RegisterProfilePresenter;
+import com.imajiku.vegefinder.model.request.RegisterProfileRequest;
 import com.imajiku.vegefinder.model.view.RegionView;
 import com.imajiku.vegefinder.model.view.RegisterProfileView;
 import com.imajiku.vegefinder.model.request.RegisterRequest;
 import com.imajiku.vegefinder.utility.CircularImageView;
+import com.imajiku.vegefinder.utility.ImageDecoderHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -36,7 +39,7 @@ public class RegisterProfileActivity extends AppCompatActivity implements
         View.OnClickListener,
         RegisterProfileView, RegionView, AdapterView.OnItemSelectedListener {
 
-    private static final int RESULT_LOAD_IMAGE = 5;
+    private static final int REQUEST_LOAD_IMAGE = 5;
     private static final int REQUEST_VERIFY = 98;
     private static final int RESULT_VERIFY = 99;
     private static final String TAG = "exc";
@@ -128,7 +131,7 @@ public class RegisterProfileActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+        if (requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
             Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
@@ -137,7 +140,10 @@ public class RegisterProfileActivity extends AppCompatActivity implements
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 picturePath = cursor.getString(columnIndex);
                 cursor.close();
-                profPic.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//                profPic.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                profPic.setImageBitmap(
+                        ImageDecoderHelper.decodeSampledBitmapFromFile(picturePath, 170, 170)
+                );
             } else {
                 Toast.makeText(RegisterProfileActivity.this, "Image not found", Toast.LENGTH_SHORT).show();
             }
@@ -150,7 +156,7 @@ public class RegisterProfileActivity extends AppCompatActivity implements
         switch (v.getId()) {
             case R.id.iv_camera:
                 Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
+                startActivityForResult(i, REQUEST_LOAD_IMAGE);
                 break;
             case R.id.save_button:
                 if (name.getText().toString().length() == 0) {
@@ -163,16 +169,25 @@ public class RegisterProfileActivity extends AppCompatActivity implements
     }
 
     private void submitRegister() {
-        // TODO: finish this
         String selectedCountry = countrySpinner.getSelectedItem().toString();
         String selectedProvince = provinceSpinner.getSelectedItem().toString();
         String selectedCity = citySpinner.getSelectedItem().toString();
         String selectedSex = sex.getSelectedItem().toString();
         String selectedPref = pref.getSelectedItem().toString();
         String imageCode = getImageCode();
-        RegisterRequest request = new RegisterRequest(username, email, password);
+        int id = 1; // TODO: change into actual id
+        RegisterProfileRequest request = new RegisterProfileRequest(
+                id,
+                regionPresenter.getCountryId(selectedCountry),
+                regionPresenter.getProvinceId(selectedProvince),
+                regionPresenter.getCityId(selectedCity),
+                selectedSex,
+                selectedPref,
+                picturePath,
+                imageCode
+        );
         // add other data
-        presenter.submitRegister(request);
+        presenter.registerProfile(request);
     }
 
     private void hideKeyboard() {
@@ -210,9 +225,14 @@ public class RegisterProfileActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void successRegister(String code, String email) {
+    public void successRegisterProfile() {
         Intent i = new Intent(RegisterProfileActivity.this, VerifyActivity.class);
         startActivityForResult(i, REQUEST_VERIFY);
+    }
+
+    @Override
+    public void failedRegisterProfile() {
+        Log.e(TAG, "failedRegisterProfile: ");
     }
 
     @Override

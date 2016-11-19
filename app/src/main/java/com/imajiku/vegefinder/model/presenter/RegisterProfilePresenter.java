@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.model.presenter;
 
 
 import com.imajiku.vegefinder.model.model.RegisterProfileModel;
+import com.imajiku.vegefinder.model.request.RegisterProfileRequest;
 import com.imajiku.vegefinder.model.view.RegisterProfileView;
 import com.imajiku.vegefinder.model.request.RegisterRequest;
 
@@ -24,12 +25,16 @@ public class RegisterProfilePresenter {
         this.model = model;
     }
 
-    public void submitRegister(RegisterRequest request) {
-        model.register(request);
+    public void registerProfile(RegisterProfileRequest request) {
+        model.registerProfile(request);
     }
 
-    public void successRegister(String code, String email) {
-        view.successRegister(code, email);
+    public void successRegisterProfile() {
+        view.successRegisterProfile();
+    }
+
+    public void failedRegisterProfile() {
+        view.failedRegisterProfile();
     }
 }
 

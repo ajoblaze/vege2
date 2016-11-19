@@ -56,9 +56,9 @@ public class PreviewListAdapter extends RecyclerView.Adapter<PreviewListAdapter.
     public PreviewListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int layout;
         if(isGrid){
-            layout = R.layout.item_grid;
+            layout = R.layout.item_preview_grid;
         }else{
-            layout = R.layout.item_horizontal;
+            layout = R.layout.item_preview_horizontal;
         }
         View v = LayoutInflater.from(context).inflate(layout, parent, false);
         return new PreviewListViewHolder(v);

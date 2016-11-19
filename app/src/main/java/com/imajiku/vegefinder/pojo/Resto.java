@@ -67,7 +67,7 @@ public class Resto implements Serializable{
     @SerializedName("content")
     private String content;
     @SerializedName("average_rate")
-    private int averageRate;
+    private String averageRate;
 
     String imgPath;
     String name;
@@ -234,7 +234,7 @@ public class Resto implements Serializable{
         return content;
     }
 
-    public int getAverageRate() {
+    public String getAverageRate() {
         return averageRate;
     }
 }

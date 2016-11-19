@@ -2,6 +2,8 @@ package com.imajiku.vegefinder.pojo;
 
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Hours;
@@ -11,23 +13,40 @@ import org.joda.time.Seconds;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 
 /**
  * Created by Alvin on 2016-09-27.
  */
 public class Review {
-    String profileImg;
-    String name;
+    @SerializedName("first_name")
+    String firstName;
+    @SerializedName("last_name")
+    String lastName;
+    @SerializedName("id")
+    int reviewId;
+    @SerializedName("place_id")
+    int placeId;
+    @SerializedName("user_id")
+    int userId;
+    @SerializedName("title")
     String title;
-    String date;
-    String rating;
-    String desc;
+    @SerializedName("date_post")
+    String datePost;
+    @SerializedName("rate")
+    double rate;
+    @SerializedName("comment")
+    String comment;
+    @SerializedName("status")
+    int status;
 
     public String getDateDiff(String now) {
-        date = "2016-09-28 21:55:55";
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        DateTime dt0 = dtf.parseDateTime(date);
+//        datePost = "2016-09-28 21:55:55";
+//        String pattern = "yyyy-MM-dd HH:mm:ss";
+        String pattern = "yyyy-MM-dd";
+        DateTimeFormatter dtf = DateTimeFormat.forPattern(pattern);
+        DateTime dt0 = dtf.parseDateTime(datePost);
         DateTime dt1 = dtf.parseDateTime(now);
         LocalDateTime ddate = new LocalDateTime(dt0);
         LocalDateTime dnow = new LocalDateTime(dt1);
@@ -36,7 +55,7 @@ public class Review {
             if(days > 7) {
                 return days + (days == 1 ? " day" : " days") + " ago";
             }else{
-                return date;
+                return datePost;
             }
         }else{
             int hours = Hours.hoursBetween(dnow, ddate).getHours() % 24;
@@ -54,36 +73,48 @@ public class Review {
         }
     }
 
-    public Review(String profileImg, String name, String title, String date, String rating, String desc) {
-        this.profileImg = profileImg;
-        this.name = name;
-        this.title = title;
-        this.date = date;
-        this.rating = rating;
-        this.desc = desc;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getProfileImg() {
-        return profileImg;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getName() {
-        return name;
+    public int getReviewId() {
+        return reviewId;
+    }
+
+    public int getPlaceId() {
+        return placeId;
+    }
+
+    public int getUserId() {
+        return userId;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getDate() {
-        return date;
+    public String getDatePost() {
+        return datePost;
     }
 
-    public String getRating() {
-        return rating;
+    public double getRate() {
+        return rate;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getRateString() {
+        DecimalFormat df = new DecimalFormat("#.00");
+        return df.format(rate);
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public int getStatus() {
+        return status;
     }
 }

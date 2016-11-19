@@ -3,6 +3,7 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="facebook_app_id">910588845712421</string>
+    <string name="google_maps_api_key">AIzaSyARP9mnW6i9FamSaTXyrwp_nxK2I88C1Oo</string>
 
     <!--title strings-->
     <string name="profile_title">Your Profile</string>
@@ -73,4 +74,20 @@
     <string name="places_label">Your Saved Places</string>
     <string name="recommend_label">You Might Like</string>
     <string name="read_more">Read More</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="check_in">Check In</string>
+    <string name="book">Book</string>
+    <string name="call">Call</string>
+    <string name="maps_and_directions"><![CDATA[Maps and Directions>]]></string>
+    <string name="photos">Photos</string>
+    <string name="add_photo"><![CDATA[Add Photo>]]></string>
+    <string name="reviews">Reviews</string>
+    <string name="report_problem">Report Problem</string>
+    <string name="call_title">Tap the number to call</string>
+    <string name="check_in_facebook">Share on Facebook</string>
+    <string name="check_in_twitter">Share on Twitter</string>
+    <string name="check_in_status">What\'s good here?</string>
+    <string name="directions">Directions</string>
+    <string name="btn_gallery">Choose from Gallery</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>

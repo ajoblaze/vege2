@@ -1,16 +1,21 @@
 package com.imajiku.vegefinder.service;
 
+import com.imajiku.vegefinder.model.request.ToggleRequest;
 import com.imajiku.vegefinder.model.request.ContactUsRequest;
 import com.imajiku.vegefinder.model.request.FindKeywordRequest;
 import com.imajiku.vegefinder.model.request.FindRegionRequest;
 import com.imajiku.vegefinder.model.request.ForgotRequest;
 import com.imajiku.vegefinder.model.request.LoginRequest;
+import com.imajiku.vegefinder.model.request.RegisterProfileRequest;
 import com.imajiku.vegefinder.model.request.RegisterRequest;
 import com.imajiku.vegefinder.model.request.VerifyForgotRequest;
 import com.imajiku.vegefinder.model.request.VerifyRequest;
+import com.imajiku.vegefinder.model.response.ToggleResponse;
 import com.imajiku.vegefinder.model.response.CityResponse;
 import com.imajiku.vegefinder.model.response.ContactUsResponse;
 import com.imajiku.vegefinder.model.response.CountryResponse;
+import com.imajiku.vegefinder.model.response.RegisterProfileResponse;
+import com.imajiku.vegefinder.model.response.RestoDetailResponse;
 import com.imajiku.vegefinder.model.response.RestoListResponse;
 import com.imajiku.vegefinder.model.response.ForgotResponse;
 import com.imajiku.vegefinder.model.response.LoginResponse;
@@ -48,6 +53,9 @@ public interface ApiService {
     @POST("users/register")
     Call<RegisterResponse> register(@Body RegisterRequest request);
 
+    @POST("users/updateProfileRegister")
+    Call<RegisterProfileResponse> registerProfile(@Body RegisterProfileRequest request);
+
     @POST("users/activationCode")
     Call<VerifyResponse> confirmCode(@Body VerifyRequest request);
 
@@ -80,6 +88,24 @@ public interface ApiService {
 
     @POST("place/search_keyword")
     Call<RestoListResponse> findKeyword(@Body FindKeywordRequest request);
+
+    @POST("place/bookmark")
+    Call<ToggleResponse> addBookmark(@Body ToggleRequest request);
+
+    @POST("place/remove_bookmark")
+    Call<ToggleResponse> removeBookmark(@Body ToggleRequest request);
+
+    @POST("place/beenhere")
+    Call<ToggleResponse> addBeenHere(@Body ToggleRequest request);
+
+    @POST("place/remove_beenhere")
+    Call<ToggleResponse> removeBeenHere(@Body ToggleRequest request);
+
+    @GET("place/get_detail_place/{placeId}/{userId}")
+    Call<RestoDetailResponse> getDetailPlace(
+            @Path ("placeId") int placeId,
+            @Path ("userId") int userId
+    );
 
     //    NEWS
     @GET("news/generate_news")

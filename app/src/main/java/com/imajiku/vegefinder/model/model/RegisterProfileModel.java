@@ -1,10 +1,8 @@
 package com.imajiku.vegefinder.model.model;
 
-import com.imajiku.vegefinder.model.request.RegisterRequest;
-import com.imajiku.vegefinder.model.response.CityResponse;
-import com.imajiku.vegefinder.model.response.ProvinceResponse;
-import com.imajiku.vegefinder.model.response.RegisterResponse;
 import com.imajiku.vegefinder.model.presenter.RegisterProfilePresenter;
+import com.imajiku.vegefinder.model.request.RegisterProfileRequest;
+import com.imajiku.vegefinder.model.response.RegisterProfileResponse;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;
 
@@ -26,17 +24,22 @@ public class RegisterProfileModel {
         retrofit = Utility.buildRetrofit();
     }
 
-    public void register(RegisterRequest request) {
+    public void registerProfile(RegisterProfileRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
-        Call<RegisterResponse> call = svc.register(request);
-        call.enqueue(new Callback<RegisterResponse>() {
+        Call<RegisterProfileResponse> call = svc.registerProfile(request);
+        call.enqueue(new Callback<RegisterProfileResponse>() {
             @Override
-            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+            public void onResponse(Call<RegisterProfileResponse> call, Response<RegisterProfileResponse> response) {
                 if (response.isSuccessful()) {
-                    RegisterResponse.RegisterResponseBody data = response.body().getData();
-                    presenter.successRegister(data.getCode(), data.getEmail());
+                    RegisterProfileResponse.RegisterProfileResponseBody data = response.body().getData();
+                    if(data.getStatus().equals("success")) {
+                        presenter.successRegisterProfile();
+                    }else{
+                        presenter.failedRegisterProfile();
+                    }
 //                    RegisterProfileView.successRegisterProfile(response.body().getSessionId());
                 } else {
+                    presenter.failedRegisterProfile();
 //                    try {
 //                        if(response.code()==500){
 //                            mIAccountView.showToast("Internal server error. Please try again later.");
@@ -52,7 +55,8 @@ public class RegisterProfileModel {
             }
 
             @Override
-            public void onFailure(Call<RegisterResponse> call, Throwable t) {
+            public void onFailure(Call<RegisterProfileResponse> call, Throwable t) {
+                presenter.failedRegisterProfile();
 //                mIAccountView.showToast("RegisterProfile failed. Please check your connection.");
 //                mIAccountView.failedRegisterProfile();
 

@@ -11,19 +11,24 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.imajiku.vegefinder.R;
-import com.imajiku.vegefinder.activity.RestaurantActivity;
+import com.imajiku.vegefinder.activity.PhotoListActivity;
+import com.imajiku.vegefinder.activity.RestoDetailActivity;
+import com.imajiku.vegefinder.adapter.ImageListAdapter;
 import com.imajiku.vegefinder.adapter.PreviewListAdapter;
+import com.imajiku.vegefinder.pojo.RestoImage;
 
 import java.util.ArrayList;
 
-public class PhotoFragment extends Fragment implements PreviewListAdapter.PreviewListListener {
+public class PhotoFragment extends Fragment implements View.OnClickListener, ImageListAdapter.ImageListListener {
     private PhotoListener mListener;
     private RecyclerView recyclerView;
-    private PreviewListAdapter adapter;
+    private ImageListAdapter adapter;
     private ArrayList<String> list;
     private String TAG="exc";
+    private int restoId, userId;
 
     public PhotoFragment() {
         // Required empty public constructor
@@ -33,6 +38,9 @@ public class PhotoFragment extends Fragment implements PreviewListAdapter.Previe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_photo, container, false);
+        TextView seeMore = (TextView) v.findViewById(R.id.see_more);
+        seeMore.setOnClickListener(this);
+
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager((Context) mListener, LinearLayoutManager.HORIZONTAL, false));
         RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
@@ -40,16 +48,10 @@ public class PhotoFragment extends Fragment implements PreviewListAdapter.Previe
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
 //        populate();
-        adapter = new PreviewListAdapter(getContext(), this, false);
+        adapter = new ImageListAdapter(getContext(), this);
 //        adapter.setData(list);
         recyclerView.setAdapter(adapter);
         return v;
-    }
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onPhoto(uri);
-        }
     }
 
     @Override
@@ -71,14 +73,38 @@ public class PhotoFragment extends Fragment implements PreviewListAdapter.Previe
 
     @Override
     public void onItemTouch(int position) {
-        if(position == 1) {
-            Intent i = new Intent(getActivity(), RestaurantActivity.class);
-            startActivity(i);
+        if (mListener != null) {
+            mListener.onPhoto(position);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.see_more: {
+                Intent i = new Intent(getActivity(), PhotoListActivity.class);
+                i.putExtra("restoId", restoId);
+                i.putExtra("userId", userId);
+                startActivity(i);
+            }
+            break;
+        }
+    }
+
+    public void setData(ArrayList<String> list, int restoId, int userId) {
+        this.restoId = restoId;
+        this.userId = userId;
+        setData(list);
+    }
+
+    public void setData(ArrayList<String> list) {
+        if(adapter!=null){
+            adapter.setData(list);
         }
     }
 
     public interface PhotoListener {
-        void onPhoto(Uri uri);
+        void onPhoto(int position);
     }
 
     public void populate(){

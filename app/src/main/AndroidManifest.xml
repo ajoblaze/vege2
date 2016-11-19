@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name="android.support.multidex.MultiDexApplication"
@@ -22,6 +23,9 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_api_key" />
 
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.LoginActivity">
@@ -31,7 +35,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.RestaurantActivity" />
+        <activity android:name=".activity.RestoDetailActivity" />
         <activity android:name=".activity.RestoListActivity" />
         <activity android:name=".activity.NewsListActivity" />
         <activity android:name=".activity.VerifyActivity" />
@@ -42,6 +46,17 @@
         <activity android:name=".activity.ContactUsActivity" />
         <activity android:name=".activity.FindPlaceActivity" />
         <activity android:name=".activity.NewsDetailActivity" />
+        <activity android:name=".activity.BookActivity" />
+        <activity android:name=".activity.CheckInActivity" />
+        <activity android:name=".activity.CallActivity" />
+        <activity android:name=".activity.MapActivity" />
+        <activity android:name=".activity.AddPhotoActivity" />
+        <activity
+            android:name=".activity.Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activity.PhotoListActivity" />
+        <activity android:name=".activity.PhotoDetailActivity"></activity>
     </application>
 
 </manifest>

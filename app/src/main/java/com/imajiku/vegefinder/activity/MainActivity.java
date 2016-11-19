@@ -1,5 +1,6 @@
 package com.imajiku.vegefinder.activity;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -22,7 +23,6 @@ import com.imajiku.vegefinder.fragment.PlacesFragment;
 import com.imajiku.vegefinder.fragment.RecommendFragment;
 import com.imajiku.vegefinder.model.model.MainModel;
 import com.imajiku.vegefinder.model.presenter.MainPresenter;
-import com.imajiku.vegefinder.model.response.NewsResponse;
 import com.imajiku.vegefinder.model.view.MainView;
 import com.imajiku.vegefinder.pojo.News;
 import com.imajiku.vegefinder.pojo.Resto;
@@ -99,15 +99,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRecommend(int id) {
-        Intent i = new Intent(MainActivity.this, RestaurantActivity.class);
-        i.putExtra("resto", findRestoById(recommendList, id));
+        Intent i = new Intent(MainActivity.this, RestoDetailActivity.class);
+        i.putExtra("resto", id);
         startActivity(i);
     }
 
     @Override
     public void onPlaces(int id) {
-        Intent i = new Intent(MainActivity.this, RestaurantActivity.class);
-        i.putExtra("resto", findRestoById(placesList, id));
+        Intent i = new Intent(MainActivity.this, RestoDetailActivity.class);
+        i.putExtra("resto", id);
         startActivity(i);
     }
 
@@ -139,10 +139,30 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
+     * Gets the state of Airplane Mode.
+     * from http://stackoverflow.com/questions/4319212/how-can-one-detect-airplane-mode-on-android
+     * Answer by Alex Volovoy
+     *
+     * @param context
+     * @return true if enabled.
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public static boolean isAirplaneModeOn(Context context) {
+
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+
+    }
+
+    /**
      * from http://stackoverflow.com/questions/10311834/how-to-check-if-location-services-are-enabled
      * Answer by Slava Fir
      */
     public static boolean isLocationEnabled(Context context) {
+        if(isAirplaneModeOn(context)){
+            return false;
+        }
+
         int locationMode = 0;
         String locationProviders;
 

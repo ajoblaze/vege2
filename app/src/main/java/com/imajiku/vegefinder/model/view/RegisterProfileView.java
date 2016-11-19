@@ -8,5 +8,7 @@ import java.util.ArrayList;
 public interface RegisterProfileView {
     void updateDropdown(int type, ArrayList<String> content);
 
-    void successRegister(String code, String email);
+    void successRegisterProfile();
+
+    void failedRegisterProfile();
 }
