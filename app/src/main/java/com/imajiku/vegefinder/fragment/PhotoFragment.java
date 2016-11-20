@@ -97,7 +97,7 @@ public class PhotoFragment extends Fragment implements View.OnClickListener, Ima
         setData(list);
     }
 
-    public void setData(ArrayList<String> list) {
+    private void setData(ArrayList<String> list) {
         if(adapter!=null){
             adapter.setData(list);
         }

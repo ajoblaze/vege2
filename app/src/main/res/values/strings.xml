@@ -90,4 +90,8 @@
     <string name="directions">Directions</string>
     <string name="btn_gallery">Choose from Gallery</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="add_review_label">Tap to rate</string>
+    <string name="review_hint">Write your review, min 140 character (optional)</string>
+    <string name="submit_review">Submit your Review</string>
+    <string name="review_title">Review Title</string>
 </resources>

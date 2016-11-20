@@ -1,6 +1,7 @@
 package com.imajiku.vegefinder.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.imajiku.vegefinder.R;
+import com.imajiku.vegefinder.activity.ReviewListActivity;
 import com.imajiku.vegefinder.adapter.ReviewListAdapter;
 import com.imajiku.vegefinder.pojo.Review;
 
@@ -30,8 +32,8 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private RecyclerView recyclerView;
     private ReviewListAdapter adapter;
     private ArrayList<Review> list;
-    private String now;
     private String TAG="exc";
+    private int restoId, userId;
 
     public ReviewFragment() {
         // Required empty public constructor
@@ -55,12 +57,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
-        now = getNow();
-//        if(list == null) {
-//            populate();
-//        }
-        adapter = new ReviewListAdapter(getContext(), now);
-//        adapter.setData(list);
+        adapter = new ReviewListAdapter(getContext());
         recyclerView.setAdapter(adapter);
         return v;
     }
@@ -92,20 +89,28 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.see_more: {
-//                Intent i = new Intent(getActivity(), RestoListActivity.class);
-//                i.putExtra("page", RestoListActivity.PAGE_SAVED);
-//                startActivity(i);
+                Intent i = new Intent(getActivity(), ReviewListActivity.class);
+                i.putExtra("restoId", restoId);
+                i.putExtra("userId", userId);
+                startActivity(i);
             }
             break;
         }
     }
 
+    public void setData(ArrayList<Review> list, int restoId, int userId) {
+        this.restoId = restoId;
+        this.userId = userId;
+        setData(list);
+    }
+
+    private void setData(ArrayList<Review> list) {
+        if(adapter!=null){
+            adapter.setData(list);
+        }
+    }
+
     public interface ReviewListener {
         void onReview(Uri uri);
-    }
-    
-    public static String getNow(){
-        LocalDateTime d2 = new LocalDateTime(new DateTime());
-        return d2.toString("yyyy-MM-dd");
     }
 }

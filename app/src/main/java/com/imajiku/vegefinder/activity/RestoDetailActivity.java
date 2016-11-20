@@ -44,7 +44,7 @@ public class RestoDetailActivity extends AppCompatActivity
     private String TAG= "exc";
     private RestoDetail restoDetail;
     private boolean[] buttonStatus = new boolean[2];
-    private LinearLayout photoLayout;
+    private LinearLayout photoLayout, reviewLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +85,7 @@ public class RestoDetailActivity extends AppCompatActivity
         map = (Button) findViewById(R.id.btn_map);
         photoLayout = (LinearLayout) findViewById(R.id.photo_layout);
         photoFragment = (PhotoFragment) getSupportFragmentManager().findFragmentById(R.id.photo_fragment);
+        reviewLayout = (LinearLayout) findViewById(R.id.review_layout);
         reviewFragment = (ReviewFragment) getSupportFragmentManager().findFragmentById(R.id.review_fragment);
         addPhoto = (Button) findViewById(R.id.btn_add_photo);
         addReview = (Button) findViewById(R.id.btn_add_review);
@@ -148,8 +149,16 @@ public class RestoDetailActivity extends AppCompatActivity
                 startActivity(i);
                 break;
             case R.id.btn_add_review:
+                i = new Intent(RestoDetailActivity.this, AddReviewActivity.class);
+                i.putExtra("restoId", restoId);
+                i.putExtra("userId", 1);
+                startActivity(i);
                 break;
             case R.id.btn_report:
+                i = new Intent(RestoDetailActivity.this, SendReportActivity.class);
+                i.putExtra("restoId", restoId);
+                i.putExtra("userId", 1);
+                startActivity(i);
                 break;
         }
     }
@@ -193,6 +202,8 @@ public class RestoDetailActivity extends AppCompatActivity
         if(restoDetail.getRestoImg().size()==0){
             photoLayout.setVisibility(View.GONE);
         }
+        reviewLayout.setVisibility(View.GONE);
+
         // load data
         Picasso.with(this)
                 .load(restoDetail.getImage())

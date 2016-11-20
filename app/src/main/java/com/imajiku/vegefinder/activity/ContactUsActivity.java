@@ -13,22 +13,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
-import com.imajiku.vegefinder.model.model.ContactUsModel;
-import com.imajiku.vegefinder.model.presenter.ContactUsPresenter;
-import com.imajiku.vegefinder.model.view.ContactUsView;
+import com.imajiku.vegefinder.model.model.MessageModel;
+import com.imajiku.vegefinder.model.presenter.MessagePresenter;
+import com.imajiku.vegefinder.model.view.MessageView;
 
-public class ContactUsActivity extends AppCompatActivity implements View.OnClickListener, ContactUsView {
+public class ContactUsActivity extends AppCompatActivity implements View.OnClickListener, MessageView {
 
     private EditText name, email, phone, subject, message;
     private Button submit;
-    private ContactUsPresenter presenter;
+    private MessagePresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_us);
-        presenter = new ContactUsPresenter(this);
-        ContactUsModel model = new ContactUsModel(presenter);
+        presenter = new MessagePresenter(this);
+        MessageModel model = new MessageModel(presenter);
         presenter.setModel(model);
         initToolbar(getResources().getString(R.string.contact_us_title));
         name = (EditText) findViewById(R.id.name);
@@ -57,7 +57,7 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
                 }else if(getString(message).length() == 0){
                     toast("Please write your message");
                 }else{
-                    presenter.sendMessage(
+                    presenter.sendContactUs(
                             getString(name),
                             getString(email),
                             getString(phone),
@@ -89,8 +89,18 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    public void successSendMessage() {
+    public void successSendContactUs() {
         finish();
+    }
+
+    @Override
+    public void successSendReview() {
+
+    }
+
+    @Override
+    public void successSendReport() {
+
     }
 
     private void hideKeyboard() {

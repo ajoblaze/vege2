@@ -55,7 +55,7 @@ public class NewsListActivity extends AppCompatActivity implements
 
         presenter.loadNews();
 
-        newsListFragment = (NewsListFragment) getSupportFragmentManager().findFragmentById(R.id.news_list_fragment);
+        newsListFragment = (NewsListFragment) getSupportFragmentManager().findFragmentById(R.id.review_list_fragment);
         filter = (Button) findViewById(R.id.filter_btn);
         sort = (Button) findViewById(R.id.sort_btn);
         filterLayout = (ExpandableRelativeLayout) findViewById(R.id.layout_filter);

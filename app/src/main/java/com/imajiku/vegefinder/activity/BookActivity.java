@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.imajiku.vegefinder.R;
+import com.squareup.picasso.Picasso;
 
 public class BookActivity extends AppCompatActivity {
 
@@ -23,5 +24,11 @@ public class BookActivity extends AppCompatActivity {
         String title = getIntent().getStringExtra("title");
         String image = getIntent().getStringExtra("image");
         restoTitle.setText(title);
+        Picasso.with(this)
+                .load(image)
+                .noFade()
+                .fit()
+                .centerCrop()
+                .into(banner);
     }
 }

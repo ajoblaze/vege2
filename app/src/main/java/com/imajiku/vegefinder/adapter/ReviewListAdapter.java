@@ -13,6 +13,9 @@ import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.pojo.Review;
 import com.squareup.picasso.Picasso;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
+
 import java.util.ArrayList;
 
 /**
@@ -27,9 +30,9 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
     /**
      * empty adapter
      */
-    public ReviewListAdapter(Context context, String now) {
+    public ReviewListAdapter(Context context) {
         this.context = context;
-        this.now = now;
+        this.now = getNow();
         list = new ArrayList<>();
     }
 
@@ -39,6 +42,11 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
     public void setData(ArrayList<Review> list) {
         this.list = list;
         notifyDataSetChanged();
+    }
+
+    public String getNow(){
+        LocalDateTime d2 = new LocalDateTime(new DateTime());
+        return d2.toString("yyyy-MM-dd");
     }
 
     @Override
@@ -59,6 +67,10 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
         holder.date.setText(list.get(position).getDateDiff(now));
         holder.rate.setText(list.get(position).getRateString());
         holder.desc.setText(list.get(position).getComment());
+    }
+
+    public interface ReviewListListener {
+        void onLoadMore();
     }
 
     @Override

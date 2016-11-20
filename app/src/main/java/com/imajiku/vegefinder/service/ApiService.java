@@ -1,6 +1,5 @@
 package com.imajiku.vegefinder.service;
 
-import com.imajiku.vegefinder.model.request.ToggleRequest;
 import com.imajiku.vegefinder.model.request.ContactUsRequest;
 import com.imajiku.vegefinder.model.request.FindKeywordRequest;
 import com.imajiku.vegefinder.model.request.FindRegionRequest;
@@ -8,28 +7,31 @@ import com.imajiku.vegefinder.model.request.ForgotRequest;
 import com.imajiku.vegefinder.model.request.LoginRequest;
 import com.imajiku.vegefinder.model.request.RegisterProfileRequest;
 import com.imajiku.vegefinder.model.request.RegisterRequest;
+import com.imajiku.vegefinder.model.request.ReviewRequest;
+import com.imajiku.vegefinder.model.request.ToggleRequest;
 import com.imajiku.vegefinder.model.request.VerifyForgotRequest;
 import com.imajiku.vegefinder.model.request.VerifyRequest;
-import com.imajiku.vegefinder.model.response.ToggleResponse;
 import com.imajiku.vegefinder.model.response.CityResponse;
 import com.imajiku.vegefinder.model.response.ContactUsResponse;
 import com.imajiku.vegefinder.model.response.CountryResponse;
-import com.imajiku.vegefinder.model.response.RegisterProfileResponse;
-import com.imajiku.vegefinder.model.response.RestoDetailResponse;
-import com.imajiku.vegefinder.model.response.RestoListResponse;
 import com.imajiku.vegefinder.model.response.ForgotResponse;
 import com.imajiku.vegefinder.model.response.LoginResponse;
 import com.imajiku.vegefinder.model.response.NewsResponse;
 import com.imajiku.vegefinder.model.response.ProvinceResponse;
+import com.imajiku.vegefinder.model.response.RegisterProfileResponse;
 import com.imajiku.vegefinder.model.response.RegisterResponse;
+import com.imajiku.vegefinder.model.response.RestoDetailResponse;
+import com.imajiku.vegefinder.model.response.RestoListResponse;
+import com.imajiku.vegefinder.model.response.ReviewResponse;
+import com.imajiku.vegefinder.model.response.ToggleResponse;
 import com.imajiku.vegefinder.model.response.VerifyForgotResponse;
 import com.imajiku.vegefinder.model.response.VerifyResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
-import retrofit2.http.GET;
 
 /**
  * Created by Alvin on 2016-10-08.
@@ -66,8 +68,8 @@ public interface ApiService {
     Call<VerifyForgotResponse> resetPassword(@Body VerifyForgotRequest request);
 
     //    CONTACT
-    @POST("contact/sendMessage")
-    Call<ContactUsResponse> sendMessage(@Body ContactUsRequest request);
+    @POST("contact/sendContactUs")
+    Call<ContactUsResponse> sendContactUs(@Body ContactUsRequest request);
 
     //    PLACES
     @GET("place/generate_place/{location}/{sort}/{filter}")
@@ -100,6 +102,9 @@ public interface ApiService {
 
     @POST("place/remove_beenhere")
     Call<ToggleResponse> removeBeenHere(@Body ToggleRequest request);
+
+    @POST("place/submit_review")
+    Call<ReviewResponse> sendReview(@Body ReviewRequest request);
 
     @GET("place/get_detail_place/{placeId}/{userId}")
     Call<RestoDetailResponse> getDetailPlace(

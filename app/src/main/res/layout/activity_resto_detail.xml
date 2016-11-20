@@ -276,19 +276,26 @@
         </LinearLayout>
 
         <!-- #6 -->
-        <fragment
-            android:id="@+id/review_fragment"
-            android:name="com.imajiku.vegefinder.fragment.ReviewFragment"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/review_layout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            tools:layout="@layout/fragment_review" />
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_add_review"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add Review >" />
+            <fragment
+                android:id="@+id/review_fragment"
+                android:name="com.imajiku.vegefinder.fragment.ReviewFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                tools:layout="@layout/fragment_review" />
+
+            <Button
+                android:id="@+id/btn_add_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Review >" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
