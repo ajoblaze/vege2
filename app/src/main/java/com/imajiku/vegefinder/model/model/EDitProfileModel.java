@@ -1,6 +1,6 @@
 package com.imajiku.vegefinder.model.model;
 
-import com.imajiku.vegefinder.model.presenter.RegisterProfilePresenter;
+import com.imajiku.vegefinder.model.presenter.EditProfilePresenter;
 import com.imajiku.vegefinder.model.request.RegisterProfileRequest;
 import com.imajiku.vegefinder.model.response.RegisterProfileResponse;
 import com.imajiku.vegefinder.service.ApiService;
@@ -14,12 +14,12 @@ import retrofit2.Retrofit;
 /**
  * Created by Alvin on 2016-10-08.
  */
-public class RegisterProfileModel {
+public class EditProfileModel {
 
-    private RegisterProfilePresenter presenter;
+    private EditProfilePresenter presenter;
     private Retrofit retrofit;
 
-    public RegisterProfileModel(RegisterProfilePresenter presenter) {
+    public EditProfileModel(EditProfilePresenter presenter) {
         this.presenter = presenter;
         retrofit = Utility.buildRetrofit();
     }
@@ -37,7 +37,7 @@ public class RegisterProfileModel {
                     }else{
                         presenter.failedRegisterProfile();
                     }
-//                    RegisterProfileView.successRegisterProfile(response.body().getSessionId());
+//                    EditProfileView.successRegisterProfile(response.body().getSessionId());
                 } else {
                     presenter.failedRegisterProfile();
 //                    try {

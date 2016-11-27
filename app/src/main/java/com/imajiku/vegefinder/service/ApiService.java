@@ -11,6 +11,7 @@ import com.imajiku.vegefinder.model.request.ReviewRequest;
 import com.imajiku.vegefinder.model.request.ToggleRequest;
 import com.imajiku.vegefinder.model.request.VerifyForgotRequest;
 import com.imajiku.vegefinder.model.request.VerifyRequest;
+import com.imajiku.vegefinder.model.response.AccountResponse;
 import com.imajiku.vegefinder.model.response.CityResponse;
 import com.imajiku.vegefinder.model.response.ContactUsResponse;
 import com.imajiku.vegefinder.model.response.CountryResponse;
@@ -115,4 +116,8 @@ public interface ApiService {
     //    NEWS
     @GET("news/generate_news")
     Call<NewsResponse> generateNews();
+
+    //    MY ACCOUNT
+    @POST("users/profile/{userId}")
+    Call<AccountResponse> getProfile(@Path ("userId") int userId);
 }

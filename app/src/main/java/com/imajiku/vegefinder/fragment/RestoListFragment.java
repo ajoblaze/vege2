@@ -1,6 +1,7 @@
 package com.imajiku.vegefinder.fragment;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,9 +42,10 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
-//        populate();
+
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Sniglet-Regular.ttf");
         adapter = new RestoListAdapter(getContext(), this);
-//        adapter.setData(list);
+        adapter.setTypeface(tf);
         recyclerView.setAdapter(adapter);
         return v;
     }

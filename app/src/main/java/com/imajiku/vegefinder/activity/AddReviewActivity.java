@@ -28,7 +28,7 @@ public class AddReviewActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_review);
 
-        restoId = getIntent().getIntExtra("restoId", -1);
+        restoId = getIntent().getIntExtra("placeId", -1);
         userId = getIntent().getIntExtra("userId", -1);
         if(restoId == -1 || userId == -1){
             throw new RuntimeException("send userid and placeid");

@@ -1,5 +1,6 @@
 package com.imajiku.vegefinder.fragment;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,7 +35,9 @@ public class ReviewListFragment extends Fragment implements ReviewListAdapter.Re
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Sniglet-Regular.ttf");
         adapter = new ReviewListAdapter(getContext());
+        adapter.setTypeface(tf);
         recyclerView.setAdapter(adapter);
         return v;
     }

@@ -15,9 +15,11 @@ import com.imajiku.vegefinder.model.view.MessageView;
 
 public class SendReportActivity extends AppCompatActivity implements View.OnClickListener, MessageView {
 
+    public static final int REPORT = 21;
+    public static final int FEEDBACK = 22;
     private EditText subject, message;
     private Button submit;
-    private int restoId, userId;
+    private int restoId, userId, type;
     private MessagePresenter presenter;
 
     @Override
@@ -25,8 +27,9 @@ public class SendReportActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_report);
 
-        restoId = getIntent().getIntExtra("restoId", -1);
+        restoId = getIntent().getIntExtra("placeId", -1);
         userId = getIntent().getIntExtra("userId", -1);
+        type = getIntent().getIntExtra("type", -1);
         if(restoId == -1 || userId == -1){
             throw new RuntimeException("send userid and placeid");
         }

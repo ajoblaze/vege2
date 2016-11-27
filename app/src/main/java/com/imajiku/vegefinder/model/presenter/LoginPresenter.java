@@ -36,13 +36,6 @@ public class LoginPresenter {
         model.login(email, pass);
     }
 
-    public void logout() {
-        SharedPreferences preferences = getContext().getSharedPreferences(LOGIN_PREF, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.remove(LOGIN_KEY);
-        editor.apply();
-    }
-
     public int getCurrentLogin(){
         SharedPreferences preferences = getContext().getSharedPreferences(LOGIN_PREF, Context.MODE_PRIVATE);
         return preferences.getInt(LOGIN_KEY, -1);
@@ -58,6 +51,10 @@ public class LoginPresenter {
 
     public void failedLogin() {
         view.failedLogin();
+    }
+
+    public void logout() {
+
     }
 }
 

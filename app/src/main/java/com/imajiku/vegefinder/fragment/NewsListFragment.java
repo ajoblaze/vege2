@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -43,7 +44,9 @@ public class NewsListFragment extends Fragment implements NewsListAdapter.NewsLi
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Sniglet-Regular.ttf");
         adapter = new NewsListAdapter(getContext(), this);
+        adapter.setTypeface(tf);
         recyclerView.setAdapter(adapter);
         return v;
     }

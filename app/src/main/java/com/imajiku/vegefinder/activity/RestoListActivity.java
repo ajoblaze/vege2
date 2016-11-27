@@ -21,7 +21,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
-import com.google.android.gms.clearcut.LogEventParcelable;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -36,9 +35,7 @@ import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.fragment.RestoListFragment;
-import com.imajiku.vegefinder.model.model.RegionModel;
 import com.imajiku.vegefinder.model.model.RestoListModel;
-import com.imajiku.vegefinder.model.presenter.RegionPresenter;
 import com.imajiku.vegefinder.model.presenter.RestoListPresenter;
 import com.imajiku.vegefinder.model.view.RestoListView;
 import com.imajiku.vegefinder.pojo.Resto;
@@ -53,8 +50,9 @@ public class RestoListActivity extends AppCompatActivity implements
 
     public static final int PAGE_BROWSE = 20;
     public static final int PAGE_RECOMMEND = 21;
-    public static final int PAGE_SAVED = 22;
-    public static final int PAGE_SEARCH = 23;
+    public static final int PAGE_BOOKMARK = 22;
+    public static final int PAGE_BEENHERE = 23;
+    public static final int PAGE_SEARCH = 24;
     private static final int REQUEST_CHECK_SETTINGS = 8008;
     private static final int FILTER_BOX_QTY = 6;
     private static final int SORT_BUTTON_QTY = 4;
@@ -102,8 +100,11 @@ public class RestoListActivity extends AppCompatActivity implements
             case PAGE_RECOMMEND:
 //                presenter.recommend();
                 break;
-            case PAGE_SAVED:
+            case PAGE_BOOKMARK:
 //                presenter.savedPlaces();
+                break;
+            case PAGE_BEENHERE:
+//                presenter.beenHerePlaces();
                 break;
             case PAGE_SEARCH: {
                 String type = intent.getStringExtra("type");
@@ -229,7 +230,7 @@ public class RestoListActivity extends AppCompatActivity implements
                             r.setDistance(mLastLocation);
                         }
                     }
-                    restoListFragment.sort(restoList, getSortResult(), pageType==PAGE_SAVED);
+                    restoListFragment.sort(restoList, getSortResult(), pageType== PAGE_BOOKMARK);
                 }
                 break;
         }

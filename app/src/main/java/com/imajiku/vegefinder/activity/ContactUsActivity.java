@@ -1,6 +1,7 @@
 package com.imajiku.vegefinder.activity;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
     private EditText name, email, phone, subject, message;
     private Button submit;
     private MessagePresenter presenter;
+    private Typeface tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +32,23 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
         presenter = new MessagePresenter(this);
         MessageModel model = new MessageModel(presenter);
         presenter.setModel(model);
-        initToolbar(getResources().getString(R.string.contact_us_title));
+
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        initToolbar(getResources().getString(R.string.title_contact_us));
+
         name = (EditText) findViewById(R.id.name);
         email = (EditText) findViewById(R.id.email);
         phone = (EditText) findViewById(R.id.phone);
         subject = (EditText) findViewById(R.id.subject);
         message = (EditText) findViewById(R.id.message);
         submit = (Button) findViewById(R.id.submit);
+
+        name.setTypeface(tf);
+        email.setTypeface(tf);
+        phone.setTypeface(tf);
+        subject.setTypeface(tf);
+        message.setTypeface(tf);
+        submit.setTypeface(tf);
 
         submit.setOnClickListener(this);
     }
@@ -78,6 +90,7 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
         }
         TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
         tv.setText(title);
+        tv.setTypeface(tf);
     }
 
     private String getString(EditText et){

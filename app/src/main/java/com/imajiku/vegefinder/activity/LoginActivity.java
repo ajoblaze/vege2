@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -52,10 +53,8 @@ public class LoginActivity extends AppCompatActivity implements
     private Button login;
     private EditText username, pass;
     private LinearLayout skip;
-    private TextView register;
-    private TextView forgot;
-    private Button fbLogin;
-    private Button gplusLogin;
+    private TextView register, forgot, skipText;
+    private Button fbLogin, gplusLogin;
     private LoginPresenter presenter;
     private AccessTokenTracker accessTokenTracker;
     private GoogleApiClient googleApiClient;
@@ -75,6 +74,8 @@ public class LoginActivity extends AppCompatActivity implements
         setupFbLogin();
         gplusLogin();
 
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+
         username = (EditText) findViewById(R.id.username_field);
         pass = (EditText) findViewById(R.id.password_field);
 
@@ -82,8 +83,19 @@ public class LoginActivity extends AppCompatActivity implements
         fbLogin = (Button) findViewById(R.id.fb_button);
         gplusLogin = (Button) findViewById(R.id.gplus_button);
         skip = (LinearLayout) findViewById(R.id.skip_login);
+        skipText = (TextView) findViewById(R.id.skip_text);
         forgot = (TextView) findViewById(R.id.forgot_password);
         register = (TextView) findViewById(R.id.register);
+
+        username.setTypeface(tf);
+        pass.setTypeface(tf);
+
+        login.setTypeface(tf);
+        fbLogin.setTypeface(tf);
+        gplusLogin.setTypeface(tf);
+        skipText.setTypeface(tf);
+        forgot.setTypeface(tf);
+        register.setTypeface(tf);
 
         // TODO: remove this
         fbLogin.setVisibility(View.GONE);
@@ -96,7 +108,7 @@ public class LoginActivity extends AppCompatActivity implements
         forgot.setOnClickListener(this);
         register.setOnClickListener(this);
     }
-    
+
     public void initToolbar() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);

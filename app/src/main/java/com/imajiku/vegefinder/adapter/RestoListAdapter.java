@@ -1,6 +1,7 @@
 package com.imajiku.vegefinder.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
  */
 public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.RestoListViewHolder> {
     private final RestoListListener listener;
+    private Typeface tf;
     private ArrayList<Resto> list;
     private Context context;
     private String TAG = "exc";
@@ -82,12 +84,11 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
             });
         } else {
             final Resto r = list.get(position);
-            // TODO: uncomment this
-//            Picasso.with(context)
-//                    .load(r.getImage())
-//                    .resize(90, 90)
-//                    .centerCrop()
-//                    .into(holder.image);
+            Picasso.with(context)
+                    .load(r.getImage())
+                    .resize(90, 90)
+                    .centerCrop()
+                    .into(holder.image);
             holder.name.setText(r.getTitle());
             holder.distance.setText(r.getDistance() + " km from your location");
             holder.price.setText("starts from Rp" + r.getPriceStart());
@@ -109,12 +110,21 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
                 }
             });
 //            holder.ratingBar.setRating(list.get(position).getRating());
+
+            holder.name.setTypeface(tf);
+            holder.distance.setTypeface(tf);
+            holder.price.setTypeface(tf);
+            holder.rating.setTypeface(tf);
         }
     }
 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void setTypeface(Typeface typeface) {
+        this.tf = typeface;
     }
 
     public interface RestoListListener {

@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -43,8 +44,11 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_review, container, false);
+
+        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Sniglet-Regular.ttf");
         TextView seeMore = (TextView) v.findViewById(R.id.see_more);
         seeMore.setOnClickListener(this);
+        seeMore.setTypeface(tf);
 
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager((Context) mListener, LinearLayoutManager.VERTICAL, false){
@@ -58,6 +62,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
         adapter = new ReviewListAdapter(getContext());
+        adapter.setTypeface(tf);
         recyclerView.setAdapter(adapter);
         return v;
     }
@@ -90,7 +95,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.see_more: {
                 Intent i = new Intent(getActivity(), ReviewListActivity.class);
-                i.putExtra("restoId", restoId);
+                i.putExtra("placeId", restoId);
                 i.putExtra("userId", userId);
                 startActivity(i);
             }

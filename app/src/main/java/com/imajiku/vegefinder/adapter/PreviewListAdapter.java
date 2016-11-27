@@ -1,6 +1,7 @@
 package com.imajiku.vegefinder.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
  * Created by Alvin on 2016-09-26.
  */
 public class PreviewListAdapter extends RecyclerView.Adapter<PreviewListAdapter.PreviewListViewHolder> {
+    private Typeface tf;
     private PreviewListListener listener;
     private ArrayList<RestoPreview> list;
     private Context context;
@@ -76,8 +78,10 @@ public class PreviewListAdapter extends RecyclerView.Adapter<PreviewListAdapter.
                     .into(holder.img);
         }
         holder.title.setText(item.getTitle());
+        holder.title.setTypeface(tf);
         if(!isGrid){
             holder.city.setText(item.getCity());
+            holder.city.setTypeface(tf);
         }
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +94,10 @@ public class PreviewListAdapter extends RecyclerView.Adapter<PreviewListAdapter.
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void setTypeface(Typeface typeface) {
+        this.tf = typeface;
     }
 
     class PreviewListViewHolder extends RecyclerView.ViewHolder {

@@ -42,7 +42,7 @@
         <activity android:name=".activity.VerifyActivity" />
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.VerifyForgotActivity" />
-        <activity android:name=".activity.RegisterProfileActivity" />
+        <activity android:name=".activity.EditProfileActivity" />
         <activity android:name=".activity.ForgotActivity" />
         <activity android:name=".activity.ContactUsActivity" />
         <activity android:name=".activity.FindPlaceActivity" />
@@ -70,7 +70,9 @@
         </provider>
 
         <activity android:name=".activity.AddReviewActivity" />
-        <activity android:name=".activity.SendReportActivity"></activity>
+        <activity android:name=".activity.SendReportActivity" />
+        <activity android:name=".activity.AccountActivity" />
+        <activity android:name=".activity.AboutActivity"/>
     </application>
 
 </manifest>

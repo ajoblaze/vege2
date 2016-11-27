@@ -8,7 +8,7 @@
         android:id="@+id/grid_img"
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginRight="12dp"
         android:background="@color/translucentLime25" />
 
@@ -16,6 +16,7 @@
         android:id="@+id/title"
         android:layout_gravity="center_horizontal"
         android:layout_width="match_parent"
+        android:layout_marginBottom="12dp"
         android:ellipsize="end"
         android:maxLines = "2"
         android:minLines = "1"

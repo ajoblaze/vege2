@@ -132,11 +132,11 @@ public class NewsListActivity extends AppCompatActivity implements
                 break;
             case R.id.submit_filter:
                 filterLayout.collapse();
-//                newsListFragment.filter(getFilterResult(), pageType == PAGE_SAVED);
+//                newsListFragment.filter(getFilterResult(), pageType == PAGE_BOOKMARK);
                 break;
             case R.id.submit_sort:
                 sortLayout.collapse();
-//                newsListFragment.sort(restoList, getSortResult(), pageType == PAGE_SAVED);
+//                newsListFragment.sort(restoList, getSortResult(), pageType == PAGE_BOOKMARK);
                 break;
         }
     }

@@ -156,7 +156,7 @@ public class RestoDetailActivity extends AppCompatActivity
                 break;
             case R.id.btn_report:
                 i = new Intent(RestoDetailActivity.this, SendReportActivity.class);
-                i.putExtra("restoId", restoId);
+                i.putExtra("placeId", restoId);
                 i.putExtra("userId", 1);
                 startActivity(i);
                 break;

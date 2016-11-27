@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,12 +10,12 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.model.model.RegisterModel;
 import com.imajiku.vegefinder.model.presenter.RegisterPresenter;
-import com.imajiku.vegefinder.model.view.RegisterProfileView;
 import com.imajiku.vegefinder.model.view.RegisterView;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, RegisterView {
@@ -33,11 +34,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         RegisterModel model = new RegisterModel(presenter);
         presenter.setModel(model);
 
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+
+        TextView title = (TextView) findViewById(R.id.title);
         username = (EditText)findViewById(R.id.username);
         pass = (EditText)findViewById(R.id.password);
         confirmPass = (EditText)findViewById(R.id.confirm_pass);
         email = (EditText)findViewById(R.id.email);
         regis = (Button)findViewById(R.id.regis_button);
+
+        title.setTypeface(tf);
+        username.setTypeface(tf);
+        pass.setTypeface(tf);
+        confirmPass.setTypeface(tf);
+        email.setTypeface(tf);
+        regis.setTypeface(tf);
 
         regis.setOnClickListener(this);
     }
@@ -47,7 +58,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         hideKeyboard();
         switch (v.getId()) {
             case R.id.regis_button:
-                validate();
+//                validate();
+                successRegister();
                 break;
         }
     }
@@ -88,7 +100,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void successRegister() {
         Toast.makeText(RegisterActivity.this, "Register Success", Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(this, RegisterProfileActivity.class);
+        Intent i = new Intent(this, EditProfileActivity.class);
         startActivity(i);
     }
 

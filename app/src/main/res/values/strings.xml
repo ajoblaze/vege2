@@ -6,8 +6,10 @@
     <string name="google_maps_api_key">AIzaSyARP9mnW6i9FamSaTXyrwp_nxK2I88C1Oo</string>
 
     <!--title strings-->
-    <string name="profile_title">Your Profile</string>
-    <string name="contact_us_title">Contact Us</string>
+    <string name="title_profile">Your Profile</string>
+    <string name="title_contact_us">Contact Us</string>
+    <string name="title_register">Register New Account</string>
+    <string name="title_verify">Enter Confirmation Code</string>
 
     <!--layout strings-->
     <string name="username">Username</string>
@@ -20,7 +22,7 @@
     <string name="gplus_login">Google+ Login</string>
     <string name="skip_login">Skip Login</string>
     <string name="confirm_pass">Confirm Password</string>
-    <string name="confirm_new_pass">Confirm New Password</string>
+    <string name="confirm_new_pass">Confirm Password</string>
     <string name="email">Email</string>
     <string name="country">Country</string>
     <string name="province">Province</string>
@@ -32,8 +34,6 @@
     <string name="verify_error">Code is incorrect. Please try again.</string>
     <string name="confirm">Confirm</string>
     <string name="confirm_code">Confirmation Code</string>
-    <string name="title_register">Register New Account</string>
-    <string name="title_verify">Enter Confirmation Code</string>
     <string name="subtitle_verify">We sent you an email with a six-digit confirmation code. Enter the code below to confirm your registration.</string>
     <string name="title_forgot">Recover Password</string>
     <string name="subtitle_forgot">To reset your password, enter the username or email address you used to sign in.</string>
@@ -94,4 +94,13 @@
     <string name="review_hint">Write your review, min 140 character (optional)</string>
     <string name="submit_review">Submit your Review</string>
     <string name="review_title">Review Title</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="my_booking">My Booking</string>
+    <string name="check_in_history">Check in History</string>
+    <string name="offers">Offers</string>
+    <string name="send_feedback">Send Feedback</string>
+    <string name="about">About</string>
+    <string name="google_play">Rate Us on Google Play</string>
+    <string name="logout">Logout</string>
+    <string name="old_password">Old Password</string>
 </resources>

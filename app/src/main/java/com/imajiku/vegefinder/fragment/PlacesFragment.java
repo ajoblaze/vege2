@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,8 +35,14 @@ public class PlacesFragment extends Fragment implements PreviewListAdapter.Previ
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_places, container, false);
+
+        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Sniglet-Regular.ttf");
         TextView seeMore = (TextView) v.findViewById(R.id.see_more);
         seeMore.setOnClickListener(this);
+        seeMore.setTypeface(tf);
+        TextView label = (TextView) v.findViewById(R.id.places_label);
+        label.setOnClickListener(this);
+        label.setTypeface(tf);
 
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager((Context) mListener, LinearLayoutManager.HORIZONTAL, false));
@@ -44,6 +51,7 @@ public class PlacesFragment extends Fragment implements PreviewListAdapter.Previ
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
         adapter = new PreviewListAdapter(getContext(), this, false);
+        adapter.setTypeface(tf);
         recyclerView.setAdapter(adapter);
 
         return v;
@@ -85,7 +93,7 @@ public class PlacesFragment extends Fragment implements PreviewListAdapter.Previ
         switch (view.getId()) {
             case R.id.see_more: {
                 Intent i = new Intent(getActivity(), RestoListActivity.class);
-                i.putExtra("page", RestoListActivity.PAGE_SAVED);
+                i.putExtra("page", RestoListActivity.PAGE_BOOKMARK);
                 startActivity(i);
             }
             break;

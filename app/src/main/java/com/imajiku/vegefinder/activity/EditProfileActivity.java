@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -17,65 +21,108 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
+import com.imajiku.vegefinder.adapter.SpinnerAdapter;
+import com.imajiku.vegefinder.model.model.EditProfileModel;
 import com.imajiku.vegefinder.model.model.RegionModel;
-import com.imajiku.vegefinder.model.model.RegisterProfileModel;
+import com.imajiku.vegefinder.model.presenter.EditProfilePresenter;
 import com.imajiku.vegefinder.model.presenter.RegionPresenter;
-import com.imajiku.vegefinder.model.presenter.RegisterProfilePresenter;
 import com.imajiku.vegefinder.model.request.RegisterProfileRequest;
+import com.imajiku.vegefinder.model.view.EditProfileView;
 import com.imajiku.vegefinder.model.view.RegionView;
-import com.imajiku.vegefinder.model.view.RegisterProfileView;
-import com.imajiku.vegefinder.model.request.RegisterRequest;
+import com.imajiku.vegefinder.pojo.UserProfile;
 import com.imajiku.vegefinder.utility.CircularImageView;
 import com.imajiku.vegefinder.utility.ImageDecoderHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
-public class RegisterProfileActivity extends AppCompatActivity implements
+public class EditProfileActivity extends AppCompatActivity implements
         View.OnClickListener,
-        RegisterProfileView, RegionView, AdapterView.OnItemSelectedListener {
+        EditProfileView, RegionView, AdapterView.OnItemSelectedListener {
 
     private static final int REQUEST_LOAD_IMAGE = 5;
     private static final int REQUEST_VERIFY = 98;
     private static final int RESULT_VERIFY = 99;
+    public static final int ACCOUNT = 21;
+    public static final int REGISTER = 22;
     private static final String TAG = "exc";
-    private CircularImageView profPic, camera;
+    private CircularImageView profPic;
     private Spinner countrySpinner, provinceSpinner, citySpinner, sex, pref;
     private Button save;
     private ArrayList<String> sexArray, prefArray;
-    private RegisterProfilePresenter presenter;
+    private EditProfilePresenter presenter;
     private ArrayAdapter<String> countryDataAdapter, provinceDataAdapter, cityDataAdapter;
-    private String username, email, password;
     private RegionPresenter regionPresenter;
     private String currProvince, currCity;
-    private EditText name;
+    private EditText name, email, oldPass, newPass, confPass;
+    private TextView[] labels = new TextView[10];
+    private LinearLayout[] layouts = new LinearLayout[5];
     private String picturePath;
+    private int pageType;
+    private UserProfile currProfile;
+    private Typeface tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_profile);
-        presenter = new RegisterProfilePresenter(this);
-        RegisterProfileModel model = new RegisterProfileModel(presenter);
+        setContentView(R.layout.activity_edit_profile);
+
+        presenter = new EditProfilePresenter(this);
+        EditProfileModel model = new EditProfileModel(presenter);
         presenter.setModel(model);
 
         regionPresenter = new RegionPresenter(this);
         RegionModel regionModel = new RegionModel(regionPresenter);
         regionPresenter.setModel(regionModel);
 
-        username = getIntent().getStringExtra("username");
-        email = getIntent().getStringExtra("email");
-        password = getIntent().getStringExtra("password");
+        pageType = getIntent().getIntExtra("type", -1);
+
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        initToolbar(getResources().getString(R.string.title_profile));
 
         profPic = (CircularImageView) findViewById(R.id.profPic);
-        camera = (CircularImageView) findViewById(R.id.iv_camera);
+        FloatingActionButton camera = (FloatingActionButton) findViewById(R.id.fab_camera);
         camera.setOnClickListener(this);
 
-        name = (EditText) findViewById(R.id.name_et);
+        labels[0] = (TextView) findViewById(R.id.name_label);
+        labels[1] = (TextView) findViewById(R.id.email_label);
+        labels[2] = (TextView) findViewById(R.id.old_pass_label);
+        labels[3] = (TextView) findViewById(R.id.new_pass_label);
+        labels[4] = (TextView) findViewById(R.id.confirm_pass_label);
+        labels[5] = (TextView) findViewById(R.id.country_label);
+        labels[6] = (TextView) findViewById(R.id.province_label);
+        labels[7] = (TextView) findViewById(R.id.city_label);
+        labels[8] = (TextView) findViewById(R.id.sex_label);
+        labels[9] = (TextView) findViewById(R.id.pref_label);
+
+        for(int i=0;i<10;i++){
+            labels[i].setTypeface(tf);
+        }
+
+        name = (EditText) findViewById(R.id.name_edittext);
+        email = (EditText) findViewById(R.id.email_edittext);
+        oldPass = (EditText) findViewById(R.id.old_pass_edittext);
+        newPass = (EditText) findViewById(R.id.new_pass_edittext);
+        confPass = (EditText) findViewById(R.id.confirm_pass_edittext);
+
+        name.setTypeface(tf);
+        email.setTypeface(tf);
+        oldPass.setTypeface(tf);
+        newPass.setTypeface(tf);
+        confPass.setTypeface(tf);
+
+        layouts[0] = (LinearLayout) findViewById(R.id.name_layout);
+        layouts[1] = (LinearLayout) findViewById(R.id.email_layout);
+        layouts[2] = (LinearLayout) findViewById(R.id.old_pass_layout);
+        layouts[3] = (LinearLayout) findViewById(R.id.new_pass_layout);
+        layouts[4] = (LinearLayout) findViewById(R.id.confirm_pass_layout);
+
         countrySpinner = (Spinner) findViewById(R.id.country_spinner);
         provinceSpinner = (Spinner) findViewById(R.id.province_spinner);
         citySpinner = (Spinner) findViewById(R.id.city_spinner);
@@ -86,16 +133,22 @@ public class RegisterProfileActivity extends AppCompatActivity implements
 
         initArray();
 
-        countryDataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, new ArrayList<String>());
-        provinceDataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, new ArrayList<String>());
-        cityDataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, new ArrayList<String>());
-        ArrayAdapter<String> sexDataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, sexArray);
-        ArrayAdapter<String> prefDataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, prefArray);
+        countryDataAdapter = new SpinnerAdapter(this,
+                R.layout.dropdown_profile, new ArrayList<String>(), tf);
+        provinceDataAdapter = new SpinnerAdapter(this,
+                R.layout.dropdown_profile, new ArrayList<String>(), tf);
+        cityDataAdapter = new SpinnerAdapter(this,
+                R.layout.dropdown_profile, new ArrayList<String>(), tf);
+        ArrayAdapter<String> sexDataAdapter = new SpinnerAdapter(this,
+                R.layout.dropdown_profile, sexArray, tf);
+        ArrayAdapter<String> prefDataAdapter = new SpinnerAdapter(this,
+                R.layout.dropdown_profile, prefArray, tf);
+
+        countrySpinner.getAdapter();
+        provinceSpinner = (Spinner) findViewById(R.id.province_spinner);
+        citySpinner = (Spinner) findViewById(R.id.city_spinner);
+        sex = (Spinner) findViewById(R.id.sex_spinner);
+        pref = (Spinner) findViewById(R.id.pref_spinner);
 
         countryDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         provinceDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -115,6 +168,37 @@ public class RegisterProfileActivity extends AppCompatActivity implements
 
         save = (Button) findViewById(R.id.save_button);
         save.setOnClickListener(this);
+        save.setTypeface(tf);
+
+        for(int i=0;i<5;i++){
+            layouts[i].setVisibility(View.VISIBLE);
+        }
+
+        if(pageType == ACCOUNT){
+            currProfile = (UserProfile) getIntent().getSerializableExtra("profile");
+            fillData(currProfile);
+        }
+    }
+
+    public void initToolbar(String title) {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
+        ActionBar ab = getSupportActionBar();
+        if(ab != null) {
+            ab.setDisplayShowTitleEnabled(false);
+            ab.setDisplayShowHomeEnabled(true);
+        }
+        TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
+        tv.setText(title);
+        tv.setTypeface(tf);
+    }
+
+    private void fillData(UserProfile profile) {
+        for(int i=0;i<5;i++){
+            layouts[i].setVisibility(View.VISIBLE);
+        }
+        name.setText(profile.getName());
+        email.setText(profile.getEmail());
     }
 
     private void initArray() {
@@ -145,7 +229,7 @@ public class RegisterProfileActivity extends AppCompatActivity implements
                         ImageDecoderHelper.decodeSampledBitmapFromFile(picturePath, 170, 170)
                 );
             } else {
-                Toast.makeText(RegisterProfileActivity.this, "Image not found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProfileActivity.this, "Image not found", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -154,15 +238,17 @@ public class RegisterProfileActivity extends AppCompatActivity implements
     public void onClick(View v) {
         hideKeyboard();
         switch (v.getId()) {
-            case R.id.iv_camera:
+            case R.id.fab_camera:
                 Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(i, REQUEST_LOAD_IMAGE);
                 break;
             case R.id.save_button:
+                successRegisterProfile();
                 if (name.getText().toString().length() == 0) {
-                    Toast.makeText(RegisterProfileActivity.this, "Name must be filled", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditProfileActivity.this, "Name must be filled", Toast.LENGTH_SHORT).show();
                 } else {
-                    submitRegister();
+//                    submitRegister();
+                    Toast.makeText(EditProfileActivity.this, "Saved", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -219,15 +305,31 @@ public class RegisterProfileActivity extends AppCompatActivity implements
         }
         adapter.clear();
         adapter.addAll(content);
-        if(type==RegionPresenter.COUNTRY){
-            countrySpinner.setSelection(adapter.getPosition("Indonesia"));
+        if(pageType == ACCOUNT){
+            if (type == RegionPresenter.COUNTRY && currProfile.getCountry() != null) {
+                countrySpinner.setSelection(adapter.getPosition(currProfile.getCountry()));
+            }
+            if (type == RegionPresenter.PROVINCE && currProfile.getProvince() != null) {
+                provinceSpinner.setSelection(adapter.getPosition(currProfile.getProvince()));
+            }
+            if (type == RegionPresenter.CITY && currProfile.getCity() != null) {
+                citySpinner.setSelection(adapter.getPosition(currProfile.getCity()));
+            }
+        } else {
+            if (type == RegionPresenter.COUNTRY) {
+                countrySpinner.setSelection(adapter.getPosition("Indonesia"));
+            }
         }
     }
 
     @Override
     public void successRegisterProfile() {
-        Intent i = new Intent(RegisterProfileActivity.this, VerifyActivity.class);
-        startActivityForResult(i, REQUEST_VERIFY);
+        if(pageType == ACCOUNT){
+            finish();
+        }else {
+            Intent i = new Intent(EditProfileActivity.this, VerifyActivity.class);
+            startActivityForResult(i, REQUEST_VERIFY);
+        }
     }
 
     @Override

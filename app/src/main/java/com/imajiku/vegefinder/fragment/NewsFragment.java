@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,8 +38,14 @@ public class NewsFragment extends Fragment implements PreviewListAdapter.Preview
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news, container, false);
+
+        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Sniglet-Regular.ttf");
         TextView seeMore = (TextView) v.findViewById(R.id.see_more);
         seeMore.setOnClickListener(this);
+        seeMore.setTypeface(tf);
+        TextView label = (TextView) v.findViewById(R.id.news_label);
+        label.setOnClickListener(this);
+        label.setTypeface(tf);
 
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager((Context) mListener, 2, LinearLayoutManager.VERTICAL, false));
@@ -49,6 +56,7 @@ public class NewsFragment extends Fragment implements PreviewListAdapter.Preview
 //        populate();
         adapter = new PreviewListAdapter(getContext(), this, true);
         adapter.setImageSize(140, 140);
+        adapter.setTypeface(tf);
 //        adapter.setData(list);
         recyclerView.setAdapter(adapter);
         return v;

@@ -1,6 +1,7 @@
 package com.imajiku.vegefinder.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
  */
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsListViewHolder> {
     private final NewsListListener listener;
+    private Typeface tf;
     private ArrayList<News> list;
     private Context context;
     private String TAG = "exc";
@@ -81,12 +83,11 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsLi
             });
         } else {
             final News n = list.get(position);
-            // TODO: uncomment this
-//            Picasso.with(context)
-//                    .load(n.getImage())
-//                    .resize(90, 90)
-//                    .centerCrop()
-//                    .into(holder.image);
+            Picasso.with(context)
+                    .load(n.getImage())
+                    .resize(90, 90)
+                    .centerCrop()
+                    .into(holder.image);
             holder.title.setText(n.getTitle());
             holder.content.setText(n.getContent());
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -95,12 +96,18 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsLi
                     listener.onReadMore(n);
                 }
             });
+            holder.title.setTypeface(tf);
+            holder.content.setTypeface(tf);
         }
     }
 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void setTypeface(Typeface typeface) {
+        this.tf = typeface;
     }
 
     public interface NewsListListener {

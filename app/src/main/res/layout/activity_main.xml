@@ -42,10 +42,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/browse_nearby"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/rounded_disabled"
+                android:background="@drawable/rounded_edittext"
                 android:padding="8dip"
-                android:text="@string/my_account"
-                android:textColor="#AAA" />
+                android:text="@string/my_account" />
 
             <fragment
                 android:id="@+id/recommend_fragment"

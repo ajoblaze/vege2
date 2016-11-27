@@ -1,6 +1,7 @@
 package com.imajiku.vegefinder.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
  * Created by Alvin on 2016-09-26.
  */
 public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.ReviewListViewHolder> {
+    private Typeface tf;
     private ArrayList<Review> list;
     private Context context;
     private String now;
@@ -67,6 +69,16 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
         holder.date.setText(list.get(position).getDateDiff(now));
         holder.rate.setText(list.get(position).getRateString());
         holder.desc.setText(list.get(position).getComment());
+
+        holder.name.setTypeface(tf);
+        holder.title.setTypeface(tf);
+        holder.date.setTypeface(tf);
+        holder.rate.setTypeface(tf);
+        holder.desc.setTypeface(tf);
+    }
+
+    public void setTypeface(Typeface typeface) {
+        this.tf = typeface;
     }
 
     public interface ReviewListListener {

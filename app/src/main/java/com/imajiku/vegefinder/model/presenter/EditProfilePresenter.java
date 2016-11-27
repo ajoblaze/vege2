@@ -1,27 +1,26 @@
 package com.imajiku.vegefinder.model.presenter;
 
 
-import com.imajiku.vegefinder.model.model.RegisterProfileModel;
+import com.imajiku.vegefinder.model.model.EditProfileModel;
 import com.imajiku.vegefinder.model.request.RegisterProfileRequest;
-import com.imajiku.vegefinder.model.view.RegisterProfileView;
-import com.imajiku.vegefinder.model.request.RegisterRequest;
+import com.imajiku.vegefinder.model.view.EditProfileView;
 
 /**
  * Created by Alvin on 2016-10-08.
  */
-public class RegisterProfilePresenter {
-    private RegisterProfileView view;
-    private RegisterProfileModel model;
+public class EditProfilePresenter {
+    private EditProfileView view;
+    private EditProfileModel model;
 
-    public RegisterProfilePresenter(RegisterProfileView v) {
+    public EditProfilePresenter(EditProfileView v) {
         this.view =v;
     }
 
-    public RegisterProfileView getView() {
+    public EditProfileView getView() {
         return view;
     }
 
-    public void setModel(RegisterProfileModel model) {
+    public void setModel(EditProfileModel model) {
         this.model = model;
     }
 

@@ -3,6 +3,7 @@ package com.imajiku.vegefinder.activity;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -58,7 +59,6 @@ public class MainActivity extends AppCompatActivity
         MainModel model = new MainModel(presenter);
         presenter.setModel(model);
 
-
         isLogin = getIntent().getBooleanExtra("isLogin", false);
         isLogin = true; // TODO: remove this
         if(isLogin){
@@ -71,12 +71,18 @@ public class MainActivity extends AppCompatActivity
         placesFragment = (PlacesFragment) getSupportFragmentManager().findFragmentById(R.id.places_fragment);
         newsFragment = (NewsFragment) getSupportFragmentManager().findFragmentById(R.id.articles_fragment);
 
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+
         find = (Button) findViewById(R.id.find_specific);
         browse = (Button) findViewById(R.id.browse_nearby);
         myAccount = (Button) findViewById(R.id.my_account);
         find.setOnClickListener(this);
         browse.setOnClickListener(this);
         myAccount.setOnClickListener(this);
+
+        find.setTypeface(tf);
+        browse.setTypeface(tf);
+        myAccount.setTypeface(tf);
 
         if(!isLogin){ // hide places & account
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -120,20 +126,25 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+        Intent i;
         switch (v.getId()){
             case R.id.find_specific:
-                startActivity(new Intent(MainActivity.this, FindPlaceActivity.class));
+                i = new Intent(MainActivity.this, FindPlaceActivity.class);
+                startActivity(i);
                 break;
-            case R.id.browse_nearby: {
+            case R.id.browse_nearby:
                 if(isLocationEnabled(this)) {
-                    Intent i = new Intent(MainActivity.this, RestoListActivity.class);
+                    i = new Intent(MainActivity.this, RestoListActivity.class);
                     i.putExtra("page", RestoListActivity.PAGE_BROWSE);
                     startActivity(i);
                 }else{
                     //show dialog
                     Toast.makeText(MainActivity.this, "Please turn on location to use this", Toast.LENGTH_SHORT).show();
                 }
-            }
+                break;
+            case R.id.my_account:
+                i = new Intent(MainActivity.this, AccountActivity.class);
+                startActivity(i);
                 break;
         }
     }

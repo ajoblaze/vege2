@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,8 +22,9 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
     private static final String TAG = "exc";
     private EditText email;
     private Button reset;
-    private TextView register, contactUs;
+    private TextView title, subtitle, register, contactUs;
     private ForgotPresenter presenter;
+    private Typeface tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +33,22 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
         presenter = new ForgotPresenter(this);
         ForgotModel model = new ForgotModel(presenter);
         presenter.setModel(model);
+
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+
+        title = (TextView) findViewById(R.id.forget_title);
+        subtitle = (TextView) findViewById(R.id.forget_subtitle);
         email = (EditText) findViewById(R.id.username_email);
         reset = (Button) findViewById(R.id.reset_btn);
         register = (TextView) findViewById(R.id.register);
         contactUs = (TextView) findViewById(R.id.contact_us);
+
+        title.setTypeface(tf);
+        subtitle.setTypeface(tf);
+        email.setTypeface(tf);
+        reset.setTypeface(tf);
+        register.setTypeface(tf);
+        contactUs.setTypeface(tf);
 
         reset.setOnClickListener(this);
         register.setOnClickListener(this);
@@ -50,7 +64,8 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
                 if (emailContent.length() == 0) {
                     Toast.makeText(ForgotActivity.this, "Please insert email or username", Toast.LENGTH_SHORT).show();
                 } else {
-                    presenter.forget(emailContent);
+                    successForgot();
+//                    presenter.forget(emailContent);
                 }
                 break;
             case R.id.register:

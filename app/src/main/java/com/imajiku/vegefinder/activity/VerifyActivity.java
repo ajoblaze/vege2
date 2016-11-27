@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,8 +19,9 @@ import com.imajiku.vegefinder.model.view.VerifyView;
 
 public class VerifyActivity extends AppCompatActivity implements View.OnClickListener, VerifyView {
     private EditText editCode;
-    private TextView error;
+    private TextView title, subtitle, error;
     private VerifyPresenter presenter;
+    private Typeface tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +30,21 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
         presenter = new VerifyPresenter(this);
         VerifyModel model = new VerifyModel(presenter);
         presenter.setModel(model);
+
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+
+        title = (TextView) findViewById(R.id.verify_title);
+        subtitle = (TextView) findViewById(R.id.verify_subtitle);
         editCode = (EditText) findViewById(R.id.verify_code);
         Button submit = (Button) findViewById(R.id.verify_btn);
         error = (TextView) findViewById(R.id.error_text);
+
+        title.setTypeface(tf);
+        subtitle.setTypeface(tf);
+        editCode.setTypeface(tf);
+        submit.setTypeface(tf);
+        error.setTypeface(tf);
+
         error.setVisibility(View.GONE);
         submit.setOnClickListener(this);
     }

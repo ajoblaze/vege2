@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,7 +22,8 @@ public class VerifyForgotActivity extends AppCompatActivity implements View.OnCl
     private EditText codeField, passField, confirmPassField;
     private Button changePass;
     private VerifyForgotPresenter presenter;
-    private TextView error;
+    private TextView title, subtitle, error;
+    private Typeface tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +32,23 @@ public class VerifyForgotActivity extends AppCompatActivity implements View.OnCl
         presenter = new VerifyForgotPresenter(this);
         VerifyForgotModel model = new VerifyForgotModel(presenter);
         presenter.setModel(model);
+
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+
+        title = (TextView) findViewById(R.id.vf_title);
+        subtitle = (TextView) findViewById(R.id.vf_subtitle);
         codeField = (EditText) findViewById(R.id.code);
         passField = (EditText) findViewById(R.id.password);
         confirmPassField = (EditText) findViewById(R.id.confirm_pass);
         changePass = (Button) findViewById(R.id.change_pass_button);
+
+        title.setTypeface(tf);
+        subtitle.setTypeface(tf);
+        codeField.setTypeface(tf);
+        passField.setTypeface(tf);
+        confirmPassField.setTypeface(tf);
+        changePass.setTypeface(tf);
+
         error = (TextView) findViewById(R.id.error_text);
         error.setVisibility(View.GONE);
 
