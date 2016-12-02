@@ -1,10 +1,7 @@
 package com.imajiku.vegefinder.model.model;
 
-import com.imajiku.vegefinder.model.presenter.ForgotPresenter;
 import com.imajiku.vegefinder.model.presenter.VerifyForgotPresenter;
-import com.imajiku.vegefinder.model.request.ForgotRequest;
 import com.imajiku.vegefinder.model.request.VerifyForgotRequest;
-import com.imajiku.vegefinder.model.response.ForgotResponse;
 import com.imajiku.vegefinder.model.response.VerifyForgotResponse;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;

@@ -17,8 +17,6 @@ import com.imajiku.vegefinder.pojo.UserProfile;
 import com.imajiku.vegefinder.utility.CircularImageView;
 import com.squareup.picasso.Picasso;
 
-import java.io.Serializable;
-
 public class AccountActivity extends AppCompatActivity implements AccountView, View.OnClickListener {
 
     private static final int LAYOUT_QTY = 4;

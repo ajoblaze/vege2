@@ -58,8 +58,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         hideKeyboard();
         switch (v.getId()) {
             case R.id.regis_button:
-//                validate();
-                successRegister();
+                validate();
                 break;
         }
     }

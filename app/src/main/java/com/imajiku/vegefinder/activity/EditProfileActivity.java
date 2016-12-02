@@ -170,10 +170,6 @@ public class EditProfileActivity extends AppCompatActivity implements
         save.setOnClickListener(this);
         save.setTypeface(tf);
 
-        for(int i=0;i<5;i++){
-            layouts[i].setVisibility(View.VISIBLE);
-        }
-
         if(pageType == ACCOUNT){
             currProfile = (UserProfile) getIntent().getSerializableExtra("profile");
             fillData(currProfile);
@@ -243,7 +239,6 @@ public class EditProfileActivity extends AppCompatActivity implements
                 startActivityForResult(i, REQUEST_LOAD_IMAGE);
                 break;
             case R.id.save_button:
-                successRegisterProfile();
                 if (name.getText().toString().length() == 0) {
                     Toast.makeText(EditProfileActivity.this, "Name must be filled", Toast.LENGTH_SHORT).show();
                 } else {

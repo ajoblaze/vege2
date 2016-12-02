@@ -3,8 +3,11 @@ package com.imajiku.vegefinder.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -43,6 +46,13 @@ public class RecommendFragment extends Fragment implements PreviewListAdapter.Pr
         TextView label = (TextView) v.findViewById(R.id.recommend_label);
         label.setOnClickListener(this);
         label.setTypeface(tf);
+
+        //Tint Drawable
+        Drawable addIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_add_circle_black_24dp_m);
+        addIcon = DrawableCompat.wrap(addIcon);
+        int btnGreen = ContextCompat.getColor(getContext(), R.color.accentGreenBtn);
+        DrawableCompat.setTint(addIcon, btnGreen);
+        seeMore.setCompoundDrawablesWithIntrinsicBounds(null, null, addIcon, null);
 
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager((Context) mListener, LinearLayoutManager.HORIZONTAL, false));

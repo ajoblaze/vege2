@@ -2,13 +2,14 @@ package com.imajiku.vegefinder.model.presenter;
 
 
 import com.imajiku.vegefinder.model.model.MainModel;
-import com.imajiku.vegefinder.model.response.NewsResponse;
 import com.imajiku.vegefinder.model.response.ProvinceResponse;
 import com.imajiku.vegefinder.model.view.MainView;
 import com.imajiku.vegefinder.pojo.News;
 import com.imajiku.vegefinder.pojo.Resto;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Alvin on 2016-10-08.
@@ -34,8 +35,8 @@ public class MainPresenter {
         model.getNews();
     }
 
-    public void getRecommendation() {
-        model.getRecommendation();
+    public void getRecommendation(String longitude, String latitude) {
+        model.getRecommendation(latitude, longitude);
     }
 
     public void getPlaces() {
@@ -51,7 +52,11 @@ public class MainPresenter {
     }
 
     public void successGetRecommendation(ArrayList<Resto> list) {
-        view.successGetRecommendation(list);
+        ArrayList<Resto> shortList = new ArrayList<>();
+        for (int i=0;i<5;i++){
+            shortList.add(list.get(i));
+        }
+        view.successGetRecommendation(shortList);
     }
 
     public void failedGetRecommendation() {

@@ -1,12 +1,8 @@
 package com.imajiku.vegefinder.model.model;
 
-import android.util.Log;
-
 import com.imajiku.vegefinder.model.presenter.NewsListPresenter;
-import com.imajiku.vegefinder.model.request.FindKeywordRequest;
 import com.imajiku.vegefinder.model.response.NewsResponse;
 import com.imajiku.vegefinder.pojo.News;
-import com.imajiku.vegefinder.pojo.Resto;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;
 

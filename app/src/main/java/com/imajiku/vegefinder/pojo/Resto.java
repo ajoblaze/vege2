@@ -72,7 +72,7 @@ public class Resto implements Serializable{
     String imgPath;
     String name;
     private float distance;
-    float rating;
+    int rating;
     int price;
     boolean bookmarked;
 
@@ -88,7 +88,7 @@ public class Resto implements Serializable{
 
     }
 
-    public Resto(String imgPath, String name, float rating, int price) {
+    public Resto(String imgPath, String name, int rating, int price) {
         this.imgPath = imgPath;
         this.name = name;
         this.rating = rating;
@@ -114,7 +114,7 @@ public class Resto implements Serializable{
         return distance/1000;
     }
 
-    public float getRating() {
+    public int getRating() {
         return rating;
     }
 

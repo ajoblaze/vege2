@@ -1,5 +1,7 @@
 package com.imajiku.vegefinder.model.model;
 
+import android.util.Log;
+
 import com.imajiku.vegefinder.model.presenter.MainPresenter;
 import com.imajiku.vegefinder.model.request.FindKeywordRequest;
 import com.imajiku.vegefinder.model.response.RestoListResponse;
@@ -111,6 +113,29 @@ public class MainModel {
                 else
                     presenter.failedGetPlaces();
 
+            }
+        });
+    }
+
+    public void getRecommendation(String latitude, String longitude) {
+        String location = longitude + "," + latitude;
+        ApiService svc = retrofit.create(ApiService.class);
+        Call<RestoListResponse> call = svc.browseNearby(location, "average_rate-desc", "");
+        Log.e(TAG, String.valueOf(call.request().url()));
+        call.enqueue(new Callback<RestoListResponse>() {
+            @Override
+            public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<Resto> data = response.body().getData();
+                    presenter.successGetRecommendation(data);
+                } else {
+                    presenter.failedGetRecommendation();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RestoListResponse> call, Throwable t) {
+                presenter.failedGetRecommendation();
             }
         });
     }

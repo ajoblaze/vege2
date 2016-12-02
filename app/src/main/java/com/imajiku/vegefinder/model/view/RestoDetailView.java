@@ -1,9 +1,6 @@
 package com.imajiku.vegefinder.model.view;
 
-import com.imajiku.vegefinder.pojo.Resto;
 import com.imajiku.vegefinder.pojo.RestoDetail;
-
-import java.util.ArrayList;
 
 /**
  * Created by Alvin on 2016-11-05.

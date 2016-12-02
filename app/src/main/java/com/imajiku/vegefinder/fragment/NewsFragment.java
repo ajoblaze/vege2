@@ -3,9 +3,12 @@ package com.imajiku.vegefinder.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,6 +49,13 @@ public class NewsFragment extends Fragment implements PreviewListAdapter.Preview
         TextView label = (TextView) v.findViewById(R.id.news_label);
         label.setOnClickListener(this);
         label.setTypeface(tf);
+
+        //Tint Drawable
+        Drawable addIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_add_circle_black_24dp_m);
+        addIcon = DrawableCompat.wrap(addIcon);
+        int btnGreen = ContextCompat.getColor(getContext(), R.color.accentGreenBtn);
+        DrawableCompat.setTint(addIcon, btnGreen);
+        seeMore.setCompoundDrawablesWithIntrinsicBounds(null, null, addIcon, null);
 
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager((Context) mListener, 2, LinearLayoutManager.VERTICAL, false));

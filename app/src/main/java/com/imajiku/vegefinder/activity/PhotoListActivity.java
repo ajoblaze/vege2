@@ -13,8 +13,6 @@ import com.imajiku.vegefinder.adapter.ImageListAdapter;
 import com.imajiku.vegefinder.model.model.PhotoListModel;
 import com.imajiku.vegefinder.model.presenter.PhotoListPresenter;
 import com.imajiku.vegefinder.model.view.PhotoListView;
-import com.imajiku.vegefinder.pojo.RestoDetail;
-import com.imajiku.vegefinder.pojo.RestoImage;
 
 import java.util.ArrayList;
 

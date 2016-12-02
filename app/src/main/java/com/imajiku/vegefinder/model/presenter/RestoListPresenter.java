@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.model.presenter;
 
 
 import android.location.Location;
+import android.util.Log;
 
 import com.imajiku.vegefinder.model.model.RestoListModel;
 import com.imajiku.vegefinder.model.view.RestoListView;
@@ -36,6 +37,10 @@ public class RestoListPresenter {
         model.findByKeyword(keyword);
     }
 
+    public void findAll(int countryId, int provinceId, int cityId, String keyword) {
+        model.findAll(countryId, provinceId, cityId, keyword);
+    }
+
     public void browseNearby(String longitude, String latitude) {
         browseNearby(longitude, latitude, "distance", "asc", "");
     }
@@ -59,19 +64,44 @@ public class RestoListPresenter {
     }
 
     public void successBrowseNearby(ArrayList<Resto> data) {
+//        ArrayList<Resto> shortList = new ArrayList<>();
+//        for (int i=0;i<data.size();i++){
+//            Log.e("exc", "distance: "+data.get(i).getDistance());
+//            if(data.get(i).getDistance() <= 25);
+//        }
         view.successBrowseNearby(data);
     }
-    public void browseSortDistance(ArrayList<Resto> data, String longitude, String latitude, String order){
+
+    public void sortData(ArrayList<Resto> data, String order){
+        view.sortData(data, order);
+    }
+
+    public void setDistance(ArrayList<Resto> data, String longitude, String latitude){
         Location location = new Location("");
         location.setLatitude(Double.parseDouble(latitude));
         location.setLongitude(Double.parseDouble(longitude));
         for(Resto r : data){
             r.setDistance(location);
         }
-        view.sortData(data, order);
     }
 
     public void failedBrowseNearby() {
+        view.failedBrowseNearby();
+    }
+
+    public void getRecommendation(String longitude, String latitude) {
+        model.getRecommendation(latitude, longitude);
+    }
+
+    public void successGetRecommendation(ArrayList<Resto> list) {
+        ArrayList<Resto> shortList = new ArrayList<>();
+        for (int i=0;i<20;i++){
+            shortList.add(list.get(i));
+        }
+        view.successBrowseNearby(shortList);
+    }
+
+    public void failedGetRecommendation() {
         view.failedBrowseNearby();
     }
 }

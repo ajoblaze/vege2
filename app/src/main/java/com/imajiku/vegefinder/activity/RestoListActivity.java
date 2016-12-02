@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -12,13 +13,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.google.android.gms.common.ConnectionResult;
@@ -57,26 +62,34 @@ public class RestoListActivity extends AppCompatActivity implements
     private static final int FILTER_BOX_QTY = 6;
     private static final int SORT_BUTTON_QTY = 4;
     private RestoListFragment restoListFragment;
-    private Button filter, sort;
+    private TextView filter;
+    private TextView sort;
     private String TAG = "exc";
     private GoogleApiClient googleApiClient;
     private boolean isRequestingLocationUpdates;
     private LocationRequest mLocationRequest;
     private ExpandableRelativeLayout filterLayout, sortLayout;
-    private Button selectAll, clear, submitFilter, submitSort;
+    private TextView selectAll;
+    private TextView clear;
+    private TextView submitFilter;
+    private TextView submitSort;
     private CheckBox[] filterBox;
     private RadioGroup orderGroup;
     private RadioButton desc;
     private boolean[] sortSelected;
-    private Button[] sortButton;
+    private LinearLayout[] sortButtonLayout;
     private String[] sortText = {"title", "distance", "date_post", "price_start"};
     private int currSelectedSort = -1;
     private RestoListPresenter presenter;
-    private int pageType;
+    private int pageType, filterCode;
     private String mLatitudeText, mLongitudeText;
-    private int filterCode;
+    private boolean isFilterToggled, isSortToggled;
     private ArrayList<Resto> restoList;
     private Location mLastLocation;
+    private Typeface tf;
+    private boolean hasBrowsedNearby;
+    private LinearLayout filterLinearLayout, sortLinearLayout;
+    private ImageView filterArrow, sortArrow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,67 +107,103 @@ public class RestoListActivity extends AppCompatActivity implements
         RestoListModel model = new RestoListModel(presenter);
         presenter.setModel(model);
 
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+
         Intent intent = getIntent();
         pageType = intent.getIntExtra("page", PAGE_BROWSE);
-        switch(pageType){
+        switch (pageType) {
             case PAGE_RECOMMEND:
 //                presenter.recommend();
+                initToolbar("You Might Like");
+                hasBrowsedNearby = false;
                 break;
             case PAGE_BOOKMARK:
 //                presenter.savedPlaces();
+                initToolbar("Saved Places");
                 break;
-            case PAGE_BEENHERE:
-//                presenter.beenHerePlaces();
+//            case PAGE_BEENHERE:
+////                presenter.beenHerePlaces();
+//                initToolbar("Visited Places");
+//                break;
+            case PAGE_BROWSE:
+                initToolbar("Nearby Places");
+                hasBrowsedNearby = false;
                 break;
             case PAGE_SEARCH: {
-                String type = intent.getStringExtra("type");
-                if(type.equals("region")) {
-                    int provinceId = intent.getIntExtra("province", -1);
-                    int cityId = intent.getIntExtra("city", -1);
-                    if(provinceId != -1 && cityId != -1) {
+                initToolbar("Find a Specific Place");
+                String keyword = intent.getStringExtra("keyword");
+                int countryId = intent.getIntExtra("country", -1);
+                int provinceId = intent.getIntExtra("province", -1);
+                int cityId = intent.getIntExtra("city", -1);
+                if (keyword.equals("")) {
+                    if (countryId != -1 && provinceId != -1 && cityId != -1) {
                         presenter.findByRegion(provinceId, cityId);
                     }
-                }else if(type.equals("keyword")){
-                    String keyword = intent.getStringExtra("keyword");
-                    presenter.findByKeyword(keyword);
+                } else {
+                    if (countryId != -1 || provinceId == -1 || cityId == -1) {
+                        presenter.findByKeyword(keyword);
+                    } else {
+                        presenter.findAll(countryId, provinceId, cityId, keyword);
+                    }
                 }
             }
         }
 
         restoListFragment = (RestoListFragment) getSupportFragmentManager().findFragmentById(R.id.resto_list_fragment);
-        filter = (Button) findViewById(R.id.filter_btn);
-        sort = (Button) findViewById(R.id.sort_btn);
+        filterLinearLayout = (LinearLayout) findViewById(R.id.filter_layout);
+        sortLinearLayout = (LinearLayout) findViewById(R.id.sort_layout);
+        filter = (TextView) findViewById(R.id.filter_btn);
+        sort = (TextView) findViewById(R.id.sort_btn);
+
+        isFilterToggled = false;
+        isSortToggled = false;
+
+        filter.setTypeface(tf);
+        sort.setTypeface(tf);
+
         filterLayout = (ExpandableRelativeLayout) findViewById(R.id.layout_filter);
         sortLayout = (ExpandableRelativeLayout) findViewById(R.id.layout_sort);
-        filter.setOnClickListener(this);
-        sort.setOnClickListener(this);
+        filterLinearLayout.setOnClickListener(this);
+        sortLinearLayout.setOnClickListener(this);
         filterBox = new CheckBox[FILTER_BOX_QTY];
-        sortButton = new Button[SORT_BUTTON_QTY];
+        sortButtonLayout = new LinearLayout[SORT_BUTTON_QTY];
         sortSelected = new boolean[]{false, false, false, false};
 
         // filter
-        selectAll = (Button) findViewById(R.id.select_all);
-        clear = (Button) findViewById(R.id.clear);
+        selectAll = (TextView) findViewById(R.id.select_all);
+        clear = (TextView) findViewById(R.id.clear);
+        selectAll.setTypeface(tf);
+        clear.setTypeface(tf);
+
         filterBox[0] = (CheckBox) findViewById(R.id.open_now);
         filterBox[1] = (CheckBox) findViewById(R.id.rate_8);
         filterBox[2] = (CheckBox) findViewById(R.id.bookmarked);
         filterBox[3] = (CheckBox) findViewById(R.id.been_here);
         filterBox[4] = (CheckBox) findViewById(R.id.vegan);
         filterBox[5] = (CheckBox) findViewById(R.id.vege);
-        submitFilter = (Button) findViewById(R.id.submit_filter);
-        if(pageType == PAGE_BROWSE){
-            for(int i=0;i<4;i++){
+        submitFilter = (TextView) findViewById(R.id.submit_filter);
+        if (pageType == PAGE_BROWSE) {
+            for (int i = 0; i < 4; i++) {
                 filterBox[i].setVisibility(View.GONE);
             }
         }
 
+        for (int i = 0; i < 6; i++) {
+            filterBox[i].setTypeface(tf);
+        }
+        submitFilter.setTypeface(tf);
+
         //sort
-        sortButton[0] = (Button) findViewById(R.id.alpha);
-        sortButton[1] = (Button) findViewById(R.id.distance);
-        sortButton[2] = (Button) findViewById(R.id.date);
-        sortButton[3] = (Button) findViewById(R.id.price);
+        sortButtonLayout[0] = (LinearLayout) findViewById(R.id.sort_alpha_ll);
+        sortButtonLayout[1] = (LinearLayout) findViewById(R.id.sort_distance_ll);
+        sortButtonLayout[2] = (LinearLayout) findViewById(R.id.sort_date_ll);
+        sortButtonLayout[3] = (LinearLayout) findViewById(R.id.sort_price_ll);
         orderGroup = (RadioGroup) findViewById(R.id.sort_order);
-        submitSort = (Button) findViewById(R.id.submit_sort);
+        submitSort = (TextView) findViewById(R.id.submit_sort);
+
+        // arrow
+        filterArrow = (ImageView) findViewById(R.id.filter_arrow);
+        sortArrow = (ImageView) findViewById(R.id.sort_arrow);
 
         // filter
         selectAll.setOnClickListener(this);
@@ -163,21 +212,42 @@ public class RestoListActivity extends AppCompatActivity implements
 
         //sort
         for (int i = 0; i < SORT_BUTTON_QTY; i++) {
-            sortButton[i].setOnClickListener(this);
+            sortButtonLayout[i].setOnClickListener(this);
+            ((TextView) sortButtonLayout[i].getChildAt(1)).setTypeface(tf);
         }
         submitSort.setOnClickListener(this);
+        submitSort.setTypeface(tf);
+    }
+
+    public void initToolbar(String title) {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayShowTitleEnabled(false);
+            ab.setDisplayShowHomeEnabled(true);
+        }
+        TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
+        tv.setText(title);
+        tv.setTypeface(tf);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.filter_btn:
+            case R.id.filter_layout:
                 sortLayout.collapse();
                 filterLayout.toggle();
+                isFilterToggled = !isFilterToggled;
+                isSortToggled = false;
+                changeMenuButton();
                 break;
-            case R.id.sort_btn:
+            case R.id.sort_layout:
                 filterLayout.collapse();
                 sortLayout.toggle();
+                isFilterToggled = false;
+                isSortToggled = !isSortToggled;
+                changeMenuButton();
                 break;
             case R.id.select_all:
                 for (int i = 0; i < FILTER_BOX_QTY; i++) {
@@ -189,21 +259,21 @@ public class RestoListActivity extends AppCompatActivity implements
                     filterBox[i].setChecked(false);
                 }
                 break;
-            case R.id.alpha:
+            case R.id.sort_alpha_ll:
                 changeSortButton(0);
                 break;
-            case R.id.distance:
+            case R.id.sort_distance_ll:
                 changeSortButton(1);
                 break;
-            case R.id.date:
+            case R.id.sort_date_ll:
                 changeSortButton(2);
                 break;
-            case R.id.price:
+            case R.id.sort_price_ll:
                 changeSortButton(3);
                 break;
             case R.id.submit_filter:
                 filterLayout.collapse();
-                if(pageType == PAGE_BROWSE) {
+                if (pageType == PAGE_BROWSE || pageType == PAGE_RECOMMEND) {
                     presenter.browseNearby(
                             mLongitudeText,
                             mLatitudeText,
@@ -216,7 +286,7 @@ public class RestoListActivity extends AppCompatActivity implements
                 break;
             case R.id.submit_sort:
                 sortLayout.collapse();
-                if(pageType == PAGE_BROWSE) {
+                if (pageType == PAGE_BROWSE || pageType == PAGE_RECOMMEND) {
                     presenter.browseNearby(
                             mLongitudeText,
                             mLatitudeText,
@@ -225,23 +295,48 @@ public class RestoListActivity extends AppCompatActivity implements
                             getFilter()
                     );
                 } else {
-                    if(currSelectedSort == 1) {
+                    if (currSelectedSort == 1) {
                         for (Resto r : restoList) {
                             r.setDistance(mLastLocation);
                         }
                     }
-                    restoListFragment.sort(restoList, getSortResult(), pageType== PAGE_BOOKMARK);
+                    restoListFragment.sort(restoList, getSortResult(), pageType == PAGE_BOOKMARK);
                 }
                 break;
         }
     }
 
+    private void changeMenuButton() {
+        boolean b;
+        ImageView iv;
+        LinearLayout ll;
+        for(int i=0;i<2;i++) {
+            if(i==0){
+                b = isFilterToggled;
+                iv = filterArrow;
+                ll = filterLinearLayout;
+            }else{
+                b = isSortToggled;
+                iv = sortArrow;
+                ll = sortLinearLayout;
+            }
+
+            if (b) {
+                iv.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp_m);
+                ll.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
+            } else {
+                iv.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp_m);
+                ll.setBackgroundColor(ContextCompat.getColor(this, R.color.selectedGray));
+            }
+            iv.setColorFilter(ContextCompat.getColor(this, R.color.accentGreenBtn));
+        }
+    }
+
     private String getFilter() {
-        Log.e(TAG, filterBox[4].isChecked()+", "+filterBox[5].isChecked());
-        if(filterBox[4].isChecked() && !filterBox[5].isChecked()) {
+        if (filterBox[4].isChecked() && !filterBox[5].isChecked()) {
             return "vegan";
         }
-        if(!filterBox[4].isChecked() && filterBox[5].isChecked()){
+        if (!filterBox[4].isChecked() && filterBox[5].isChecked()) {
             return "vegetarian";
         }
         return "";
@@ -249,12 +344,7 @@ public class RestoListActivity extends AppCompatActivity implements
 
     private int[] getSortResult() {
         int[] sortResult = new int[2];
-        for (int i = 0; i < SORT_BUTTON_QTY; i++) {
-            if(filterBox[i].isChecked()) {
-                sortResult[0] = i;
-                break;
-            }
-        }
+        sortResult[0] = currSelectedSort;
         sortResult[1] =
                 (orderGroup.getCheckedRadioButtonId() == R.id.asc) ? 0 : 1;
         return sortResult;
@@ -284,17 +374,27 @@ public class RestoListActivity extends AppCompatActivity implements
         // change color
         for (int i = 0; i < SORT_BUTTON_QTY; i++) {
             if (sortSelected[i]) {
-                color = ContextCompat.getColor(this, R.color.translucentGreen75);
+                color = ContextCompat.getColor(this, R.color.accentGreenBtn);
             } else {
-                color = ContextCompat.getColor(this, R.color.translucentRed75);
+                color = ContextCompat.getColor(this, R.color.black);
             }
-            sortButton[i].setBackgroundColor(color);
+            ((ImageView) sortButtonLayout[i].getChildAt(0)).setColorFilter(color);
         }
     }
 
     @Override
     public void onRestoList(Uri uri) {
 
+    }
+
+    @Override
+    public void changeBookmark(int restoId) {
+        Log.e(TAG, "changeBookmark: ");
+    }
+
+    @Override
+    public void removeBeenHere(Resto r) {
+        Log.e(TAG, "removeBeenHere: ");
     }
 
     @Override
@@ -334,7 +434,7 @@ public class RestoListActivity extends AppCompatActivity implements
 
     @Override
     public void successBrowseNearby(ArrayList<Resto> data) {
-        Log.e(TAG, "successBrowseNearby: ");
+        hasBrowsedNearby = true;
         filterLayout.setVisibility(View.VISIBLE);
         sortLayout.setVisibility(View.VISIBLE);
         restoList = data;
@@ -355,12 +455,28 @@ public class RestoListActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onBackPressed() {
+        if(isFilterToggled) {
+            filterLayout.collapse();
+            isFilterToggled = false;
+        } else if(isSortToggled) {
+            sortLayout.collapse();
+            isSortToggled = false;
+        } else {
+            super.onBackPressed();
+        }
+        changeMenuButton();
+    }
+
+    @Override
     public void onConnected(@Nullable Bundle bundle) {
+        createLocationRequest();
         updateLocation();
         if (mLastLocation != null) {
-            if(pageType == PAGE_BROWSE) {
-//            Log.e(TAG, mLatitudeText + " " + mLongitudeText);
+            if (pageType == PAGE_BROWSE) {
                 presenter.browseNearby(mLongitudeText, mLatitudeText);
+            } else if (pageType == PAGE_RECOMMEND) {
+                presenter.browseNearby(mLongitudeText, mLatitudeText, "average_rate", "desc", "");
             }
         }
 
@@ -422,9 +538,23 @@ public class RestoListActivity extends AppCompatActivity implements
     }
 
     protected void stopLocationUpdates() {
-        if (mLocationRequest != null) {
+        if (mLocationRequest != null && googleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(
                     googleApiClient, (LocationListener) this);
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        updateLocation();
+        if (mLastLocation != null && !hasBrowsedNearby) {
+            if (pageType == PAGE_BROWSE) {
+                presenter.browseNearby(mLongitudeText, mLatitudeText);
+                hasBrowsedNearby = true;
+            } else if (pageType == PAGE_RECOMMEND) {
+                presenter.browseNearby(mLongitudeText, mLatitudeText, "average_rate", "desc", "");
+                hasBrowsedNearby = true;
+            }
         }
     }
 
@@ -487,10 +617,5 @@ public class RestoListActivity extends AppCompatActivity implements
                 }
             }
         });
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        updateLocation();
     }
 }

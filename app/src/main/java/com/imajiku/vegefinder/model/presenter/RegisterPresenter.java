@@ -2,7 +2,6 @@ package com.imajiku.vegefinder.model.presenter;
 
 
 import com.imajiku.vegefinder.model.model.RegisterModel;
-import com.imajiku.vegefinder.model.request.RegisterRequest;
 import com.imajiku.vegefinder.model.view.RegisterView;
 
 /**

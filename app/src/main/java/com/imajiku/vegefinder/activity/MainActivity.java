@@ -1,13 +1,22 @@
 package com.imajiku.vegefinder.activity;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,8 +25,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.fragment.NewsFragment;
 import com.imajiku.vegefinder.fragment.PlacesFragment;
@@ -34,7 +49,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements RecommendFragment.RecommendListener,
         PlacesFragment.PlacesListener,
-        NewsFragment.NewsListener, View.OnClickListener, MainView {
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener, NewsFragment.NewsListener, View.OnClickListener, MainView {
 
     private static final int NEWS_MAX_QTY = 4;
     private static final int PREVIEW_MAX_QTY = 5;
@@ -49,10 +66,24 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<Resto> recommendList;
     private ArrayList<Resto> placesList;
     private ArrayList<News> newsList;
+    private GoogleApiClient googleApiClient;
+    private boolean isRequestingLocationUpdates;
+    private boolean hasRecommendation;
+    private Location mLastLocation;
+    private String mLatitudeText, mLongitudeText;
+    private LocationRequest mLocationRequest;
+    private LinearLayout recommendLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+        }
         setContentView(R.layout.activity_main);
         initToolbar();
         presenter = new MainPresenter(this);
@@ -65,8 +96,16 @@ public class MainActivity extends AppCompatActivity
             loginMethod = getIntent().getStringExtra("loginMethod");
             presenter.getPlaces();
         }
-        presenter.getRecommendation();
         presenter.getNews();
+
+        recommendLayout = (LinearLayout) findViewById(R.id.recommend_layout);
+        if(isLocationEnabled(this)){
+            mLastLocation = null;
+            recommendLayout.setVisibility(View.VISIBLE);
+        }
+
+        hasRecommendation = false; // has called getRecommendation or not
+
         recommendFragment = (RecommendFragment) getSupportFragmentManager().findFragmentById(R.id.recommend_fragment);
         placesFragment = (PlacesFragment) getSupportFragmentManager().findFragmentById(R.id.places_fragment);
         newsFragment = (NewsFragment) getSupportFragmentManager().findFragmentById(R.id.articles_fragment);
@@ -79,6 +118,13 @@ public class MainActivity extends AppCompatActivity
         find.setOnClickListener(this);
         browse.setOnClickListener(this);
         myAccount.setOnClickListener(this);
+
+        //Tint Drawable
+        Drawable userIcon = ContextCompat.getDrawable(this, R.drawable.ic_account_circle_black_24dp_m);
+        userIcon = DrawableCompat.wrap(userIcon);
+        int btnGreen = ContextCompat.getColor(this, R.color.accentGreenBtn);
+        DrawableCompat.setTint(userIcon, btnGreen);
+        myAccount.setCompoundDrawablesWithIntrinsicBounds(userIcon, null, null, null);
 
         find.setTypeface(tf);
         browse.setTypeface(tf);
@@ -101,6 +147,29 @@ public class MainActivity extends AppCompatActivity
             ab.setDisplayShowHomeEnabled(true);
         }
         ImageView iv = (ImageView) mToolbar.findViewById(R.id.toolbar_image);
+    }
+
+    @Override
+    protected void onStart() {
+        googleApiClient.connect();
+        isRequestingLocationUpdates = true;
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (googleApiClient.isConnected() && !isRequestingLocationUpdates) {
+            startLocationUpdates();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        googleApiClient.disconnect();
+        isRequestingLocationUpdates = false;
+        stopLocationUpdates();
+        super.onStop();
     }
 
     @Override
@@ -236,6 +305,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void successGetRecommendation(ArrayList<Resto> list) {
+        hasRecommendation = true;
         recommendList = list;
         ArrayList<RestoPreview> recommendPreviewList = new ArrayList<>();
         int size = min(list.size(), PREVIEW_MAX_QTY);
@@ -244,6 +314,9 @@ public class MainActivity extends AppCompatActivity
             recommendPreviewList.add(new RestoPreview(r.getId(), r.getImage(), r.getTitle(), r.getCityId()+""));
         }
         recommendFragment.setData(recommendPreviewList);
+        if(isLocationEnabled(this)){
+            recommendLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -266,5 +339,99 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void failedGetPlaces() {
         Log.e(TAG, "failedGetPlaces");
+    }
+
+    private void updateLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.INTERNET
+                }, 10);
+            }
+            return;
+        }
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                googleApiClient);
+    }
+
+    private void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.INTERNET
+                }, 10);
+            }
+            return;
+        }
+        if (mLocationRequest != null) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    googleApiClient, mLocationRequest, this);
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        createLocationRequest();
+        updateLocation();
+        if (mLastLocation != null) {
+            mLatitudeText = String.valueOf(mLastLocation.getLatitude());
+            mLongitudeText = String.valueOf(mLastLocation.getLongitude());
+            presenter.getRecommendation(mLongitudeText, mLatitudeText);
+        }
+
+        if (isRequestingLocationUpdates) {
+            startLocationUpdates();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 10:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // can start listening to location changes
+                }
+                break;
+        }
+    }
+
+    protected void stopLocationUpdates() {
+        if (googleApiClient.isConnected() && mLocationRequest != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    googleApiClient, (LocationListener) this);
+        }
+    }
+
+    private void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        updateLocation();
+        if (mLastLocation != null && !hasRecommendation) {
+            mLatitudeText = String.valueOf(mLastLocation.getLatitude());
+            mLongitudeText = String.valueOf(mLastLocation.getLongitude());
+            presenter.getRecommendation(mLongitudeText, mLatitudeText);
+            hasRecommendation = true;
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

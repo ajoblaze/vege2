@@ -1,6 +1,7 @@
 package com.imajiku.vegefinder.service;
 
 import com.imajiku.vegefinder.model.request.ContactUsRequest;
+import com.imajiku.vegefinder.model.request.FindAllRequest;
 import com.imajiku.vegefinder.model.request.FindKeywordRequest;
 import com.imajiku.vegefinder.model.request.FindRegionRequest;
 import com.imajiku.vegefinder.model.request.ForgotRequest;
@@ -91,6 +92,9 @@ public interface ApiService {
 
     @POST("place/search_keyword")
     Call<RestoListResponse> findKeyword(@Body FindKeywordRequest request);
+
+    @POST("place/search_all")
+    Call<RestoListResponse> findAll(@Body FindAllRequest request);
 
     @POST("place/bookmark")
     Call<ToggleResponse> addBookmark(@Body ToggleRequest request);

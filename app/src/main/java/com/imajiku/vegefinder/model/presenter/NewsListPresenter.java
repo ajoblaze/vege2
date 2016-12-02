@@ -1,12 +1,9 @@
 package com.imajiku.vegefinder.model.presenter;
 
 
-import android.location.Location;
-
 import com.imajiku.vegefinder.model.model.NewsListModel;
 import com.imajiku.vegefinder.model.view.NewsListView;
 import com.imajiku.vegefinder.pojo.News;
-import com.imajiku.vegefinder.pojo.Resto;
 
 import java.util.ArrayList;
 

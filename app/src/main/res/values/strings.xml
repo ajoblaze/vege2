@@ -50,7 +50,7 @@
     <string name="find_specific_place">Find Specific Place</string>
     <string name="browse_nearby_places">Browse Nearby Places</string>
     <string name="my_account">My Account</string>
-    <string name="name_optional">Name [optional]</string>
+    <string name="keyword_hint">Name [optional]</string>
     <string name="find_now">Find Now</string>
     <string name="filter">Filter</string>
     <string name="sort">Sort</string>
@@ -103,4 +103,6 @@
     <string name="google_play">Rate Us on Google Play</string>
     <string name="logout">Logout</string>
     <string name="old_password">Old Password</string>
+    <string name="price_starts_from">starts from</string>
+    <string name="from_your_location"> km from your location</string>
 </resources>

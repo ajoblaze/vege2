@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,9 +11,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
+import com.imajiku.vegefinder.adapter.SpinnerAdapter;
 import com.imajiku.vegefinder.model.model.RegionModel;
 import com.imajiku.vegefinder.model.presenter.RegionPresenter;
 import com.imajiku.vegefinder.model.view.FindPlaceView;
@@ -26,9 +31,14 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
     private Spinner countrySpinner, provinceSpinner, citySpinner;
     private ArrayAdapter<String> countryDataAdapter, provinceDataAdapter, cityDataAdapter;
     private RegionPresenter presenter;
-    private Button findRegion, findKeyword;
-    private String currProvince, currCity;
-    private EditText keyword;
+    private Button findBtn;
+    private String currCountry, currProvince, currCity;
+    private EditText keywordText;
+    private Typeface tf;
+    private TextView title;
+    private ImageView arrow1, arrow2, arrow3;
+    private final String ALL_PROVINCE = "All Province";
+    private final String ALL_CITY = "All City";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +49,22 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
         RegionModel model = new RegionModel(presenter);
         presenter.setModel(model);
 
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+
+        title = (TextView) findViewById(R.id.find_title);
         countrySpinner = (Spinner) findViewById(R.id.country_spinner);
         provinceSpinner = (Spinner) findViewById(R.id.province_spinner);
         citySpinner = (Spinner) findViewById(R.id.city_spinner);
-        keyword = (EditText) findViewById(R.id.keyword);
+        keywordText = (EditText) findViewById(R.id.keyword);
 
         presenter.getCountry();
 
-        countryDataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, new ArrayList<String>());
-        provinceDataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, new ArrayList<String>());
-        cityDataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, new ArrayList<String>());
+        countryDataAdapter = new SpinnerAdapter(this,
+                R.layout.dropdown_profile, new ArrayList<String>(), tf);
+        provinceDataAdapter = new SpinnerAdapter(this,
+                R.layout.dropdown_profile, new ArrayList<String>(), tf);
+        cityDataAdapter = new SpinnerAdapter(this,
+                R.layout.dropdown_profile, new ArrayList<String>(), tf);
 
         countryDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         provinceDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -64,29 +77,40 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
         provinceSpinner.setOnItemSelectedListener(this);
         citySpinner.setOnItemSelectedListener(this);
 
-        findRegion = (Button) findViewById(R.id.find_region);
-        findKeyword = (Button) findViewById(R.id.find_keyword);
-        findRegion.setOnClickListener(this);
-        findKeyword.setOnClickListener(this);
+        findBtn = (Button) findViewById(R.id.find_btn);
+        findBtn.setOnClickListener(this);
+
+        title.setTypeface(tf);
+        keywordText.setTypeface(tf);
+        findBtn.setTypeface(tf);
+
+        arrow1 = (ImageView) findViewById(R.id.arrow1);
+        arrow2 = (ImageView) findViewById(R.id.arrow2);
+        arrow3 = (ImageView) findViewById(R.id.arrow3);
     }
 
     @Override
     public void updateDropdown(int type, ArrayList<String> content) {
         ArrayAdapter<String> adapter;
-        if(type == RegionPresenter.COUNTRY){
+        ImageView arrow;
+        if (type == RegionPresenter.COUNTRY) {
             adapter = countryDataAdapter;
-        } else if(type == RegionPresenter.PROVINCE){
+            arrow = arrow1;
+        } else if (type == RegionPresenter.PROVINCE) {
             adapter = provinceDataAdapter;
-            content.add(0, "All Province");
-        } else if(type == RegionPresenter.CITY) {
+            content.add(0, ALL_PROVINCE);
+            arrow = arrow2;
+        } else if (type == RegionPresenter.CITY) {
             adapter = cityDataAdapter;
-            content.add(0, "All City");
+            content.add(0, ALL_CITY);
+            arrow = arrow3;
         } else {
             return;
         }
         adapter.clear();
         adapter.addAll(content);
-        if(type==RegionPresenter.COUNTRY){
+        arrow.setVisibility(View.VISIBLE);
+        if (type == RegionPresenter.COUNTRY) {
             countrySpinner.setSelection(adapter.getPosition("Indonesia"));
         }
     }
@@ -94,20 +118,31 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
     @Override
     public void onClick(View v) {
         hideKeyboard();
-        Intent i  = new Intent(FindPlaceActivity.this, RestoListActivity.class);
-        switch(v.getId()){
-            case R.id.find_region:
-                i.putExtra("page", RestoListActivity.PAGE_SEARCH);
-                i.putExtra("type", "region");
-                i.putExtra("province", presenter.getProvinceId(currProvince));
-                i.putExtra("city", presenter.getCityId(currCity));
-                startActivity(i);
-                break;
-            case R.id.find_keyword:
-                i.putExtra("page", RestoListActivity.PAGE_SEARCH);
-                i.putExtra("type", "keyword");
-                i.putExtra("keyword", keyword.getText().toString());
-                startActivity(i);
+        Intent i = new Intent(FindPlaceActivity.this, RestoListActivity.class);
+        switch (v.getId()) {
+            case R.id.find_btn:
+                String keyword = keywordText.getText().toString();
+                if (keyword.equals("")) {
+                    if (currProvince.equals(ALL_PROVINCE)) {
+                        Toast.makeText(FindPlaceActivity.this, "Please pick a province", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (currCity.equals(ALL_CITY)) {
+                        Toast.makeText(FindPlaceActivity.this, "Please pick a city", Toast.LENGTH_SHORT).show();
+                    }else{
+                        i.putExtra("page", RestoListActivity.PAGE_SEARCH);
+                        i.putExtra("country", presenter.getCountryId(currCountry));
+                        i.putExtra("province", presenter.getProvinceId(currProvince));
+                        i.putExtra("city", presenter.getCityId(currCity));
+                        startActivity(i);
+                    }
+                } else {
+                    i.putExtra("page", RestoListActivity.PAGE_SEARCH);
+                    i.putExtra("country", presenter.getCountryId(currCountry));
+                    i.putExtra("province", presenter.getProvinceId(currProvince));
+                    i.putExtra("city", presenter.getCityId(currCity));
+                    i.putExtra("keyword", keyword);
+                    startActivity(i);
+                }
                 break;
         }
     }
@@ -125,8 +160,8 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.country_spinner:
+                currCountry = countryDataAdapter.getItem(position);
                 presenter.getProvince(countryDataAdapter.getItem(position));
-                provinceSpinner.setSelection(countryDataAdapter.getPosition("Indonesia"));
                 break;
             case R.id.province_spinner:
                 currProvince = provinceDataAdapter.getItem(position);

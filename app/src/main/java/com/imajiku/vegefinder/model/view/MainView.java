@@ -1,6 +1,5 @@
 package com.imajiku.vegefinder.model.view;
 
-import com.imajiku.vegefinder.model.response.NewsResponse;
 import com.imajiku.vegefinder.pojo.News;
 import com.imajiku.vegefinder.pojo.Resto;
 

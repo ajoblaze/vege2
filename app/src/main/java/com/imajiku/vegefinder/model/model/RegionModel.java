@@ -1,7 +1,5 @@
 package com.imajiku.vegefinder.model.model;
 
-import android.util.Log;
-
 import com.imajiku.vegefinder.model.presenter.RegionPresenter;
 import com.imajiku.vegefinder.model.response.CityResponse;
 import com.imajiku.vegefinder.model.response.CountryResponse;

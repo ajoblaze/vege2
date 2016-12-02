@@ -2,7 +2,9 @@ package com.imajiku.vegefinder.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,7 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
     private Context context;
     private String TAG = "exc";
     private boolean isSavedPlace;
+    private boolean isBeenHere;
 
     public static final int NORMAL = 1;
     public static final int FOOTER = 2;
@@ -43,9 +46,10 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
     /**
      * updates adapter with content
      */
-    public void setData(ArrayList<Resto> list, boolean isSavedPlace) {
+    public void setData(ArrayList<Resto> list, boolean isSavedPlace, boolean isBeenHere) {
         this.list = list;
         this.isSavedPlace = isSavedPlace;
+        this.isBeenHere = isBeenHere;
         notifyDataSetChanged();
     }
 
@@ -73,8 +77,22 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
         }
     }
 
+    private void changeFlag(Resto r, ImageView view) {
+        if (isBeenHere) {
+            view.setImageResource(R.drawable.ic_close_black_24dp_m);
+        } else {
+            if (r.isBookmarked()) {
+                view.setImageResource(R.drawable.ic_bookmark_black_24dp_m);
+            } else {
+                view.setImageResource(R.drawable.ic_bookmark_border_black_24dp_m);
+            }
+        }
+    }
+
     @Override
-    public void onBindViewHolder(RestoListViewHolder holder, int position) {
+    public void onBindViewHolder(RestoListViewHolder holder, final int position) {
+        View itemView = holder.itemView;
+
         if (isPositionLast(position)) {
             holder.loadMore.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -84,37 +102,54 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
             });
         } else {
             final Resto r = list.get(position);
-            Picasso.with(context)
-                    .load(r.getImage())
-                    .resize(90, 90)
-                    .centerCrop()
-                    .into(holder.image);
+            holder.itemLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.goToDetail(r);
+                }
+            });
+
+            if (!r.getImage().isEmpty()) {
+                Picasso.with(context)
+                        .load(r.getImage())
+                        .resize(90, 90)
+                        .centerCrop()
+                        .into(holder.image);
+            }
             holder.name.setText(r.getTitle());
-            holder.distance.setText(r.getDistance() + " km from your location");
-            holder.price.setText("starts from Rp" + r.getPriceStart());
-            holder.rating.setText(r.getAverageRate() + " of 10");
-            if(isSavedPlace){
+            holder.distance.setText(r.getDistance() + " ");
+            holder.price.setText(" Rp " + r.getPriceStart());
+            holder.rating.setText(r.getAverageRate());
+            holder.review.setText("20");
+            if (isSavedPlace) {
                 holder.flagLayout.setVisibility(View.GONE);
-            }else{
+            } else {
                 holder.flagLayout.setVisibility(View.VISIBLE);
             }
+            changeFlag(r, holder.flag);
+
             holder.flag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(r.isBookmarked()){
-                        ((ImageView)view).setImageResource(R.drawable.ic_bookmark_border_black_24dp_m);
-                    }else{
-                        ((ImageView)view).setImageResource(R.drawable.ic_bookmark_black_24dp_m);
+                    if (isBeenHere) {
+                        listener.removeBeenHere(r);
+                        list.remove(position);
+                        notifyDataSetChanged();
+                    } else {
+                        r.setBookmarked(!r.isBookmarked());
+                        listener.changeBookmark(r.getId());
                     }
-                    r.setBookmarked(!r.isBookmarked());
+                    changeFlag(r, (ImageView) view);
                 }
             });
+            holder.flag.setColorFilter(ContextCompat.getColor(context, R.color.accentGreenBtn));
 //            holder.ratingBar.setRating(list.get(position).getRating());
-
             holder.name.setTypeface(tf);
-            holder.distance.setTypeface(tf);
-            holder.price.setTypeface(tf);
-            holder.rating.setTypeface(tf);
+            for (int i = 0; i < holder.restoLayouts.length; i++) {
+                for (int ii = 0; ii < holder.restoLayouts[i].getChildCount(); ii++) {
+                    ((TextView) holder.restoLayouts[i].getChildAt(ii)).setTypeface(tf);
+                }
+            }
         }
     }
 
@@ -129,15 +164,22 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
 
     public interface RestoListListener {
         void onLoadMore();
+
+        void goToDetail(Resto r);
+
+        void changeBookmark(int restoId);
+
+        void removeBeenHere(Resto r);
     }
 
     class RestoListViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView image, flag;
-        public TextView name, distance, price, rating;
+        public TextView name, distance, price, rating, review;
         //        public RatingBar ratingBar;
         public Button loadMore;
-        public LinearLayout flagLayout;
+        public LinearLayout itemLayout, flagLayout;
+        public LinearLayout[] restoLayouts = new LinearLayout[3];
 
         public RestoListViewHolder(View itemView, boolean isFooter) {
             super(itemView);
@@ -149,8 +191,13 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
                 distance = (TextView) itemView.findViewById(R.id.distance);
                 price = (TextView) itemView.findViewById(R.id.price);
                 rating = (TextView) itemView.findViewById(R.id.rating);
+                review = (TextView) itemView.findViewById(R.id.review);
                 flag = (ImageView) itemView.findViewById(R.id.flag);
+                itemLayout = (LinearLayout) itemView.findViewById(R.id.item_layout);
                 flagLayout = (LinearLayout) itemView.findViewById(R.id.flag_layout);
+                restoLayouts[0] = (LinearLayout) itemView.findViewById(R.id.distance_layout);
+                restoLayouts[1] = (LinearLayout) itemView.findViewById(R.id.review_layout);
+                restoLayouts[2] = (LinearLayout) itemView.findViewById(R.id.price_layout);
 //                ratingBar = (RatingBar) itemView.findViewById(R.id.rating_bar);
             }
         }

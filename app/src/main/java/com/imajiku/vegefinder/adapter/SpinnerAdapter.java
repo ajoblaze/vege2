@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,15 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
         hiddenIndex = -1;
     }
 
+    public SpinnerAdapter(Context context, int resource, ArrayList<String> list) {
+        super(context, resource, list);
+        mContext = context;
+        mResource = resource;
+        this.list = list;
+        this.tf = null;
+        hiddenIndex = -1;
+    }
+
     public SpinnerAdapter(Context context, int resource, ArrayList<String> list, Typeface tf, int hiddenIndex) {
         super(context, resource, list);
         mContext = context;
@@ -50,7 +60,9 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
         holder = new MenuHolder(v);
 
         holder.menuText.setText(list.get(position));
-        holder.menuText.setTypeface(tf);
+        if(tf != null) {
+            holder.menuText.setTypeface(tf);
+        }
 
         if (position == hiddenIndex) {
             holder.menuText.setHeight(0);
@@ -63,7 +75,9 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView view = (TextView) super.getView(position, convertView, parent);
-        view.setTypeface(tf);
+        if(tf != null) {
+            view.setTypeface(tf);
+        }
         return view;
     }
 

@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:context=".activity.MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,15 +15,17 @@
             android:layout_below="@+id/app_bar"
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            tools:context=".activity.MainActivity">
+            android:paddingRight="@dimen/activity_horizontal_margin">
 
             <Button
                 android:id="@+id/find_specific"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/rounded_edittext"
+                android:drawableLeft="@drawable/ic_search_white_24dp_m"
+                android:drawablePadding="5dp"
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_green"
                 android:padding="8dip"
                 android:text="@string/find_specific_place" />
 
@@ -32,7 +35,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/find_specific"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/rounded_edittext"
+                android:drawableLeft="@drawable/ic_location_on_white_24dp_m"
+                android:drawablePadding="5dp"
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_green"
                 android:padding="8dip"
                 android:text="@string/browse_nearby_places" />
 
@@ -42,25 +48,33 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/browse_nearby"
                 android:layout_marginTop="12dp"
+                android:textColor="@color/accentGreenBtn"
                 android:background="@drawable/rounded_edittext"
                 android:padding="8dip"
                 android:text="@string/my_account" />
 
-            <fragment
-                android:id="@+id/recommend_fragment"
-                android:name="com.imajiku.vegefinder.fragment.RecommendFragment"
+            <LinearLayout
+                android:id="@+id/recommend_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/my_account"
-                android:layout_marginTop="12dp"
-                tools:layout="@layout/fragment_recommend" />
+                android:visibility="gone">
+
+                <fragment
+                    android:id="@+id/recommend_fragment"
+                    android:name="com.imajiku.vegefinder.fragment.RecommendFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    tools:layout="@layout/fragment_recommend" />
+            </LinearLayout>
 
             <fragment
                 android:id="@+id/places_fragment"
                 android:name="com.imajiku.vegefinder.fragment.PlacesFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/recommend_fragment"
+                android:layout_below="@id/recommend_layout"
                 android:layout_marginTop="12dp"
                 tools:layout="@layout/fragment_places" />
 

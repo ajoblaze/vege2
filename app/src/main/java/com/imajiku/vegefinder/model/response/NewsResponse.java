@@ -3,7 +3,6 @@ package com.imajiku.vegefinder.model.response;
 import com.google.gson.annotations.SerializedName;
 import com.imajiku.vegefinder.pojo.News;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**

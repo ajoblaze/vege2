@@ -95,77 +95,12 @@ public class NewsListFragment extends Fragment implements NewsListAdapter.NewsLi
     }
 
     /**
-     * Filter the News list
-     * parameter = boolean[] filterResult
-     *
-     * 0 => Open Now
-     * 1 => Rated 8+
-     * 2 => Bookmarked
-     * 3 => Been Here
-     * 4 => Vegan
-     * 5 => Vegetarian
-     */
-    class NewsFilterTask extends AsyncTask<Void, Void, ArrayList<News>> {
-
-        private final boolean[] filterResult;
-
-        public NewsFilterTask(boolean[] filterResult) {
-            this.filterResult = filterResult;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // show loading spinner
-        }
-
-        @Override
-        protected ArrayList<News> doInBackground(Void... params) {
-            ArrayList<News> filteredList = new ArrayList<>();
-            for(News r : list){
-                if(filterResult[0]){
-                    //cek if open now
-                }
-                if(filterResult[1]){
-                    //cek if rated 8+
-//                    if(r.getRating() < 8){
-//                        continue;
-//                    }
-                }
-                if(filterResult[2]){
-                    //cek if bookmarked
-                }
-                if(filterResult[3]){
-                    //cek if vegan
-                }
-                if(filterResult[4]){
-                    //cek if been here
-                }
-                if(filterResult[5]){
-                    //cek if vegetarian
-                }
-                filteredList.add(r);
-            }
-            return filteredList;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<News> NewsList) {
-            super.onPostExecute(NewsList);
-            // hide loading spinner
-            setData(NewsList);
-        }
-    }
-
-    /**
      * Sort the News list
      * parameter = int[] sortResult
      *
      * index 0 => type of sort
      * * 0 => by name (alphabetical)
-     * * 1 => by distance
-     * * 2 => by date
-     * * 3 => by price
+     * * 1 => by date
      * index 1 => order of sort
      * * 0 => ascending
      * * 1 => descending
@@ -204,15 +139,10 @@ public class NewsListFragment extends Fragment implements NewsListAdapter.NewsLi
                     if(sortResult[0] == 0) {
                         return a.getTitle().compareTo(b.getTitle());
                     } else if(sortResult[0] == 1) {
-//                        return Float.valueOf(a.getDistance()).compareTo(b.getDistance());
-                    } else if(sortResult[0] == 2) {
                         return a.getDatePost().compareTo(b.getDatePost());
-                    } else if(sortResult[0] == 3) {
-//                        return Integer.valueOf(a.getPriceStart()).compareTo(b.getPriceStart());
                     } else {
                         throw new IllegalArgumentException("Invalid Parameter : "+sortResult[0]);
                     }
-                    return 0;
                 }
             });
             return sortedList;

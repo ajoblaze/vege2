@@ -177,7 +177,7 @@ public class RestoDetailModel {
 //                if (response.isSuccessful()) {
 //                    ArrayList<Resto> data = response.body().getData();
 //                    if (sortType.equals("distance")) {
-//                        presenter.browseSortDistance(data, longitude, latitude, order);
+//                        presenter.sortData(data, longitude, latitude, order);
 //                    } else {
 //                        presenter.successBrowseNearby(data);
 //                    }

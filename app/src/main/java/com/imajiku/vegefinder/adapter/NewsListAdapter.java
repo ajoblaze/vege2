@@ -2,7 +2,10 @@ package com.imajiku.vegefinder.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,23 +84,44 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsLi
                     listener.onLoadMore();
                 }
             });
+            holder.loadMore.setTypeface(tf);
         } else {
             final News n = list.get(position);
-            Picasso.with(context)
-                    .load(n.getImage())
-                    .resize(90, 90)
-                    .centerCrop()
-                    .into(holder.image);
+            if(!n.getImage().isEmpty()) {
+                Picasso.with(context)
+                        .load(n.getImage())
+                        .resize(90, 90)
+                        .centerCrop()
+                        .into(holder.image);
+            }
             holder.title.setText(n.getTitle());
-            holder.content.setText(n.getContent());
+
+            Spanned html;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                html = Html.fromHtml(n.getContent(), Html.FROM_HTML_MODE_LEGACY);
+            } else {
+                html = Html.fromHtml(n.getContent());
+            }
+            holder.content.setText(html);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     listener.onReadMore(n);
                 }
             });
+
+            int color;
+            if (position % 2 == 0) {
+                color = ContextCompat.getColor(context, R.color.white);
+            } else {
+                color = ContextCompat.getColor(context, R.color.selectedGray);
+            }
+            itemView.setBackgroundColor(color);
+
             holder.title.setTypeface(tf);
             holder.content.setTypeface(tf);
+            holder.readMore.setTypeface(tf);
         }
     }
 

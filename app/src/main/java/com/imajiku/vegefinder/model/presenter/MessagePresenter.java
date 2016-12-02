@@ -1,8 +1,6 @@
 package com.imajiku.vegefinder.model.presenter;
 
 
-import android.widget.TextView;
-
 import com.imajiku.vegefinder.model.model.MessageModel;
 import com.imajiku.vegefinder.model.view.MessageView;
 

@@ -1,7 +1,6 @@
 package com.imajiku.vegefinder.model.view;
 
 import com.imajiku.vegefinder.pojo.News;
-import com.imajiku.vegefinder.pojo.Resto;
 
 import java.util.ArrayList;
 

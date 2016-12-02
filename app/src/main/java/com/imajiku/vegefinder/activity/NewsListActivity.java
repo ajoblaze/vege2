@@ -1,21 +1,25 @@
 package com.imajiku.vegefinder.activity;
 
-import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.fragment.NewsListFragment;
-import com.imajiku.vegefinder.fragment.RestoListFragment;
 import com.imajiku.vegefinder.model.model.NewsListModel;
 import com.imajiku.vegefinder.model.presenter.NewsListPresenter;
 import com.imajiku.vegefinder.model.view.NewsListView;
@@ -27,22 +31,24 @@ import java.util.ArrayList;
 public class NewsListActivity extends AppCompatActivity implements
         NewsListFragment.NewsListListener,View.OnClickListener, NewsListView {
 
-    private static final int FILTER_BOX_QTY = 6;
-    private static final int SORT_BUTTON_QTY = 4;
+    private static final int SORT_BUTTON_QTY = 2;
     private NewsListFragment newsListFragment;
-    private Button filter, sort;
+    private TextView sort;
     private String TAG = "exc";
-    private ExpandableRelativeLayout filterLayout, sortLayout;
-    private Button selectAll, clear, submitFilter, submitSort;
-    private CheckBox[] filterBox;
+    private ExpandableRelativeLayout sortLayout;
+    private TextView submitSort;
     private RadioGroup orderGroup;
     private RadioButton desc;
     private boolean[] sortSelected;
-    private Button[] sortButton;
+    private LinearLayout[] sortButtonLayout;
     private int currSelectedSort = -1;
     private int pageType;
-    private ArrayList<Resto> restoList;
+    private ArrayList<News> newsList;
     private NewsListPresenter presenter;
+    private Typeface tf;
+    private LinearLayout sortLinearLayout;
+    private boolean isSortToggled;
+    private ImageView sortArrow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,70 +59,54 @@ public class NewsListActivity extends AppCompatActivity implements
         NewsListModel model = new NewsListModel(presenter);
         presenter.setModel(model);
 
-        presenter.loadNews();
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
 
-        newsListFragment = (NewsListFragment) getSupportFragmentManager().findFragmentById(R.id.review_list_fragment);
-        filter = (Button) findViewById(R.id.filter_btn);
-        sort = (Button) findViewById(R.id.sort_btn);
-        filterLayout = (ExpandableRelativeLayout) findViewById(R.id.layout_filter);
+        presenter.loadNews();
+        initToolbar("News and Ideas");
+        isSortToggled = false;
+
+        newsListFragment = (NewsListFragment) getSupportFragmentManager().findFragmentById(R.id.news_list_fragment);
+        sort = (TextView) findViewById(R.id.sort_btn);
+        sortArrow = (ImageView) findViewById(R.id.sort_arrow);
         sortLayout = (ExpandableRelativeLayout) findViewById(R.id.layout_sort);
-        filter.setOnClickListener(this);
-        sort.setOnClickListener(this);
-        filterBox = new CheckBox[FILTER_BOX_QTY];
-        sortButton = new Button[SORT_BUTTON_QTY];
+        sortLinearLayout = (LinearLayout) findViewById(R.id.sort_layout);
+        sortLinearLayout.setOnClickListener(this);
+        sortButtonLayout = new LinearLayout[SORT_BUTTON_QTY];
         sortSelected = new boolean[]{false, false, false, false};
 
-        // filter
-        selectAll = (Button) findViewById(R.id.select_all);
-        clear = (Button) findViewById(R.id.clear);
-        filterBox[0] = (CheckBox) findViewById(R.id.open_now);
-        filterBox[1] = (CheckBox) findViewById(R.id.rate_8);
-        filterBox[2] = (CheckBox) findViewById(R.id.bookmarked);
-        filterBox[3] = (CheckBox) findViewById(R.id.been_here);
-        filterBox[4] = (CheckBox) findViewById(R.id.vegan);
-        filterBox[5] = (CheckBox) findViewById(R.id.vege);
-        submitFilter = (Button) findViewById(R.id.submit_filter);
-
         //sort
-        sortButton[0] = (Button) findViewById(R.id.alpha);
-        sortButton[1] = (Button) findViewById(R.id.distance);
-        sortButton[2] = (Button) findViewById(R.id.date);
-        sortButton[3] = (Button) findViewById(R.id.price);
+        sortButtonLayout[0] = (LinearLayout) findViewById(R.id.sort_alpha_ll);
+        sortButtonLayout[1] = (LinearLayout) findViewById(R.id.sort_date_ll);
         orderGroup = (RadioGroup) findViewById(R.id.sort_order);
-        submitSort = (Button) findViewById(R.id.submit_sort);
-
-        // filter
-        selectAll.setOnClickListener(this);
-        clear.setOnClickListener(this);
-        submitFilter.setOnClickListener(this);
+        submitSort = (TextView) findViewById(R.id.submit_sort);
 
         //sort
         for (int i = 0; i < SORT_BUTTON_QTY; i++) {
-            sortButton[i].setOnClickListener(this);
+            sortButtonLayout[i].setOnClickListener(this);
         }
         submitSort.setOnClickListener(this);
+    }
+
+    public void initToolbar(String title) {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayShowTitleEnabled(false);
+            ab.setDisplayShowHomeEnabled(true);
+        }
+        TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
+        tv.setText(title);
+        tv.setTypeface(tf);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.filter_btn:
-                sortLayout.collapse();
-                filterLayout.toggle();
-                break;
-            case R.id.sort_btn:
-                filterLayout.collapse();
+            case R.id.sort_layout:
                 sortLayout.toggle();
-                break;
-            case R.id.select_all:
-                for (int i = 0; i < FILTER_BOX_QTY; i++) {
-                    filterBox[i].setSelected(true);
-                }
-                break;
-            case R.id.clear:
-                for (int i = 0; i < FILTER_BOX_QTY; i++) {
-                    filterBox[i].setSelected(false);
-                }
+                isSortToggled = !isSortToggled;
+                changeMenuButton();
                 break;
             case R.id.alpha:
                 changeSortButton(0);
@@ -130,46 +120,30 @@ public class NewsListActivity extends AppCompatActivity implements
             case R.id.price:
                 changeSortButton(3);
                 break;
-            case R.id.submit_filter:
-                filterLayout.collapse();
-//                newsListFragment.filter(getFilterResult(), pageType == PAGE_BOOKMARK);
-                break;
             case R.id.submit_sort:
                 sortLayout.collapse();
-//                newsListFragment.sort(restoList, getSortResult(), pageType == PAGE_BOOKMARK);
+                newsListFragment.sort(newsList, getSortResult());
                 break;
         }
-    }
-
-    private String getFilter() {
-        if(filterBox[4].isSelected() && !filterBox[5].isSelected()) {
-            return "vegan";
-        }
-        if(!filterBox[4].isSelected() && filterBox[5].isSelected()){
-            return "vegetarian";
-        }
-        return "";
     }
 
     private int[] getSortResult() {
         int[] sortResult = new int[2];
-        for (int i = 0; i < SORT_BUTTON_QTY; i++) {
-            if(filterBox[i].isSelected()) {
-                sortResult[0] = i;
-                break;
-            }
-        }
+        sortResult[0] = currSelectedSort;
         sortResult[1] =
                 (orderGroup.getCheckedRadioButtonId() == R.id.asc) ? 0 : 1;
         return sortResult;
     }
 
-    private boolean[] getFilterResult() {
-        boolean[] filterResult = new boolean[FILTER_BOX_QTY];
-        for (int i = 0; i < FILTER_BOX_QTY; i++) {
-            filterResult[i] = filterBox[i].isSelected();
+    private void changeMenuButton() {
+        if (isSortToggled) {
+            sortArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp_m);
+            sortLinearLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
+        } else {
+            sortArrow.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp_m);
+            sortLinearLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.selectedGray));
         }
-        return filterResult;
+        sortArrow.setColorFilter(ContextCompat.getColor(this, R.color.accentGreenBtn));
     }
 
     private void changeSortButton(int index) {
@@ -188,19 +162,18 @@ public class NewsListActivity extends AppCompatActivity implements
         // change color
         for (int i = 0; i < SORT_BUTTON_QTY; i++) {
             if (sortSelected[i]) {
-                color = ContextCompat.getColor(this, R.color.translucentGreen75);
+                color = ContextCompat.getColor(this, R.color.accentGreenBtn);
             } else {
-                color = ContextCompat.getColor(this, R.color.translucentRed75);
+                color = ContextCompat.getColor(this, R.color.black);
             }
-            sortButton[i].setBackgroundColor(color);
+            ((ImageView) sortButtonLayout[i].getChildAt(0)).setColorFilter(color);
         }
     }
 
     @Override
     public void successLoadNews(ArrayList<News> data) {
-        filterLayout.setVisibility(View.VISIBLE);
         sortLayout.setVisibility(View.VISIBLE);
-        newsListFragment.sort(data, new int[]{2, 1});
+        newsListFragment.sort(data, new int[]{1, 1});
     }
 
     @Override

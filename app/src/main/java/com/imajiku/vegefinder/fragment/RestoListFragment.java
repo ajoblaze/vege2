@@ -1,6 +1,7 @@
 package com.imajiku.vegefinder.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.imajiku.vegefinder.R;
+import com.imajiku.vegefinder.activity.RestoDetailActivity;
 import com.imajiku.vegefinder.adapter.RestoListAdapter;
 import com.imajiku.vegefinder.pojo.Resto;
 
@@ -72,9 +74,26 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
 
     }
 
+    @Override
+    public void goToDetail(Resto r) {
+        Intent i = new Intent(getActivity(), RestoDetailActivity.class);
+        i.putExtra("resto", r.getId());
+        startActivity(i);
+    }
+
+    @Override
+    public void changeBookmark(int restoId) {
+        mListener.changeBookmark(restoId);
+    }
+
+    @Override
+    public void removeBeenHere(Resto r) {
+        mListener.removeBeenHere(r);
+    }
+
     public void setData(ArrayList<Resto> list, boolean isSavedPlace) {
         if(adapter!=null){
-            adapter.setData(list, isSavedPlace);
+            adapter.setData(list, isSavedPlace, false);
         }
     }
 
@@ -88,17 +107,10 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
 
     public interface RestoListListener {
         void onRestoList(Uri uri);
-    }
 
-    public void populate(){
-        list = new ArrayList<>();
-        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato1", (float)2, 100000));
-        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato2", (float)4.8, 90000));
-        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato3", 5, 120000));
-        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato4", (float)2.5, 80000));
-        list.add(new Resto("http://oregonaitc.org/wp-content/uploads/2016/02/potato.jpg", "Potato5", 5, 9999999));
-        //footer
-        list.add(new Resto());
+        void changeBookmark(int restoId);
+
+        void removeBeenHere(Resto r);
     }
 
     /**

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="8dp"
     android:orientation="horizontal">
 
     <ImageView
@@ -21,6 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:textSize="18sp"
+            android:textStyle="bold"
             android:maxLines = "2"
             android:minLines = "1"
             />
@@ -37,6 +40,8 @@
             android:id="@+id/read_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/translucentBlack50"
             android:text="@string/read_more"
             />
     </LinearLayout>

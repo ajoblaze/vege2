@@ -21,7 +21,7 @@ public class ReviewListActivity extends AppCompatActivity implements ReviewListV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_list);
+        setContentView(R.layout.activity_review_list);
 
         restoId = getIntent().getIntExtra("placeId", -1);
         userId = getIntent().getIntExtra("userId", -1);

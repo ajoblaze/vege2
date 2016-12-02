@@ -5,7 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/selectedGray"
     tools:context=".activity.RestoListActivity">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/toolbar" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -16,19 +21,53 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/filter_btn"
+        <!--filter-->
+        <LinearLayout
+            android:id="@+id/filter_layout"
             android:layout_width="wrap_content"
-            android:background="@color/translucentBlue25"
             android:layout_height="match_parent"
-            android:text="@string/filter" />
+            android:background="@drawable/selector_normal"
+            android:gravity="center_vertical"
+            android:padding="4dp">
 
-        <Button
-            android:id="@+id/sort_btn"
+            <TextView
+                android:id="@+id/filter_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/filter" />
+
+            <ImageView
+                android:id="@+id/filter_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_keyboard_arrow_down_black_24dp_m"
+                android:tint="@color/accentGreenBtn" />
+        </LinearLayout>
+
+        <!--sort-->
+        <LinearLayout
+            android:id="@+id/sort_layout"
             android:layout_width="wrap_content"
-            android:background="@color/translucentWater25"
             android:layout_height="match_parent"
-            android:text="@string/sort" />
+            android:background="@drawable/selector_normal"
+            android:gravity="center_vertical"
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/sort_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/sort" />
+
+            <ImageView
+                android:id="@+id/sort_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_keyboard_arrow_down_black_24dp_m"
+                android:tint="@color/accentGreenBtn" />
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -36,11 +75,11 @@
         android:id="@+id/layout_filter"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/translucentRed25"
+        android:visibility="invisible"
+        android:background="@color/white"
         app:ael_duration="200"
         app:ael_interpolator="accelerate"
-        app:ael_orientation="vertical"
-        android:visibility="invisible">
+        app:ael_orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,16 +91,24 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <Button
+                <TextView
                     android:id="@+id/select_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@color/translucent"
+                    android:padding="8dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accentGreenBtn"
                     android:text="@string/select_all" />
 
-                <Button
+                <TextView
                     android:id="@+id/clear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@color/translucent"
+                    android:padding="8dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accentGreenBtn"
                     android:text="@string/clear" />
             </LinearLayout>
 
@@ -128,10 +175,15 @@
                     android:text="@string/vegetarian" />
             </LinearLayout>
 
-            <Button
+            <TextView
                 android:id="@+id/submit_filter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="8dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/accentGreenBtn"
+                android:textColor="@color/white"
                 android:text="@string/show_result" />
 
         </LinearLayout>
@@ -141,11 +193,11 @@
         android:id="@+id/layout_sort"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/translucentOrange50"
+        android:visibility="invisible"
+        android:background="@color/white"
         app:ael_duration="200"
         app:ael_interpolator="accelerate"
-        app:ael_orientation="vertical"
-        android:visibility="invisible">
+        app:ael_orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -157,33 +209,93 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/alpha"
+                <!--alpha-->
+                <LinearLayout
+                    android:id="@+id/sort_alpha_ll"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="@string/alphabet" />
+                    android:padding="4dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/distance"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/distance" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_bookmark_border_black_24dp_m" />
 
-                <Button
-                    android:id="@+id/date"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/date" />
+                    <TextView
+                        android:id="@+id/alpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/alphabet" />
+                </LinearLayout>
 
-                <Button
-                    android:id="@+id/price"
+                <!--distance-->
+                <LinearLayout
+                    android:id="@+id/sort_distance_ll"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="@string/price" />
+                    android:padding="4dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_bookmark_border_black_24dp_m" />
+
+                    <TextView
+                        android:id="@+id/distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/distance" />
+                </LinearLayout>
+
+                <!--date-->
+                <LinearLayout
+                    android:id="@+id/sort_date_ll"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="4dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_bookmark_border_black_24dp_m" />
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/date" />
+                </LinearLayout>
+
+                <!--price-->
+                <LinearLayout
+                    android:id="@+id/sort_price_ll"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="4dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_bookmark_border_black_24dp_m" />
+
+                    <TextView
+                        android:id="@+id/price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/price" />
+                </LinearLayout>
             </LinearLayout>
 
             <RadioGroup
@@ -208,21 +320,30 @@
                     android:text="@string/descending" />
             </RadioGroup>
 
-            <Button
+            <TextView
                 android:id="@+id/submit_sort"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="8dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/accentGreenBtn"
+                android:textColor="@color/white"
                 android:text="@string/show_result" />
 
         </LinearLayout>
     </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/translucentBlack25"/>
 
     <fragment
         android:id="@+id/resto_list_fragment"
         android:name="com.imajiku.vegefinder.fragment.RestoListFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         tools:layout="@layout/fragment_resto_list" />
 
 </LinearLayout>

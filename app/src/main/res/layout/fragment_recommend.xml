@@ -14,6 +14,7 @@
             android:id="@+id/recommend_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:gravity="start"
             android:text="@string/recommend_label" />
 
@@ -21,7 +22,9 @@
             android:id="@+id/see_more"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
+            android:textColor="@color/accentGreenBtn"
+            android:drawablePadding="4dp"
+            android:gravity="end|center_vertical"
             android:text="@string/see_more" />
     </LinearLayout>
 
