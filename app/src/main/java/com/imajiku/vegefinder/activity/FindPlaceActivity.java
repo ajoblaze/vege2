@@ -60,11 +60,11 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
         presenter.getCountry();
 
         countryDataAdapter = new SpinnerAdapter(this,
-                R.layout.dropdown_profile, new ArrayList<String>(), tf);
+                R.layout.item_dropdown_profile, new ArrayList<String>(), tf);
         provinceDataAdapter = new SpinnerAdapter(this,
-                R.layout.dropdown_profile, new ArrayList<String>(), tf);
+                R.layout.item_dropdown_profile, new ArrayList<String>(), tf);
         cityDataAdapter = new SpinnerAdapter(this,
-                R.layout.dropdown_profile, new ArrayList<String>(), tf);
+                R.layout.item_dropdown_profile, new ArrayList<String>(), tf);
 
         countryDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         provinceDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

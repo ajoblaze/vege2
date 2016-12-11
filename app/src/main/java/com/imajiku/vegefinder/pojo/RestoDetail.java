@@ -99,6 +99,9 @@ public class RestoDetail {
     public String getOpenTime() {
         String[] open = {openMon, openTue, openWed, openThu, openFri, openSat, openSun};
         int currDay = new LocalDate().getDayOfWeek();
+        if(!open[currDay-1].isEmpty()){
+            return "  |  "+open[currDay-1];
+        }
         return open[currDay-1];
     }
 

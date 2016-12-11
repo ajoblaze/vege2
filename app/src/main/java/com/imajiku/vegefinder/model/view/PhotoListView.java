@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by Alvin on 2016-10-08.
  */
 public interface PhotoListView {
-    void successGetRestoImages(ArrayList<String> list);
+    void successGetRestoImages(ArrayList<String> list, String title);
 
     void failedGetRestoImages();
 }

@@ -36,6 +36,7 @@ public class RestoListModel {
         FindRegionRequest request = new FindRegionRequest(provinceId, cityId);
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.findRegion(request);
+        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
@@ -58,6 +59,7 @@ public class RestoListModel {
         FindKeywordRequest request = new FindKeywordRequest(keyword);
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.findKeyword(request);
+        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
@@ -80,6 +82,7 @@ public class RestoListModel {
         FindAllRequest request = new FindAllRequest(provinceId, cityId, keyword);
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.findAll(request);
+        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
@@ -108,7 +111,7 @@ public class RestoListModel {
         }
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.browseNearby(location, sort, filter);
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {

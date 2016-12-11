@@ -10,6 +10,9 @@
     <string name="title_contact_us">Contact Us</string>
     <string name="title_register">Register New Account</string>
     <string name="title_verify">Enter Confirmation Code</string>
+    <string name="title_add_photo">Upload a Photo</string>
+    <string name="title_report">Report</string>
+    <string name="title_add_review">Add Review</string>
 
     <!--layout strings-->
     <string name="username">Username</string>
@@ -46,6 +49,7 @@
     <string name="name">Name</string>
     <string name="subject">Subject</string>
     <string name="message">Write your message…</string>
+    <string name="report">Write your report…</string>
     <string name="submit">Submit</string>
     <string name="find_specific_place">Find Specific Place</string>
     <string name="browse_nearby_places">Browse Nearby Places</string>
@@ -75,14 +79,14 @@
     <string name="recommend_label">You Might Like</string>
     <string name="read_more">Read More</string>
     <string name="bookmark">Bookmark</string>
-    <string name="check_in">Check In</string>
-    <string name="book">Book</string>
+    <string name="check_in">Check-In</string>
+    <string name="book">Book Now</string>
     <string name="call">Call</string>
-    <string name="maps_and_directions"><![CDATA[Maps and Directions>]]></string>
+    <string name="maps_and_directions">Maps and Directions</string>
     <string name="photos">Photos</string>
-    <string name="add_photo"><![CDATA[Add Photo>]]></string>
+    <string name="add_photo">Add Photo</string>
     <string name="reviews">Reviews</string>
-    <string name="report_problem">Report Problem</string>
+    <string name="report_problem">Report Problem with this Listing</string>
     <string name="call_title">Tap the number to call</string>
     <string name="check_in_facebook">Share on Facebook</string>
     <string name="check_in_twitter">Share on Twitter</string>

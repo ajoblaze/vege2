@@ -1,6 +1,7 @@
 package com.imajiku.vegefinder.activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -38,13 +39,14 @@ public class RestoDetailActivity extends AppCompatActivity
     private Button map, addPhoto, addReview, reportProblem;
     private Button[] buttonHead = new Button[5];
     private PhotoFragment photoFragment;
-    private TextView openDays;
+    private TextView openDays, openDaysTitle;
     private ReviewFragment reviewFragment;
     private RestoDetailPresenter presenter;
     private String TAG= "exc";
     private RestoDetail restoDetail;
     private boolean[] buttonStatus = new boolean[2];
     private LinearLayout photoLayout, reviewLayout;
+    private Typeface tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,8 @@ public class RestoDetailActivity extends AppCompatActivity
         presenter = new RestoDetailPresenter(this);
         RestoDetailModel model = new RestoDetailModel(presenter);
         presenter.setModel(model);
+
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
 
         restoDetail = null;
         restoId = getIntent().getIntExtra("resto", -1);
@@ -89,10 +93,36 @@ public class RestoDetailActivity extends AppCompatActivity
         reviewFragment = (ReviewFragment) getSupportFragmentManager().findFragmentById(R.id.review_fragment);
         addPhoto = (Button) findViewById(R.id.btn_add_photo);
         addReview = (Button) findViewById(R.id.btn_add_review);
+        openDaysTitle = (TextView) findViewById(R.id.open_days_title);
         openDays = (TextView) findViewById(R.id.open_days);
         reportProblem = (Button) findViewById(R.id.btn_report);
 
         presenter.getRestoDetail(restoId);
+
+        //tf
+        TextView of10 = (TextView) findViewById(R.id.of_10);
+        of10.setTypeface(tf);
+        rate.setTypeface(tf);
+        guest.setTypeface(tf);
+
+        for(TextView t : restoHead){
+            t.setTypeface(tf);
+        }
+        for(Button b : buttonHead){
+            b.setTypeface(tf);
+        }
+        for(TextView t : restoContentTitle){
+            t.setTypeface(tf);
+        }
+        for(TextView t : restoContent){
+            t.setTypeface(tf);
+        }
+        map.setTypeface(tf);
+        addPhoto.setTypeface(tf);
+        addReview.setTypeface(tf);
+        openDaysTitle.setTypeface(tf);
+        openDays.setTypeface(tf);
+        reportProblem.setTypeface(tf);
     }
 
     @Override
@@ -121,17 +151,17 @@ public class RestoDetailActivity extends AppCompatActivity
                 startActivity(i);
                 break;
             case R.id.btn_call:
-//                i = new Intent(RestoDetailActivity.this, CallActivity.class);
-//                i.putExtra("id", resto.getId());
-//                i.putExtra("title", resto.getTitle());
-//                i.putExtra("image", resto.getImage());
-//                startActivity(i);
+                i = new Intent(RestoDetailActivity.this, CallActivity.class);
+                i.putExtra("id", restoDetail.getId());
+                i.putExtra("title", restoDetail.getTitle());
+                i.putExtra("image", restoDetail.getImage());
+                startActivity(i);
                 break;
             case R.id.btn_check_in:
                 i = new Intent(RestoDetailActivity.this, CheckInActivity.class);
-//                i.putExtra("id", resto.getId());
-//                i.putExtra("title", resto.getTitle());
-//                i.putExtra("image", resto.getImage());
+                i.putExtra("id", restoDetail.getId());
+                i.putExtra("title", restoDetail.getTitle());
+                i.putExtra("image", restoDetail.getImage());
                 startActivity(i);
                 break;
             case R.id.btn_map:
@@ -178,13 +208,16 @@ public class RestoDetailActivity extends AppCompatActivity
     }
 
     private void changeButtonColor(int index){
-        int colorId;
+        int bgId, textColorId;
         if(buttonStatus[index]){
-            colorId = R.color.translucentWhite75;
+            bgId = R.drawable.rounded_green_selected;
+            textColorId = R.color.accentGreenBtn;
         }else{
-            colorId = R.color.translucentLime75;
+            bgId = R.drawable.rounded_green;
+            textColorId = R.color.white;
         }
-        buttonHead[index].setBackgroundColor(ContextCompat.getColor(this, colorId));
+        buttonHead[index].setBackground(ContextCompat.getDrawable(this, bgId));
+        buttonHead[index].setTextColor(ContextCompat.getColor(this, textColorId));
     }
 
     @Override
@@ -213,8 +246,11 @@ public class RestoDetailActivity extends AppCompatActivity
                 .into(banner);
 //        if(restoDetail.getAvgRate() != null) {
 //            rate.setText(restoDetail.getAvgRate());
-            guest.setText("From " + restoDetail.getCountReview() + " guests");
+            rate.setText("3");
+            guest.setText(restoDetail.getCountReview() + " guest"+(restoDetail.getCountReview()<2?"":"s"));
 //        }
+        findViewById(R.id.rate_guest).setVisibility(View.VISIBLE);
+
         restoHead[0].setText(restoDetail.getTitle());
         restoHead[1].setText(restoDetail.getAddress());
         if(restoDetail.isOpenNow()) {

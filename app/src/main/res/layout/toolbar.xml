@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:minHeight="?attr/actionBarSize"
-    android:background="@color/accentGreenBg"
+    android:background="@color/accentGreenBg75"
     app:theme="@style/AppTheme">
 
     <TextView

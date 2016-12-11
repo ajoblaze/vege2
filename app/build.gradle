@@ -41,4 +41,5 @@ dependencies {
     compile 'com.github.aakira:expandable-layout:1.6.0@aar'
     compile 'com.github.deano2390:FlowTextView:2.0.5'
     compile 'com.android.support:design:25.0.0'
+    compile 'com.github.clans:fab:1.6.0'
 }

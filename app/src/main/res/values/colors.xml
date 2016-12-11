@@ -12,6 +12,7 @@
     <color name="selectedGrayDarker">#AEAEAE</color>
     <color name="selectedBlue">#E3F2FD</color>
     <color name="borderGray">#BDBDBD</color>
+    <color name="twitterBlue">#00ACED</color>
     <color name="selectedBlueDark">#42A5F5</color>
     <color name="floatingBlueRipple">#B2EBF2</color>
     <color name="floatingBlue">#00BCD4</color>
@@ -20,7 +21,8 @@
     <color name="successGreen">#64DD17</color>
     <color name="actionBarDark">#303030</color>
     <color name="accentOrange">#EF5C0B</color>
-    <color name="accentGreenBg">#8060aa2f</color>
+    <color name="accentGreenBg50">#8060aa2f</color>
+    <color name="accentGreenBg75">#BF60aa2f</color>
     <color name="accentGreenBtn">#78b74e</color>
 
     <color name="translucent">#00000000</color>

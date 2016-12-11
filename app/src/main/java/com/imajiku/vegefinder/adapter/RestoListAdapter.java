@@ -150,6 +150,14 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
                     ((TextView) holder.restoLayouts[i].getChildAt(ii)).setTypeface(tf);
                 }
             }
+
+            int color;
+            if (position % 2 == 0) {
+                color = ContextCompat.getColor(context, R.color.white);
+            } else {
+                color = ContextCompat.getColor(context, R.color.selectedGray);
+            }
+            itemView.setBackgroundColor(color);
         }
     }
 

@@ -4,17 +4,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.utility.ImageDecoderHelper;
 
@@ -24,20 +26,39 @@ public class AddPhotoActivity extends AppCompatActivity implements View.OnClickL
     private static final int REQUEST_CAMERA = 6;
     private String picturePath;
     private ImageView photoView;
+    private Typeface tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_photo);
 
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        initToolbar(getResources().getString(R.string.title_add_photo));
+
         int id = getIntent().getIntExtra("id", -1);
         photoView = (ImageView) findViewById(R.id.photo);
         photoView.getAdjustViewBounds();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_camera);
-        Button btnGallery = (Button) findViewById(R.id.btn_gallery);
+        TextView btnGallery = (TextView) findViewById(R.id.btn_gallery);
+
+        btnGallery.setTypeface(tf);
 
         fab.setOnClickListener(this);
         btnGallery.setOnClickListener(this);
+    }
+
+    public void initToolbar(String title) {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayShowTitleEnabled(false);
+            ab.setDisplayShowHomeEnabled(true);
+        }
+        TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
+        tv.setText(title);
+        tv.setTypeface(tf);
     }
 
     /**
@@ -81,8 +102,7 @@ public class AddPhotoActivity extends AppCompatActivity implements View.OnClickL
             } else {
                 Toast.makeText(this, "Image not found", Toast.LENGTH_SHORT).show();
             }
-        }
-        else if (requestCode == REQUEST_CAMERA && resultCode == Activity.RESULT_OK) {
+        } else if (requestCode == REQUEST_CAMERA && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             photoView.setImageBitmap(photo);
         }

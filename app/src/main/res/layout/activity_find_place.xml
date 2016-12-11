@@ -1,125 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/accentGreenBg"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/accentGreenBg50"
     tools:context="com.imajiku.vegefinder.activity.FindPlaceActivity">
 
-    <ImageView
-        android:id="@+id/find_img"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/find_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/find_img"
-        android:layout_centerHorizontal="true"
-        android:text="@string/find_specific_place"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
-
     <RelativeLayout
-        android:id="@+id/country_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/find_title"
-        android:layout_marginTop="20dp">
-
-        <Spinner
-            android:id="@+id/country_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector_rounded_edittext"
-            android:hint="@string/country"
-            android:padding="8dip" />
-
-        <ImageView
-            android:id="@+id/arrow1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:visibility="gone"
-            android:src="@drawable/ic_arrow_drop_down_black_24dp_m" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/province_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/country_layout"
-        android:layout_marginTop="20dp">
-
-        <Spinner
-            android:id="@+id/province_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector_rounded_edittext"
-            android:hint="@string/province"
-            android:padding="8dip" />
-
-        <ImageView
-            android:id="@+id/arrow2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:visibility="gone"
-            android:src="@drawable/ic_arrow_drop_down_black_24dp_m" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/city_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/province_layout"
-        android:layout_marginTop="20dp">
-
-        <Spinner
-            android:id="@+id/city_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector_rounded_edittext"
-            android:hint="@string/city"
-            android:padding="8dip" />
-
-        <ImageView
-            android:id="@+id/arrow3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:visibility="gone"
-            android:src="@drawable/ic_arrow_drop_down_black_24dp_m" />
-    </RelativeLayout>
-
-    <EditText
-        android:id="@+id/keyword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/city_layout"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/selector_rounded_edittext"
-        android:hint="@string/keyword_hint"
-        android:padding="12dip" />
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
-    <Button
-        android:id="@+id/find_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/keyword"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/rounded_orange"
-        android:padding="8dip"
-        android:text="@string/find_now"
-        android:textColor="@color/white" />
+        <ImageView
+            android:id="@+id/find_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/find_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/find_img"
+            android:layout_centerHorizontal="true"
+            android:text="@string/find_specific_place"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <RelativeLayout
+            android:id="@+id/country_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/find_title"
+            android:layout_marginTop="20dp">
+
+            <Spinner
+                android:id="@+id/country_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_rounded_edittext"
+                android:hint="@string/country"
+                android:padding="8dip" />
+
+            <ImageView
+                android:id="@+id/arrow1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_arrow_drop_down_black_24dp_m"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/province_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/country_layout"
+            android:layout_marginTop="20dp">
+
+            <Spinner
+                android:id="@+id/province_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_rounded_edittext"
+                android:hint="@string/province"
+                android:padding="8dip" />
+
+            <ImageView
+                android:id="@+id/arrow2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_arrow_drop_down_black_24dp_m"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/city_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/province_layout"
+            android:layout_marginTop="20dp">
+
+            <Spinner
+                android:id="@+id/city_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_rounded_edittext"
+                android:hint="@string/city"
+                android:padding="8dip" />
+
+            <ImageView
+                android:id="@+id/arrow3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_arrow_drop_down_black_24dp_m"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+        <LinearLayout
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="0px"
+            android:layout_height="0px"/>
+
+        <EditText
+            android:id="@+id/keyword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/city_layout"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/selector_rounded_edittext"
+            android:hint="@string/keyword_hint"
+            android:nextFocusUp="@id/keyword"
+            android:nextFocusLeft="@id/keyword"
+            android:padding="12dip" />
+
+        <Button
+            android:id="@+id/find_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/keyword"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_orange"
+            android:padding="8dip"
+            android:text="@string/find_now"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+</ScrollView>

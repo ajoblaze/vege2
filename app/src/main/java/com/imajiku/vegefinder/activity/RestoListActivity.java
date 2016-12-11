@@ -140,7 +140,7 @@ public class RestoListActivity extends AppCompatActivity implements
                         presenter.findByRegion(provinceId, cityId);
                     }
                 } else {
-                    if (countryId != -1 || provinceId == -1 || cityId == -1) {
+                    if (countryId == -1 || provinceId == -1 || cityId == -1) {
                         presenter.findByKeyword(keyword);
                     } else {
                         presenter.findAll(countryId, provinceId, cityId, keyword);

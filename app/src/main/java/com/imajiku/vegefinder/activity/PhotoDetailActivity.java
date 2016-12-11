@@ -3,16 +3,20 @@ package com.imajiku.vegefinder.activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.adapter.PhotoDetailAdapter;
@@ -38,11 +42,14 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
     private int restoId, userId, position;
     private PhotoDetailAdapter adapter;
     private ArrayList<String> list;
+    private Typeface tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_detail);
+
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
 
         restoId = getIntent().getIntExtra("restoId", -1);
         userId = getIntent().getIntExtra("userId", -1);
@@ -60,14 +67,28 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
     }
 
     @Override
-    public void successGetRestoImages(ArrayList<String> list) {
-        this.list = list;
-        adapter = new PhotoDetailAdapter(getSupportFragmentManager(), list.size());
-        adapter.setData(list);
+    public void successGetRestoImages(ArrayList<String> imageList, String title) {
+        initToolbar(title);
+        this.list = imageList;
+        adapter = new PhotoDetailAdapter(getSupportFragmentManager(), imageList.size());
+        adapter.setData(imageList);
         viewPager.setAdapter(adapter);
         if(position != -1) {
             viewPager.setCurrentItem(position);
         }
+    }
+
+    public void initToolbar(String title) {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
+        ActionBar ab = getSupportActionBar();
+        if(ab != null) {
+            ab.setDisplayShowTitleEnabled(false);
+            ab.setDisplayShowHomeEnabled(true);
+        }
+        TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
+        tv.setText(title);
+        tv.setTypeface(tf);
     }
 
     @Override

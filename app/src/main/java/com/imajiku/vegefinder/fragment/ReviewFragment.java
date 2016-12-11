@@ -3,9 +3,12 @@ package com.imajiku.vegefinder.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -49,6 +52,16 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         TextView seeMore = (TextView) v.findViewById(R.id.see_more);
         seeMore.setOnClickListener(this);
         seeMore.setTypeface(tf);
+        TextView label = (TextView) v.findViewById(R.id.review_label);
+        label.setOnClickListener(this);
+        label.setTypeface(tf);
+
+        //Tint Drawable
+        Drawable addIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_add_circle_black_24dp_m);
+        addIcon = DrawableCompat.wrap(addIcon);
+        int btnGreen = ContextCompat.getColor(getContext(), R.color.accentGreenBtn);
+        DrawableCompat.setTint(addIcon, btnGreen);
+        seeMore.setCompoundDrawablesWithIntrinsicBounds(null, null, addIcon, null);
 
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager((Context) mListener, LinearLayoutManager.VERTICAL, false){

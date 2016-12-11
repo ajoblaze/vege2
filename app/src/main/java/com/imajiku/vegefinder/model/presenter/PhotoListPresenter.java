@@ -40,7 +40,7 @@ public class PhotoListPresenter {
         for(RestoImage r : restoImage){
             list.add(r.getImage());
         }
-        view.successGetRestoImages(list);
+        view.successGetRestoImages(list, data.getTitle());
     }
 
     private ArrayList<RestoImage> dummyImages() {

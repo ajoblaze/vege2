@@ -18,6 +18,8 @@
             android:id="@+id/subject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:background="@drawable/selector_edittext"
             android:layout_marginTop="8dp"
             android:hint="@string/subject" />
 
@@ -27,7 +29,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/subject"
             android:layout_marginTop="8dp"
-            android:hint="@string/message"
+            android:padding="12dp"
+            android:gravity="top"
+            android:background="@drawable/selector_edittext"
+            android:hint="@string/report"
             android:inputType="textMultiLine"
             android:lines="4"
             android:scrollbars="vertical" />
@@ -38,7 +43,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/message"
             android:layout_marginTop="8dp"
-            android:background="@drawable/rounded_edittext"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_green"
             android:text="@string/submit" />
     </RelativeLayout>
 

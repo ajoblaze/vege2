@@ -1,12 +1,16 @@
 package com.imajiku.vegefinder.activity;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.model.model.MessageModel;
@@ -21,11 +25,15 @@ public class SendReportActivity extends AppCompatActivity implements View.OnClic
     private Button submit;
     private int restoId, userId, type;
     private MessagePresenter presenter;
+    private Typeface tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_report);
+
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        initToolbar(getResources().getString(R.string.title_report));
 
         restoId = getIntent().getIntExtra("placeId", -1);
         userId = getIntent().getIntExtra("userId", -1);
@@ -42,7 +50,24 @@ public class SendReportActivity extends AppCompatActivity implements View.OnClic
         message = (EditText) findViewById(R.id.message);
         submit = (Button) findViewById(R.id.submit);
 
+        subject.setTypeface(tf);
+        message.setTypeface(tf);
+        submit.setTypeface(tf);
+
         submit.setOnClickListener(this);
+    }
+
+    public void initToolbar(String title) {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
+        ActionBar ab = getSupportActionBar();
+        if(ab != null) {
+            ab.setDisplayShowTitleEnabled(false);
+            ab.setDisplayShowHomeEnabled(true);
+        }
+        TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
+        tv.setText(title);
+        tv.setTypeface(tf);
     }
 
     @Override

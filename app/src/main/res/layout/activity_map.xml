@@ -6,17 +6,31 @@
     android:orientation="vertical"
     tools:context="com.imajiku.vegefinder.activity.MapActivity">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/toolbar" />
 
-    <TextView
-        android:id="@+id/address"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="8dp"
+            android:paddingLeft="8dp"
+            android:paddingBottom="8dp" />
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/container"
@@ -29,6 +43,9 @@
         android:id="@+id/btn_direction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_margin="8dp"
+        android:background="@drawable/rounded_green"
         android:text="@string/directions" />
 
 </LinearLayout>

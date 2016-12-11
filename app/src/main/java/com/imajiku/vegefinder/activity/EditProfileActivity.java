@@ -134,15 +134,15 @@ public class EditProfileActivity extends AppCompatActivity implements
         initArray();
 
         countryDataAdapter = new SpinnerAdapter(this,
-                R.layout.dropdown_profile, new ArrayList<String>(), tf);
+                R.layout.item_dropdown_profile, new ArrayList<String>(), tf);
         provinceDataAdapter = new SpinnerAdapter(this,
-                R.layout.dropdown_profile, new ArrayList<String>(), tf);
+                R.layout.item_dropdown_profile, new ArrayList<String>(), tf);
         cityDataAdapter = new SpinnerAdapter(this,
-                R.layout.dropdown_profile, new ArrayList<String>(), tf);
+                R.layout.item_dropdown_profile, new ArrayList<String>(), tf);
         ArrayAdapter<String> sexDataAdapter = new SpinnerAdapter(this,
-                R.layout.dropdown_profile, sexArray, tf);
+                R.layout.item_dropdown_profile, sexArray, tf);
         ArrayAdapter<String> prefDataAdapter = new SpinnerAdapter(this,
-                R.layout.dropdown_profile, prefArray, tf);
+                R.layout.item_dropdown_profile, prefArray, tf);
 
         countrySpinner.getAdapter();
         provinceSpinner = (Spinner) findViewById(R.id.province_spinner);

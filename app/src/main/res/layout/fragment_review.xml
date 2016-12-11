@@ -8,11 +8,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/review_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:gravity="start"
             android:text="@string/reviews" />
 
@@ -20,7 +24,9 @@
             android:id="@+id/see_more"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
+            android:textColor="@color/accentGreenBtn"
+            android:drawablePadding="4dp"
+            android:gravity="end|center_vertical"
             android:text="@string/see_more" />
     </LinearLayout>
 
@@ -28,7 +34,6 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:background="@color/translucentWater25" />
+        android:layout_margin="8dp" />
 
 </LinearLayout>

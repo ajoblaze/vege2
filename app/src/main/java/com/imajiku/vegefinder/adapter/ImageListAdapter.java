@@ -2,6 +2,8 @@ package com.imajiku.vegefinder.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
  * Created by Alvin on 2016-09-26.
  */
 public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.ImageListViewHolder> {
+    private final int screenWidth;
     private boolean isGrid;
     private ImageListListener listener;
     private ArrayList<String> list;
@@ -26,19 +29,28 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Imag
     public ImageListAdapter(Context context, ImageListListener listener) {
         this.context = context;
         this.listener = listener;
-        this.width = 90;
-        this.height = 90;
+        this.width = this.height = 90;
         this.isGrid = false;
         list = new ArrayList<>();
+        screenWidth = getScreenWidth(context);
     }
 
     public ImageListAdapter(Context context, ImageListListener listener, boolean isGrid) {
         this.context = context;
         this.listener = listener;
-        this.width = 90;
-        this.height = 90;
         this.isGrid = isGrid;
         list = new ArrayList<>();
+        screenWidth = getScreenWidth(context);
+        if(isGrid){
+            this.width = this.height = screenWidth/3;
+        }else {
+            this.width = this.height = 90;
+        }
+    }
+
+    public static int getScreenWidth(Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        return displayMetrics.widthPixels;
     }
 
     public void setImageSize(int width, int height) {
@@ -59,7 +71,11 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Imag
     @Override
     public ImageListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int layout;
-        layout = R.layout.item_image_horizontal;
+        if(isGrid) {
+            layout = R.layout.item_image_grid;
+        } else {
+            layout = R.layout.item_image_horizontal;
+        }
         View v = LayoutInflater.from(context).inflate(layout, parent, false);
         return new ImageListViewHolder(v);
     }

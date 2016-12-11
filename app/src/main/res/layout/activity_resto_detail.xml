@@ -2,14 +2,13 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:context=".activity.RestoDetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/translucentYellow25"
-        android:orientation="vertical"
-        tools:context=".activity.RestoDetailActivity">
+        android:orientation="vertical">
 
         <!-- #1 -->
         <RelativeLayout
@@ -19,35 +18,52 @@
             <ImageView
                 android:id="@+id/resto_img"
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
-                android:background="@color/translucentGreen50" />
+                android:layout_height="240dp" />
 
             <LinearLayout
                 android:id="@+id/rate_guest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:orientation="vertical">
+                android:layout_margin="4dp"
+                android:layout_alignBottom="@id/resto_img"
+                android:background="@drawable/rounded_green_75"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_margin="4dp"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
+                    android:text="3.7"
                     android:textColor="@color/white"
-                    android:text="3.7" />
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/guest"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:text="From 12 guests" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/of_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:text="/ 10 from"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/guest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
 
@@ -62,42 +78,47 @@
                 android:id="@+id/resto_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Healthy Foodiest" />
+                android:padding="8dp"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/resto_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Jl Sudirman 12, Semarang" />
+                android:paddingRight="8dp"
+                android:paddingLeft="8dp"
+                android:paddingBottom="8dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/translucentBlack25"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/resto_is_open"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/translucentGreen25"
-                    android:text="Open" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="  -  " />
+                    android:textColor="@color/translucentGreen25" />
 
                 <TextView
                     android:id="@+id/resto_open_hours"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/resto_statistic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12 review - 20 bookmarks - 135 been here" />
+                android:paddingRight="8dp"
+                android:paddingLeft="8dp"
+                android:paddingBottom="8dp" />
         </LinearLayout>
 
         <!-- #3 -->
@@ -109,6 +130,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:padding="4dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -117,6 +139,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="8dp"
+                    android:layout_margin="4dp"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:background="@drawable/rounded_green"
                     android:text="@string/bookmark" />
 
                 <Button
@@ -125,12 +151,17 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="8dp"
+                    android:layout_margin="4dp"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:background="@drawable/rounded_green"
                     android:text="@string/been_here" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:padding="4dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -139,6 +170,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="8dp"
+                    android:layout_margin="4dp"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:background="@drawable/rounded_green"
                     android:text="@string/book" />
 
                 <Button
@@ -147,6 +182,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="8dp"
+                    android:layout_margin="4dp"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:background="@drawable/rounded_green"
                     android:text="@string/check_in" />
             </LinearLayout>
 
@@ -154,7 +193,17 @@
                 android:id="@+id/btn_call"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_margin="8dp"
+                android:textAllCaps="false"
+                android:background="@drawable/rounded_green"
                 android:text="@string/call" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/translucentBlack25"/>
         </LinearLayout>
 
         <!-- #4 -->
@@ -167,10 +216,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:padding="12dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/title_1"
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -178,11 +229,12 @@
                     android:id="@+id/content_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="10"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="12dp"
+                    android:maxLines="10" />
 
                 <TextView
                     android:id="@+id/title_2"
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -190,11 +242,12 @@
                     android:id="@+id/content_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="10"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="12dp"
+                    android:maxLines="10" />
 
                 <TextView
                     android:id="@+id/title_3"
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -202,8 +255,8 @@
                     android:id="@+id/content_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="10"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="12dp"
+                    android:maxLines="10" />
 
             </LinearLayout>
 
@@ -211,10 +264,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:paddingTop="12dp"
+                android:paddingRight="12dp"
+                android:paddingBottom="12dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/title_4"
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -222,11 +279,12 @@
                     android:id="@+id/content_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="10"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="12dp"
+                    android:maxLines="10" />
 
                 <TextView
                     android:id="@+id/title_5"
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -234,11 +292,12 @@
                     android:id="@+id/content_5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="10"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="12dp"
+                    android:maxLines="10" />
 
                 <TextView
                     android:id="@+id/title_6"
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -246,8 +305,8 @@
                     android:id="@+id/content_6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="10"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="12dp"
+                    android:maxLines="10" />
 
             </LinearLayout>
         </LinearLayout>
@@ -257,7 +316,10 @@
             android:id="@+id/btn_map"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|left"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_margin="8dp"
+            android:background="@drawable/rounded_green"
             android:text="@string/maps_and_directions"
             android:textAllCaps="false" />
 
@@ -280,6 +342,10 @@
                 android:id="@+id/btn_add_photo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_margin="8dp"
+                android:textAllCaps="false"
+                android:background="@drawable/rounded_green"
                 android:text="@string/add_photo" />
         </LinearLayout>
 
@@ -302,17 +368,32 @@
                 android:id="@+id/btn_add_review"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add Review >" />
+                android:textColor="@color/white"
+                android:layout_margin="8dp"
+                android:background="@drawable/rounded_green"
+                android:text="Add Review" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/open_days_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:textStyle="bold"
+                android:text="OPENING HOURS"/>
 
             <TextView
                 android:id="@+id/open_days"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:padding="12dp" />
         </LinearLayout>
 
         <!-- #7 -->
@@ -320,8 +401,11 @@
             android:id="@+id/btn_report"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|left"
+            android:gravity="center"
             android:text="@string/report_problem"
+            android:layout_margin="8dp"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_green"
             android:textAllCaps="false" />
     </LinearLayout>
 </ScrollView>
