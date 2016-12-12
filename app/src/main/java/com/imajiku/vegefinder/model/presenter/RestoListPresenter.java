@@ -104,5 +104,29 @@ public class RestoListPresenter {
     public void failedGetRecommendation() {
         view.failedBrowseNearby();
     }
+
+    public void changeBookmark(int userId, int placeId, boolean isBookmarked) {
+        model.changeBookmark(userId, placeId, isBookmarked);
+    }
+
+    public void changeBeenHere(int userId, int placeId, boolean hasBeenHere) {
+        model.changeBeenHere(userId, placeId, hasBeenHere);
+    }
+
+    public void successChangeBookmark(int placeId, boolean isBookmarked) {
+        view.successChangeBookmark(placeId, isBookmarked);
+    }
+
+    public void failedChangeBookmark(String message) {
+        view.failedChangeBookmark(message);
+    }
+
+    public void successChangeBeenHere(int placeId) {
+        view.successChangeBeenHere(placeId);
+    }
+
+    public void failedChangeBeenHere(String message) {
+        view.failedChangeBeenHere(message);
+    }
 }
 

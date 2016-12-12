@@ -1,6 +1,7 @@
 package com.imajiku.vegefinder.activity;
 
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ public class NewsDetailActivity extends AppCompatActivity {
             html = Html.fromHtml(n.getContent());
         }
         flowContent.setText(html);
+        flowContent.setTextSize(getResources().getDimension(R.dimen.text_size_news));
         flowContent.setTypeface(tf);
     }
 

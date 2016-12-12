@@ -75,6 +75,10 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
         holder.date.setTypeface(tf);
         holder.rate.setTypeface(tf);
         holder.desc.setTypeface(tf);
+
+        if(position == list.size()-1){
+            holder.separator.setVisibility(View.GONE);
+        }
     }
 
     public void setTypeface(Typeface typeface) {
@@ -94,6 +98,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
 
         public ImageView img;
         public TextView name, title, date, rate, desc;
+        public View separator;
 
         public ReviewListViewHolder(View itemView) {
             super(itemView);
@@ -103,6 +108,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
             date = (TextView) itemView.findViewById(R.id.date);
             rate = (TextView) itemView.findViewById(R.id.rate);
             desc = (TextView) itemView.findViewById(R.id.desc);
+            separator = itemView.findViewById(R.id.separator);
         }
     }
 }

@@ -101,7 +101,6 @@ public class PhotoFragment extends Fragment implements View.OnClickListener, Ima
             case R.id.see_more: {
                 Intent i = new Intent(getActivity(), PhotoListActivity.class);
                 i.putExtra("restoId", restoId);
-                i.putExtra("userId", userId);
                 startActivity(i);
             }
             break;

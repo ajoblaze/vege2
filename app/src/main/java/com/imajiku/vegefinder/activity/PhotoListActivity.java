@@ -17,6 +17,7 @@ import com.imajiku.vegefinder.adapter.ImageListAdapter;
 import com.imajiku.vegefinder.model.model.PhotoListModel;
 import com.imajiku.vegefinder.model.presenter.PhotoListPresenter;
 import com.imajiku.vegefinder.model.view.PhotoListView;
+import com.imajiku.vegefinder.utility.CurrentUser;
 
 import java.util.ArrayList;
 
@@ -41,7 +42,7 @@ public class PhotoListActivity extends AppCompatActivity implements ImageListAda
         initToolbar(getResources().getString(R.string.photos));
 
         restoId = getIntent().getIntExtra("restoId", -1);
-        userId = getIntent().getIntExtra("userId", -1);
+        userId = CurrentUser.getId();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3, LinearLayoutManager.VERTICAL, false));
@@ -72,7 +73,6 @@ public class PhotoListActivity extends AppCompatActivity implements ImageListAda
     public void onItemTouch(int position) {
         Intent i = new Intent(this, PhotoDetailActivity.class);
         i.putExtra("restoId", restoId);
-        i.putExtra("userId", userId);
         i.putExtra("position", position);
         startActivity(i);
     }

@@ -12,6 +12,8 @@
     <string name="title_verify">Enter Confirmation Code</string>
     <string name="title_add_photo">Upload a Photo</string>
     <string name="title_report">Report</string>
+    <string name="title_account">My Account</string>
+    <string name="title_review">Review</string>
     <string name="title_add_review">Add Review</string>
 
     <!--layout strings-->
@@ -109,4 +111,9 @@
     <string name="old_password">Old Password</string>
     <string name="price_starts_from">starts from</string>
     <string name="from_your_location"> km from your location</string>
+    <string name="version">version 2.1</string>
+    <string name="lorem_ipsum">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</string>
+    <string name="developed_by">developed by</string>
+    <string name="success_booking">Your booking has been sent to this place, they will be contacting you shortly</string>
+    <string name="add_review">Add Review</string>
 </resources>

@@ -30,7 +30,7 @@ public class CallActivity extends AppCompatActivity {
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
         initToolbar("Call");
 
-        Resto r = (Resto) getIntent().getSerializableExtra("resto");
+//        Resto r = (Resto) getIntent().getSerializableExtra("resto");
 //        Intent intent = new Intent(Intent.ACTION_DIAL);
 //        intent.setData(Uri.parse("tel:"+asd.getText().toString()));
 //        startActivity(intent);

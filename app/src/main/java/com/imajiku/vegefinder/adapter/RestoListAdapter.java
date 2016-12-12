@@ -18,6 +18,7 @@ import com.imajiku.vegefinder.pojo.Resto;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Alvin on 2016-09-26.
@@ -137,9 +138,8 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
                         notifyDataSetChanged();
                     } else {
                         r.setBookmarked(!r.isBookmarked());
-                        listener.changeBookmark(r.getId());
+                        listener.changeBookmark(r.getId(), r.isBookmarked());
                     }
-                    changeFlag(r, (ImageView) view);
                 }
             });
             holder.flag.setColorFilter(ContextCompat.getColor(context, R.color.accentGreenBtn));
@@ -170,12 +170,31 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
         this.tf = typeface;
     }
 
+    public void updateBookmark(int placeId, boolean isBookmarked) {
+        for(Resto r : list){
+            if(r.getId() == placeId && r.isBookmarked() != isBookmarked){
+                r.setBookmarked(isBookmarked);
+            }
+            notifyDataSetChanged();
+        }
+    }
+
+    public void removeData(int placeId) {
+        Iterator<Resto> iterator = list.iterator();
+        while(iterator.hasNext()){
+            if(iterator.next().getId() == placeId){
+                iterator.remove();
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     public interface RestoListListener {
         void onLoadMore();
 
         void goToDetail(Resto r);
 
-        void changeBookmark(int restoId);
+        void changeBookmark(int restoId, boolean isBookmarked);
 
         void removeBeenHere(Resto r);
     }

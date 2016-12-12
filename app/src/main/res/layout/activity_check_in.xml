@@ -15,7 +15,7 @@
         android:paddingTop="@dimen/activity_vertical_margin">
 
         <EditText
-            android:id="@+id/status"
+            android:id="@+id/comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/check_in_status"
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:layout_below="@id/status"
+            android:layout_below="@id/comment"
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatCheckBox

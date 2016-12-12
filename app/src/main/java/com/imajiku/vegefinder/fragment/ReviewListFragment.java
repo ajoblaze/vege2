@@ -52,7 +52,7 @@ public class ReviewListFragment extends Fragment implements ReviewListAdapter.Re
 
     }
 
-    private void setData(ArrayList<Review> reviewList) {
+    public void setData(ArrayList<Review> reviewList) {
         if(adapter != null){
             adapter.setData(reviewList);
         }

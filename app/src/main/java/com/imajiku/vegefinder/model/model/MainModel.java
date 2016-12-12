@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.imajiku.vegefinder.model.presenter.MainPresenter;
 import com.imajiku.vegefinder.model.request.FindKeywordRequest;
+import com.imajiku.vegefinder.model.request.ToggleRequest;
 import com.imajiku.vegefinder.model.response.RestoListResponse;
 import com.imajiku.vegefinder.model.response.NewsResponse;
 import com.imajiku.vegefinder.pojo.News;
@@ -136,6 +137,51 @@ public class MainModel {
             @Override
             public void onFailure(Call<RestoListResponse> call, Throwable t) {
                 presenter.failedGetRecommendation();
+            }
+        });
+    }
+
+    public void getBookmarks(int userId) {
+        ToggleRequest request = new ToggleRequest(userId);
+        ApiService svc = retrofit.create(ApiService.class);
+        Call<RestoListResponse> call = svc.getBookmarks(request);
+        Log.e(TAG, String.valueOf(call.request().url()));
+        call.enqueue(new Callback<RestoListResponse>() {
+            @Override
+            public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<Resto> data = response.body().getData();
+                    presenter.successGetBookmarks();
+                } else {
+                    presenter.failedGetBookmarks();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RestoListResponse> call, Throwable t) {
+                presenter.failedGetBookmarks();
+            }
+        });
+    }
+
+    public void getBeenHere(int userId, String order) {
+        ApiService svc = retrofit.create(ApiService.class);
+        Call<RestoListResponse> call = svc.getBeenHere(userId, order);
+        Log.e(TAG, String.valueOf(call.request().url()));
+        call.enqueue(new Callback<RestoListResponse>() {
+            @Override
+            public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<Resto> data = response.body().getData();
+                    presenter.successGetBeenHere();
+                } else {
+                    presenter.failedGetBeenHere();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RestoListResponse> call, Throwable t) {
+                presenter.failedGetBeenHere();
             }
         });
     }

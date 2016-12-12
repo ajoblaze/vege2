@@ -6,17 +6,20 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.model.model.MessageModel;
 import com.imajiku.vegefinder.model.presenter.MessagePresenter;
 import com.imajiku.vegefinder.model.view.MessageView;
+import com.imajiku.vegefinder.utility.CurrentUser;
 
 public class AddReviewActivity extends AppCompatActivity implements View.OnClickListener, MessageView {
 
@@ -38,10 +41,10 @@ public class AddReviewActivity extends AppCompatActivity implements View.OnClick
         initToolbar(getResources().getString(R.string.title_add_review));
 
         restoId = getIntent().getIntExtra("placeId", -1);
-        userId = getIntent().getIntExtra("userId", -1);
-        if(restoId == -1 || userId == -1){
-            throw new RuntimeException("send userid and placeid");
-        }
+        userId = CurrentUser.getId();
+//        if(restoId == -1 || userId == -1){
+//            throw new RuntimeException("send userid and placeid");
+//        }
 
         presenter = new MessagePresenter(this);
         MessageModel model = new MessageModel(presenter);
@@ -126,8 +129,19 @@ public class AddReviewActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    public void successSendReview() {
+    public void failedSendContactUs(String s) {
+        Log.e("exc", "failedSendContactUs "+s);
+    }
 
+    @Override
+    public void successSendReview(String s) {
+        Toast.makeText(AddReviewActivity.this, s, Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    @Override
+    public void failedSendReview(String s) {
+        Log.e("exc", "failedSendReview "+s);
     }
 
     @Override

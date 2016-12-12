@@ -7,4 +7,12 @@ public interface EditProfileView {
     void successRegisterProfile();
 
     void failedRegisterProfile();
+
+    void successUpdateProfile();
+
+    void failedUpdateProfile();
+
+    void successUpdatePhotoProfile();
+
+    void failedUpdatePhotoProfile();
 }

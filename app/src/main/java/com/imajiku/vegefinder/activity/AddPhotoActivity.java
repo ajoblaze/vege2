@@ -36,7 +36,7 @@ public class AddPhotoActivity extends AppCompatActivity implements View.OnClickL
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
         initToolbar(getResources().getString(R.string.title_add_photo));
 
-        int id = getIntent().getIntExtra("id", -1);
+        int placeId = getIntent().getIntExtra("placeId", -1);
         photoView = (ImageView) findViewById(R.id.photo);
         photoView.getAdjustViewBounds();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_camera);

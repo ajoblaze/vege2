@@ -1,22 +1,26 @@
 package com.imajiku.vegefinder.service;
 
+import com.imajiku.vegefinder.model.request.BookRequest;
+import com.imajiku.vegefinder.model.request.CheckInRequest;
 import com.imajiku.vegefinder.model.request.ContactUsRequest;
 import com.imajiku.vegefinder.model.request.FindAllRequest;
 import com.imajiku.vegefinder.model.request.FindKeywordRequest;
 import com.imajiku.vegefinder.model.request.FindRegionRequest;
 import com.imajiku.vegefinder.model.request.ForgotRequest;
 import com.imajiku.vegefinder.model.request.LoginRequest;
-import com.imajiku.vegefinder.model.request.RegisterProfileRequest;
+import com.imajiku.vegefinder.model.request.EditProfileRequest;
 import com.imajiku.vegefinder.model.request.RegisterRequest;
 import com.imajiku.vegefinder.model.request.ReviewRequest;
 import com.imajiku.vegefinder.model.request.ToggleRequest;
 import com.imajiku.vegefinder.model.request.VerifyForgotRequest;
 import com.imajiku.vegefinder.model.request.VerifyRequest;
 import com.imajiku.vegefinder.model.response.AccountResponse;
+import com.imajiku.vegefinder.model.response.BookResponse;
+import com.imajiku.vegefinder.model.response.CheckInResponse;
 import com.imajiku.vegefinder.model.response.CityResponse;
 import com.imajiku.vegefinder.model.response.ContactUsResponse;
 import com.imajiku.vegefinder.model.response.CountryResponse;
-import com.imajiku.vegefinder.model.response.ForgotResponse;
+import com.imajiku.vegefinder.model.response.StatusResponse;
 import com.imajiku.vegefinder.model.response.LoginResponse;
 import com.imajiku.vegefinder.model.response.NewsResponse;
 import com.imajiku.vegefinder.model.response.ProvinceResponse;
@@ -27,7 +31,6 @@ import com.imajiku.vegefinder.model.response.RestoListResponse;
 import com.imajiku.vegefinder.model.response.ReviewResponse;
 import com.imajiku.vegefinder.model.response.ToggleResponse;
 import com.imajiku.vegefinder.model.response.VerifyForgotResponse;
-import com.imajiku.vegefinder.model.response.VerifyResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -58,16 +61,25 @@ public interface ApiService {
     Call<RegisterResponse> register(@Body RegisterRequest request);
 
     @POST("users/updateProfileRegister")
-    Call<RegisterProfileResponse> registerProfile(@Body RegisterProfileRequest request);
+    Call<RegisterProfileResponse> registerProfile(@Body EditProfileRequest request);
 
     @POST("users/activationCode")
-    Call<VerifyResponse> confirmCode(@Body VerifyRequest request);
+    Call<StatusResponse> confirmCode(@Body VerifyRequest request);
 
     @POST("users/forgot")
-    Call<ForgotResponse> forgot(@Body ForgotRequest request);
+    Call<StatusResponse> forgot(@Body ForgotRequest request);
 
     @POST("users/reset_password")
     Call<VerifyForgotResponse> resetPassword(@Body VerifyForgotRequest request);
+
+    @POST("users/UpdateProfile")
+    Call<RegisterProfileResponse> updateProfile(@Body EditProfileRequest request);
+
+    @POST("users/UpdatePhotoProfile")
+    Call<RegisterProfileResponse> updatePhotoProfile(@Body EditProfileRequest request);
+
+    @GET("users/logout")
+    Call<StatusResponse> logout();
 
     //    CONTACT
     @POST("contact/sendContactUs")
@@ -87,6 +99,9 @@ public interface ApiService {
             @Path ("sort") String sort
     );
 
+    @POST("place/checkin")
+    Call<CheckInResponse> checkIn(@Body CheckInRequest request);
+
     @POST("place/search_region")
     Call<RestoListResponse> findRegion(@Body FindRegionRequest request);
 
@@ -102,11 +117,23 @@ public interface ApiService {
     @POST("place/remove_bookmark")
     Call<ToggleResponse> removeBookmark(@Body ToggleRequest request);
 
+    @POST("place/myplaces")
+    Call<RestoListResponse> getBookmarks(@Body ToggleRequest request);
+
     @POST("place/beenhere")
     Call<ToggleResponse> addBeenHere(@Body ToggleRequest request);
 
     @POST("place/remove_beenhere")
     Call<ToggleResponse> removeBeenHere(@Body ToggleRequest request);
+
+    @POST("place/book")
+    Call<BookResponse> book(@Body BookRequest request);
+
+    @GET("place/beenhere_user/{userId}/{sort}")
+    Call<RestoListResponse> getBeenHere(
+            @Path ("userId") int userId,
+            @Path ("sort") String sort
+    );
 
     @POST("place/submit_review")
     Call<ReviewResponse> sendReview(@Body ReviewRequest request);

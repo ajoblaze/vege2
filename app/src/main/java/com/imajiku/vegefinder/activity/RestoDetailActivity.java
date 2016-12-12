@@ -23,6 +23,8 @@ import com.imajiku.vegefinder.model.view.RestoDetailView;
 import com.imajiku.vegefinder.pojo.RestoDetail;
 import com.imajiku.vegefinder.pojo.RestoImage;
 import com.imajiku.vegefinder.pojo.RestoMenu;
+import com.imajiku.vegefinder.pojo.Review;
+import com.imajiku.vegefinder.utility.CurrentUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ import java.util.ArrayList;
 public class RestoDetailActivity extends AppCompatActivity
         implements PhotoFragment.PhotoListener, ReviewFragment.ReviewListener, View.OnClickListener, RestoDetailView {
 
-    private int restoId;
+    private int restoId, userId;
     private ImageView banner;
     private TextView rate, guest;
     private TextView[] restoHead = new TextView[5];
@@ -42,7 +44,7 @@ public class RestoDetailActivity extends AppCompatActivity
     private TextView openDays, openDaysTitle;
     private ReviewFragment reviewFragment;
     private RestoDetailPresenter presenter;
-    private String TAG= "exc";
+    private String TAG = "exc";
     private RestoDetail restoDetail;
     private boolean[] buttonStatus = new boolean[2];
     private LinearLayout photoLayout, reviewLayout;
@@ -60,7 +62,8 @@ public class RestoDetailActivity extends AppCompatActivity
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
 
         restoDetail = null;
-        restoId = getIntent().getIntExtra("resto", -1);
+        restoId = getIntent().getIntExtra("placeId", -1);
+        userId = CurrentUser.getId();
         banner = (ImageView) findViewById(R.id.resto_img);
         rate = (TextView) findViewById(R.id.rating);
         guest = (TextView) findViewById(R.id.guest);
@@ -97,6 +100,15 @@ public class RestoDetailActivity extends AppCompatActivity
         openDays = (TextView) findViewById(R.id.open_days);
         reportProblem = (Button) findViewById(R.id.btn_report);
 
+        if(isLoggedIn(false)){
+            for(int i=0;i<4;i++) {
+                buttonHead[i].setVisibility(View.VISIBLE);
+            }
+            addPhoto.setVisibility(View.VISIBLE);
+            addReview.setVisibility(View.VISIBLE);
+        }
+
+        // TODO: spinner
         presenter.getRestoDetail(restoId);
 
         //tf
@@ -105,16 +117,16 @@ public class RestoDetailActivity extends AppCompatActivity
         rate.setTypeface(tf);
         guest.setTypeface(tf);
 
-        for(TextView t : restoHead){
+        for (TextView t : restoHead) {
             t.setTypeface(tf);
         }
-        for(Button b : buttonHead){
+        for (Button b : buttonHead) {
             b.setTypeface(tf);
         }
-        for(TextView t : restoContentTitle){
+        for (TextView t : restoContentTitle) {
             t.setTypeface(tf);
         }
-        for(TextView t : restoContent){
+        for (TextView t : restoContent) {
             t.setTypeface(tf);
         }
         map.setTypeface(tf);
@@ -131,42 +143,40 @@ public class RestoDetailActivity extends AppCompatActivity
         switch (view.getId()) {
             case R.id.btn_bookmark: {
                 int idx = 0;
-                buttonStatus[idx] = !buttonStatus[idx];
-                changeButtonColor(idx);
-                // call API
+                // TODO: spinner
+                presenter.changeBookmark(userId, restoId, buttonStatus[idx]);
             }
-                break;
+            break;
             case R.id.btn_been_here: {
                 int idx = 1;
-                buttonStatus[idx] = !buttonStatus[idx];
-                changeButtonColor(idx);
-                // call API
+                // TODO: spinner
+                presenter.changeBeenHere(userId, restoId, !buttonStatus[idx]);
             }
-                break;
+            break;
             case R.id.btn_book:
                 i = new Intent(RestoDetailActivity.this, BookActivity.class);
-                i.putExtra("id", restoDetail.getId());
+                i.putExtra("placeId", restoDetail.getId());
                 i.putExtra("title", restoDetail.getTitle());
                 i.putExtra("image", restoDetail.getImage());
                 startActivity(i);
                 break;
             case R.id.btn_call:
                 i = new Intent(RestoDetailActivity.this, CallActivity.class);
-                i.putExtra("id", restoDetail.getId());
+                i.putExtra("placeId", restoDetail.getId());
                 i.putExtra("title", restoDetail.getTitle());
                 i.putExtra("image", restoDetail.getImage());
                 startActivity(i);
                 break;
             case R.id.btn_check_in:
                 i = new Intent(RestoDetailActivity.this, CheckInActivity.class);
-                i.putExtra("id", restoDetail.getId());
+                i.putExtra("placeId", restoDetail.getId());
                 i.putExtra("title", restoDetail.getTitle());
                 i.putExtra("image", restoDetail.getImage());
                 startActivity(i);
                 break;
             case R.id.btn_map:
                 i = new Intent(RestoDetailActivity.this, MapActivity.class);
-                i.putExtra("id", restoDetail.getId());
+                i.putExtra("placeId", restoDetail.getId());
                 i.putExtra("title", restoDetail.getTitle());
                 i.putExtra("address", restoDetail.getAddress());
                 i.putExtra("longitude", restoDetail.getLongitude());
@@ -175,29 +185,41 @@ public class RestoDetailActivity extends AppCompatActivity
                 break;
             case R.id.btn_add_photo:
                 i = new Intent(RestoDetailActivity.this, AddPhotoActivity.class);
-                i.putExtra("id", restoId);
+                i.putExtra("placeId", restoId);
                 startActivity(i);
                 break;
             case R.id.btn_add_review:
                 i = new Intent(RestoDetailActivity.this, AddReviewActivity.class);
-                i.putExtra("restoId", restoId);
-                i.putExtra("userId", 1);
-                startActivity(i);
+                i.putExtra("placeId", restoId);
+                startActivityForResult(i, 1);
                 break;
             case R.id.btn_report:
                 i = new Intent(RestoDetailActivity.this, SendReportActivity.class);
                 i.putExtra("placeId", restoId);
-                i.putExtra("userId", 1);
                 startActivity(i);
                 break;
         }
     }
 
+    private boolean isLoggedIn(boolean toast){
+        if(CurrentUser.getId() <= -1){
+            if(toast) {
+                Toast.makeText(RestoDetailActivity.this, "You have to be logged in to use", Toast.LENGTH_SHORT).show();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        presenter.getRestoDetail(restoId);
+    }
+
     @Override
     public void onPhoto(int position) {
         Intent i = new Intent(this, PhotoDetailActivity.class);
-        i.putExtra("restoId", restoId);
-        i.putExtra("userId", 1);
+        i.putExtra("placeId", restoId);
         i.putExtra("position", position);
         startActivity(i);
     }
@@ -207,12 +229,12 @@ public class RestoDetailActivity extends AppCompatActivity
 
     }
 
-    private void changeButtonColor(int index){
+    private void changeButtonColor(int index) {
         int bgId, textColorId;
-        if(buttonStatus[index]){
+        if (buttonStatus[index]) {
             bgId = R.drawable.rounded_green_selected;
             textColorId = R.color.accentGreenBtn;
-        }else{
+        } else {
             bgId = R.drawable.rounded_green;
             textColorId = R.color.white;
         }
@@ -232,10 +254,10 @@ public class RestoDetailActivity extends AppCompatActivity
         reportProblem.setOnClickListener(this);
 
         restoDetail = data;
-        if(restoDetail.getRestoImg().size()==0){
+        if (restoDetail.getRestoImg().size() == 0) {
             photoLayout.setVisibility(View.GONE);
         }
-        reviewLayout.setVisibility(View.GONE);
+//        reviewLayout.setVisibility(View.GONE);
 
         // load data
         Picasso.with(this)
@@ -244,19 +266,18 @@ public class RestoDetailActivity extends AppCompatActivity
                 .fit()
                 .centerCrop()
                 .into(banner);
-//        if(restoDetail.getAvgRate() != null) {
-//            rate.setText(restoDetail.getAvgRate());
-            rate.setText("3");
-            guest.setText(restoDetail.getCountReview() + " guest"+(restoDetail.getCountReview()<2?"":"s"));
-//        }
+        if (restoDetail.getAvgRate() != null) {
+            rate.setText(restoDetail.getAvgRate());
+            guest.setText(restoDetail.getCountReview() + " guest" + (restoDetail.getCountReview() < 2 ? "" : "s"));
+        }
         findViewById(R.id.rate_guest).setVisibility(View.VISIBLE);
 
         restoHead[0].setText(restoDetail.getTitle());
         restoHead[1].setText(restoDetail.getAddress());
-        if(restoDetail.isOpenNow()) {
+        if (restoDetail.isOpenNow()) {
             restoHead[2].setTextColor(ContextCompat.getColor(this, R.color.translucentGreen75));
             restoHead[2].setText("OPEN");
-        }else{
+        } else {
             restoHead[2].setTextColor(ContextCompat.getColor(this, R.color.translucentRed75));
             restoHead[2].setText("CLOSED");
         }
@@ -266,16 +287,24 @@ public class RestoDetailActivity extends AppCompatActivity
 
         buttonStatus[0] = restoDetail.getStatusBookmark().equals("active");
         buttonStatus[1] = restoDetail.getStatusBeenHere().equals("active");
-        for(int i=0;i<2;i++){
+        for (int i = 0; i < 2; i++) {
             changeButtonColor(i);
         }
 
         ArrayList<String> imageList = new ArrayList<>();
-        for(RestoImage img : data.getRestoImg()){
+        for (RestoImage img : restoDetail.getRestoImg()) {
             imageList.add(img.getImage());
         }
         photoFragment.setData(imageList, restoId, 1);
-//        presenter.loadReview(r.getId());
+
+        ArrayList<Review> miniList = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            if(i == restoDetail.getRatesReview().size()){
+                break;
+            }
+            miniList.add(restoDetail.getRatesReview().get(i));
+        }
+        reviewFragment.setData(miniList, restoId);
         openDays.setText(restoDetail.getWeekOpenTime());
     }
 
@@ -321,13 +350,13 @@ public class RestoDetailActivity extends AppCompatActivity
 //                }
 //                restoContent[i].setText(builder.toString());
 //            }
-            if(menu && facility){
+            if (menu && facility) {
                 break;
             }
         }
     }
 
-    private void toast(String message){
+    private void toast(String message) {
         Toast.makeText(RestoDetailActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
@@ -337,42 +366,26 @@ public class RestoDetailActivity extends AppCompatActivity
     }
 
     @Override
-    public void successAddBookmark() {
-
+    public void successChangeBookmark() {
+        int idx = 0;
+        buttonStatus[idx] = !buttonStatus[idx];
+        changeButtonColor(idx);
     }
 
     @Override
-    public void failedAddBookmark(String message) {
-        toast(message);
+    public void failedChangeBookmark(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void successRemoveBookmark() {
-
+    public void successChangeBeenHere() {
+        int idx = 1;
+        buttonStatus[idx] = !buttonStatus[idx];
+        changeButtonColor(idx);
     }
 
     @Override
-    public void failedRemoveBookmark(String message) {
-        toast(message);
-    }
-
-    @Override
-    public void successAddBeenHere() {
-
-    }
-
-    @Override
-    public void failedAddBeenHere(String message) {
-        toast(message);
-    }
-
-    @Override
-    public void successRemoveBeenHere() {
-
-    }
-
-    @Override
-    public void failedRemoveBeenHere(String message) {
-        toast(message);
+    public void failedChangeBeenHere(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

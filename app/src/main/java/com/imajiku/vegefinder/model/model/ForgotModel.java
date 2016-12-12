@@ -1,8 +1,10 @@
 package com.imajiku.vegefinder.model.model;
 
+import android.util.Log;
+
 import com.imajiku.vegefinder.model.presenter.ForgotPresenter;
 import com.imajiku.vegefinder.model.request.ForgotRequest;
-import com.imajiku.vegefinder.model.response.ForgotResponse;
+import com.imajiku.vegefinder.model.response.StatusResponse;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;
 
@@ -16,6 +18,7 @@ import retrofit2.Retrofit;
  */
 public class ForgotModel {
 
+    private static final String TAG = "exc";
     private ForgotPresenter presenter;
     private Retrofit retrofit;
 
@@ -27,37 +30,29 @@ public class ForgotModel {
     public void forgotPassword(String email) {
         ForgotRequest request = new ForgotRequest(email);
         ApiService svc = retrofit.create(ApiService.class);
-        Call<ForgotResponse> call = svc.forgot(request);
-        call.enqueue(new Callback<ForgotResponse>() {
+        Call<StatusResponse> call = svc.forgot(request);
+        Log.e(TAG, String.valueOf(call.request().url()));
+        call.enqueue(new Callback<StatusResponse>() {
             @Override
-            public void onResponse(Call<ForgotResponse> call, Response<ForgotResponse> response) {
+            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
                 if (response.isSuccessful()) {
-                    if (response.body().getData().getStatus() != null) {
+                    if (response.body().getData() != null) {
                         if (response.body().getData().getStatus().toLowerCase().equals("success")) {
                             presenter.successForgot();
                         }else{
                             presenter.failedForgot();
                         }
+                    }else{
+                        presenter.failedForgot();
                     }
                 } else {
-//                    try {
-//                        if(response.code()==500){
-//                            mIAccountView.showToast("Internal server error. Please try again later.");
-//                        }else {
-//                            String error = response.errorBody().string();
-//                            mIAccountView.showToast(getResponseErrorStatus(error));
-//                        }
-//                        mIAccountView.failedForgot();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
+                    presenter.failedForgot();
                 }
             }
 
             @Override
-            public void onFailure(Call<ForgotResponse> call, Throwable t) {
-//                mIAccountView.showToast("Forgot failed. Please check your connection.");
-//                mIAccountView.failedForgot();
+            public void onFailure(Call<StatusResponse> call, Throwable t) {
+                presenter.failedForgot();
             }
         });
     }

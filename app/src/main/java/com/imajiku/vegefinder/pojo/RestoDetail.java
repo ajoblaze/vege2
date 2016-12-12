@@ -8,13 +8,14 @@ import com.imajiku.vegefinder.utility.Utility;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
  * Created by Alvin on 2016-11-13.
  */
-public class RestoDetail {
+public class RestoDetail{
     @SerializedName("id")
     private String id;
     @SerializedName("country_id")
@@ -65,15 +66,14 @@ public class RestoDetail {
     private int type;
 //    @SerializedName("facilities")
 //    private int facilities; //TODO change into arraylist
-
     @SerializedName("menu")
     private ArrayList<RestoMenu> restoMenu;
     @SerializedName("tags")
     private ArrayList<RestoTag> restoTag;
     @SerializedName("all_image")
     private ArrayList<RestoImage> restoImg;
-//    @SerializedName("rates_review")
-//    private ArrayList<Review> ratesReview;
+    @SerializedName("rates_review")
+    private ArrayList<Review> ratesReview;
 
     @SerializedName("count_review")
     private int countReview;
@@ -91,6 +91,7 @@ public class RestoDetail {
         String[] open = {openMon, openTue, openWed, openThu, openFri, openSat, openSun};
         int currDay = new LocalDate().getDayOfWeek();
         String str = open[currDay - 1];
+        Log.e(TAG, "isOpenNow: "+str);
         return str.length() >= 5 &&
                 !str.toLowerCase().startsWith("close") &&
                 compareTime(getOpenCloseHour(open[currDay - 1]));
@@ -99,10 +100,10 @@ public class RestoDetail {
     public String getOpenTime() {
         String[] open = {openMon, openTue, openWed, openThu, openFri, openSat, openSun};
         int currDay = new LocalDate().getDayOfWeek();
-        if(!open[currDay-1].isEmpty()){
-            return "  |  "+open[currDay-1];
+        if (!open[currDay - 1].isEmpty()) {
+            return "  |  " + open[currDay - 1];
         }
-        return open[currDay-1];
+        return open[currDay - 1];
     }
 
     public String[] getOpenCloseHour(String src) {
@@ -127,24 +128,30 @@ public class RestoDetail {
         Log.e(TAG, "compareTime: " + open);
         LocalTime left = new LocalTime(open);
         isEarly = now.isBefore(left);
+        Log.e(TAG, now.toString()+" - "+left.toString());
         if (close != null) {
-            LocalTime right = new LocalTime(close);
-            isLate = now.isAfter(right);
+            try {
+                LocalTime right = new LocalTime(close);
+                isLate = now.isAfter(right);
+            }catch(Exception e){
+                isLate = false;
+            }
         }
-        return isEarly && isLate;
+        return !isEarly && !isLate;
     }
 
-//    public String getAvgRate() {
-//        if(ratesReview == null || ratesReview.size() == 0){
-//            return null;
-//        }
-//        double total = 0;
-//        DecimalFormat df = new DecimalFormat("#.00");
-//        for(Review r : ratesReview){
-//            total += r.getRate();
-//        }
-//        return df.format(total/ratesReview.size());
-//    }
+    public String getAvgRate() {
+//        ratesReview = getDummyRatesReview();
+        if (ratesReview == null || ratesReview.size() == 0) {
+            return null;
+        }
+        double total = 0;
+        DecimalFormat df = new DecimalFormat("#.00");
+        for (Review r : ratesReview) {
+            total += r.getRate();
+        }
+        return df.format(total / ratesReview.size());
+    }
 
     public String getStatistics() {
         int[] count = {countReview, countBookmark, countBeenHere};
@@ -176,6 +183,17 @@ public class RestoDetail {
         }
         return sb.toString();
     }
+
+//    public ArrayList<Review> getDummyRatesReview() {
+//        ArrayList<Review> dummy = new ArrayList<>();
+//        dummy.add(new Review("Robby Radhika", null, 16, 32, 56, "This is Title Review",
+//                        "2016-11-18", 4, "This is comment review, please ignore this one.", 0));
+//        dummy.add(new Review("Administrator", "Default", 3, 32, 1, "wow", "2016-06-02", 4, "good", 0));
+//        dummy.add(new Review("Supernam", "Mek", 3, 32, 40, "suge", "2016-12-05", 6, "mkey", 0));
+//        dummy.add(new Review("Supernam2", "Mek", 3, 32, 40, "suge2", "2016-12-07", 1, "mkey2", 0));
+//        dummy.add(new Review("Supernam3", "Mek", 3, 32, 40, "suge3", "2016-12-08", 2, "mkey3", 0));
+//        return dummy;
+//    }
 
     public int getId() {
         return Integer.parseInt(id);
@@ -268,9 +286,11 @@ public class RestoDetail {
     public void setRestoImg(ArrayList<RestoImage> restoImg) {
         this.restoImg = restoImg;
     }
-    //    public ArrayList<Review> getRatesReview() {
-//        return ratesReview;
-//    }
+
+    public ArrayList<Review> getRatesReview() {
+//        ratesReview = getDummyRatesReview();
+        return ratesReview;
+    }
 
     public int getCountReview() {
         return countReview;

@@ -15,26 +15,36 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
+import com.imajiku.vegefinder.model.model.BookModel;
+import com.imajiku.vegefinder.model.presenter.BookPresenter;
+import com.imajiku.vegefinder.model.view.BookView;
+import com.imajiku.vegefinder.utility.CurrentUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
-public class BookActivity extends AppCompatActivity implements View.OnClickListener {
+public class BookActivity extends AppCompatActivity implements View.OnClickListener, BookView {
 
     private ImageView banner;
     private TextView restoTitle, dateTitle, timeTitle;
     private EditText date, time, comment;
     private Button btnBook;
     private Typeface tf;
+    private BookPresenter presenter;
+    private int placeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book);
 
+        presenter = new BookPresenter(this);
+        BookModel model = new BookModel(presenter);
+        presenter.setModel(model);
+
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
 
-        int id = getIntent().getIntExtra("id", -1);
+        placeId = getIntent().getIntExtra("placeId", -1);
         String title = getIntent().getStringExtra("title");
         String image = getIntent().getStringExtra("image");
 
@@ -85,17 +95,17 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 StringBuilder sb = new StringBuilder();
-                                if (dayOfMonth < 10) {
-                                    sb.append("0");
-                                }
-                                sb.append(dayOfMonth)
+                                sb.append(year)
                                         .append("-");
                                 if (monthOfYear < 9) {
                                     sb.append("0");
                                 }
                                 sb.append(monthOfYear + 1)
-                                        .append("-")
-                                        .append(year);
+                                        .append("-");
+                                if (dayOfMonth < 10) {
+                                    sb.append("0");
+                                }
+                                sb.append(dayOfMonth);
                                 date.setText(sb.toString());
                             }
                         }, mYear, mMonth, mDay);
@@ -124,9 +134,26 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
                 timePickerDialog.show();
                 break;
             case R.id.btn_book:
-                Toast.makeText(BookActivity.this, "Your booking has been sent to this place, they will be contacting you shortly", Toast.LENGTH_SHORT).show();
+                presenter.book(
+                        CurrentUser.getId(),
+                        placeId,
+                        date.getText().toString(),
+                        time.getText().toString(),
+                        comment.getText().toString()
+                );
                 break;
         }
+    }
+
+    @Override
+    public void successBook() {
+        Toast.makeText(BookActivity.this, R.string.success_booking, Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    @Override
+    public void failedBook(String s) {
+        Toast.makeText(BookActivity.this, s, Toast.LENGTH_SHORT).show();
     }
 }
 

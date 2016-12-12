@@ -109,16 +109,14 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
             case R.id.see_more: {
                 Intent i = new Intent(getActivity(), ReviewListActivity.class);
                 i.putExtra("placeId", restoId);
-                i.putExtra("userId", userId);
                 startActivity(i);
             }
             break;
         }
     }
 
-    public void setData(ArrayList<Review> list, int restoId, int userId) {
+    public void setData(ArrayList<Review> list, int restoId) {
         this.restoId = restoId;
-        this.userId = userId;
         setData(list);
     }
 

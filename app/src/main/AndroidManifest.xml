@@ -70,6 +70,7 @@
         </provider>
 
         <activity android:name=".activity.AddReviewActivity" />
+        <activity android:name=".activity.ReviewListActivity" />
         <activity android:name=".activity.SendReportActivity" />
         <activity android:name=".activity.AccountActivity" />
         <activity android:name=".activity.AboutActivity"/>

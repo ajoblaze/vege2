@@ -1,5 +1,7 @@
 package com.imajiku.vegefinder.model.model;
 
+import android.util.Log;
+
 import com.imajiku.vegefinder.model.request.LoginRequest;
 import com.imajiku.vegefinder.model.response.LoginResponse;
 import com.imajiku.vegefinder.model.presenter.LoginPresenter;
@@ -32,30 +34,24 @@ public class LoginModel {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
+                    Log.e("exc", response.raw().toString());
                     if (response.body().getData().getStatus() != null) {
                         if (response.body().getData().getStatus().toLowerCase().equals("success")) {
-                            presenter.successLogin();
+                            presenter.successLogin(response.body().getData().getUserId());
+                        }else{
+                            presenter.failedLogin();
                         }
+                    } else {
+                        presenter.failedLogin();
                     }
                 } else {
-//                    try {
-//                        if(response.code()==500){
-//                            mIAccountView.showToast("Internal server error. Please try again later.");
-//                        }else {
-//                            String error = response.errorBody().string();
-//                            mIAccountView.showToast(getResponseErrorStatus(error));
-//                        }
-//                        mIAccountView.failedLogin();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
+                    presenter.failedLogin();
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-//                mIAccountView.showToast("Login failed. Please check your connection.");
-//                mIAccountView.failedLogin();
+                presenter.failedLogin();
             }
         });
     }

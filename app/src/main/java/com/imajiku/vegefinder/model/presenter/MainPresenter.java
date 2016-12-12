@@ -70,5 +70,25 @@ public class MainPresenter {
     public void failedGetPlaces() {
         view.failedGetPlaces();
     }
+
+    public void getBookmarks(int userId) {
+        model.getBookmarks(userId);
+    }
+
+    public void getBeenHere(int userId, String order) {
+        model.getBeenHere(userId, order);
+    }
+
+    public void successGetBookmarks() {
+    }
+
+    public void failedGetBookmarks() {
+    }
+
+    public void successGetBeenHere() {
+    }
+
+    public void failedGetBeenHere() {
+    }
 }
 

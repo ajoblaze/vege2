@@ -24,6 +24,7 @@ import com.imajiku.vegefinder.fragment.PhotoDetailFragment;
 import com.imajiku.vegefinder.model.model.PhotoListModel;
 import com.imajiku.vegefinder.model.presenter.PhotoListPresenter;
 import com.imajiku.vegefinder.model.view.PhotoListView;
+import com.imajiku.vegefinder.utility.CurrentUser;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -51,8 +52,8 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
 
-        restoId = getIntent().getIntExtra("restoId", -1);
-        userId = getIntent().getIntExtra("userId", -1);
+        restoId = getIntent().getIntExtra("placeId", -1);
+        userId = CurrentUser.getId();
         position = getIntent().getIntExtra("position", -1);
 
         presenter = new PhotoListPresenter(this);

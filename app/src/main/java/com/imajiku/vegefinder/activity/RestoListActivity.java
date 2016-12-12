@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.google.android.gms.common.ConnectionResult;
@@ -44,6 +45,7 @@ import com.imajiku.vegefinder.model.model.RestoListModel;
 import com.imajiku.vegefinder.model.presenter.RestoListPresenter;
 import com.imajiku.vegefinder.model.view.RestoListView;
 import com.imajiku.vegefinder.pojo.Resto;
+import com.imajiku.vegefinder.utility.CurrentUser;
 
 import java.util.ArrayList;
 
@@ -90,6 +92,7 @@ public class RestoListActivity extends AppCompatActivity implements
     private boolean hasBrowsedNearby;
     private LinearLayout filterLinearLayout, sortLinearLayout;
     private ImageView filterArrow, sortArrow;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +113,7 @@ public class RestoListActivity extends AppCompatActivity implements
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
 
         Intent intent = getIntent();
+        userId = CurrentUser.getId();
         pageType = intent.getIntExtra("page", PAGE_BROWSE);
         switch (pageType) {
             case PAGE_RECOMMEND:
@@ -121,10 +125,10 @@ public class RestoListActivity extends AppCompatActivity implements
 //                presenter.savedPlaces();
                 initToolbar("Saved Places");
                 break;
-//            case PAGE_BEENHERE:
-////                presenter.beenHerePlaces();
-//                initToolbar("Visited Places");
-//                break;
+            case PAGE_BEENHERE:
+//                presenter.beenHerePlaces();
+                initToolbar("Visited Places");
+                break;
             case PAGE_BROWSE:
                 initToolbar("Nearby Places");
                 hasBrowsedNearby = false;
@@ -388,13 +392,15 @@ public class RestoListActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void changeBookmark(int restoId) {
-        Log.e(TAG, "changeBookmark: ");
+    public void changeBookmark(int restoId, boolean isBookmarked) {
+        // TODO: spinner
+        presenter.changeBookmark(userId, restoId, isBookmarked);
     }
 
     @Override
     public void removeBeenHere(Resto r) {
-        Log.e(TAG, "removeBeenHere: ");
+        // TODO: spinner
+        presenter.changeBeenHere(userId, r.getId(), false);
     }
 
     @Override
@@ -438,6 +444,7 @@ public class RestoListActivity extends AppCompatActivity implements
         filterLayout.setVisibility(View.VISIBLE);
         sortLayout.setVisibility(View.VISIBLE);
         restoList = data;
+        Toast.makeText(RestoListActivity.this, "Bookmark has not been set", Toast.LENGTH_SHORT).show();
         restoListFragment.setData(restoList, false);
     }
 
@@ -452,6 +459,26 @@ public class RestoListActivity extends AppCompatActivity implements
         sortLayout.setVisibility(View.VISIBLE);
         int o = order.equals("asc") ? 0 : 1;
         restoListFragment.sort(data, new int[]{1, o}, false);
+    }
+
+    @Override
+    public void successChangeBookmark(int placeId, boolean isBookmarked) {
+        restoListFragment.updateBookmark(placeId, isBookmarked);
+    }
+
+    @Override
+    public void failedChangeBookmark(String message) {
+        Toast.makeText(RestoListActivity.this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void successChangeBeenHere(int placeId) {
+        restoListFragment.removeData(placeId);
+    }
+
+    @Override
+    public void failedChangeBeenHere(String message) {
+        Toast.makeText(RestoListActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

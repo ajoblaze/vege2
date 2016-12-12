@@ -14,6 +14,8 @@ public class RegisterResponse {
     }
 
     public class RegisterResponseBody {
+        @SerializedName("id")
+        private int id;
         @SerializedName("name")
         private String name;
         @SerializedName("email")
@@ -22,6 +24,10 @@ public class RegisterResponse {
         private String code;
         @SerializedName("status")
         private String status;
+
+        public int getId() {
+            return id;
+        }
 
         public String getName() {
             return name;

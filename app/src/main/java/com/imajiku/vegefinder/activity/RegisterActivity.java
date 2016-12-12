@@ -75,11 +75,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }else if(!confirmPass.getText().toString().equals(confirmPass.getText().toString())){
             toast("Password confirmation incorrect");
         }else{
-            presenter.register(
-                    username.getText().toString(),
-                    email.getText().toString(),
-                    pass.getText().toString()
-            );
+            successRegister(64);
+//            presenter.register(
+//                    username.getText().toString(),
+//                    email.getText().toString(),
+//                    pass.getText().toString()
+//            );
         }
     }
 
@@ -97,9 +98,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void successRegister() {
+    public void successRegister(int id) {
         Toast.makeText(RegisterActivity.this, "Register Success", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(this, EditProfileActivity.class);
+        i.putExtra("userId", id);
+        i.putExtra("type", EditProfileActivity.REGISTER);
         startActivity(i);
     }
 

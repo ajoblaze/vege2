@@ -66,7 +66,7 @@ public class VerifyForgotActivity extends AppCompatActivity implements View.OnCl
                     toast("Please fill new password");
                 }else if(getString(confirmPassField).length() == 0){
                     toast("Please confirm new password");
-                }else if(getString(passField).equals(getString(confirmPassField))){
+                }else if(!getString(passField).equals(getString(confirmPassField))){
                     toast("Password does not match confirm password, please try again");
                 }else{
                     presenter.resetPassword(getString(codeField), getString(passField));

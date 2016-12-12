@@ -10,19 +10,11 @@ public interface RestoDetailView {
 
     void failedGetRestoDetail();
 
-    void successAddBookmark();
+    void successChangeBookmark();
 
-    void failedAddBookmark(String message);
+    void failedChangeBookmark(String message);
 
-    void successRemoveBookmark();
+    void successChangeBeenHere();
 
-    void failedRemoveBookmark(String message);
-
-    void successAddBeenHere();
-
-    void failedAddBeenHere(String message);
-
-    void successRemoveBeenHere();
-
-    void failedRemoveBeenHere(String message);
+    void failedChangeBeenHere(String message);
 }

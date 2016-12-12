@@ -2,7 +2,7 @@ package com.imajiku.vegefinder.model.model;
 
 import com.imajiku.vegefinder.model.presenter.VerifyPresenter;
 import com.imajiku.vegefinder.model.request.VerifyRequest;
-import com.imajiku.vegefinder.model.response.VerifyResponse;
+import com.imajiku.vegefinder.model.response.StatusResponse;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;
 
@@ -27,10 +27,10 @@ public class VerifyModel {
     public void submitCode(String code) {
         VerifyRequest request = new VerifyRequest(code);
         ApiService svc = retrofit.create(ApiService.class);
-        Call<VerifyResponse> call = svc.confirmCode(request);
-        call.enqueue(new Callback<VerifyResponse>() {
+        Call<StatusResponse> call = svc.confirmCode(request);
+        call.enqueue(new Callback<StatusResponse>() {
             @Override
-            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
+            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getData().getStatus() != null) {
                         if (response.body().getData().getStatus().toLowerCase().equals("success")) {
@@ -57,7 +57,7 @@ public class VerifyModel {
             }
 
             @Override
-            public void onFailure(Call<VerifyResponse> call, Throwable t) {
+            public void onFailure(Call<StatusResponse> call, Throwable t) {
 //                mIAccountView.showToast("Login failed. Please check your connection.");
 //                mIAccountView.failedLogin();
             }

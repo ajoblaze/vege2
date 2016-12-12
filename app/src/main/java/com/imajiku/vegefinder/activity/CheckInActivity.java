@@ -8,29 +8,42 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
+import com.imajiku.vegefinder.model.model.CheckInModel;
+import com.imajiku.vegefinder.model.presenter.CheckInPresenter;
+import com.imajiku.vegefinder.model.view.CheckInView;
+import com.imajiku.vegefinder.utility.CurrentUser;
 
-public class CheckInActivity extends AppCompatActivity implements View.OnClickListener {
+public class CheckInActivity extends AppCompatActivity implements View.OnClickListener, CheckInView {
 
     private Typeface tf;
-    private EditText status;
+    private EditText comment;
     private AppCompatCheckBox fb, twitter;
     private Button checkInBtn;
+    private CheckInPresenter presenter;
+    private int placeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_in);
 
+        presenter = new CheckInPresenter(this);
+        CheckInModel model = new CheckInModel(presenter);
+        presenter.setModel(model);
+
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
         initToolbar("Check In");
 
-        status = (EditText) findViewById(R.id.status);
+        placeId = getIntent().getIntExtra("placeId", -1);
+        comment = (EditText) findViewById(R.id.comment);
         fb = (AppCompatCheckBox) findViewById(R.id.checkin_fb);
         twitter = (AppCompatCheckBox) findViewById(R.id.checkin_twit);
         checkInBtn = (Button) findViewById(R.id.btn_check_in);
@@ -42,7 +55,7 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
                 ContextCompat.getColor(this, R.color.twitterBlue)
         ));
 
-        status.setTypeface(tf);
+        comment.setTypeface(tf);
         fb.setTypeface(tf);
         twitter.setTypeface(tf);
         checkInBtn.setTypeface(tf);
@@ -54,10 +67,7 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
         return new ColorStateList(
                 new int[][]{
                         new int[]{android.R.attr.state_enabled} //enabled
-                },
-                new int[] {
-                        color
-                }
+                },new int[] {color}
         );
     }
 
@@ -76,6 +86,20 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btn_check_in:
+                presenter.checkIn(CurrentUser.getId(), placeId, comment.getText().toString());
+                break;
+        }
+    }
 
+    @Override
+    public void successCheckIn() {
+        Log.e("exc", "successCheckIn!");
+    }
+
+    @Override
+    public void failedCheckIn(String message) {
+        Toast.makeText(CheckInActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }

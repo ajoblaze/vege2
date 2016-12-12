@@ -6,7 +6,9 @@ import com.imajiku.vegefinder.model.presenter.RestoListPresenter;
 import com.imajiku.vegefinder.model.request.FindAllRequest;
 import com.imajiku.vegefinder.model.request.FindKeywordRequest;
 import com.imajiku.vegefinder.model.request.FindRegionRequest;
+import com.imajiku.vegefinder.model.request.ToggleRequest;
 import com.imajiku.vegefinder.model.response.RestoListResponse;
+import com.imajiku.vegefinder.model.response.ToggleResponse;
 import com.imajiku.vegefinder.pojo.Resto;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;
@@ -154,6 +156,78 @@ public class RestoListModel {
             @Override
             public void onFailure(Call<RestoListResponse> call, Throwable t) {
                 presenter.failedGetRecommendation();
+            }
+        });
+    }
+
+    public void changeBookmark(int userId, int placeId, final boolean isBookmarked) {
+        ToggleRequest request = new ToggleRequest(userId, placeId);
+        ApiService svc = retrofit.create(ApiService.class);
+        Call<ToggleResponse> call;
+        if(isBookmarked) {
+            call = svc.addBookmark(request);
+        }else{
+            call = svc.removeBookmark(request);
+        }
+        Log.e(TAG, String.valueOf(call.request().url())+" UID:"+userId+" PID:"+placeId);
+        call.enqueue(new Callback<ToggleResponse>() {
+            @Override
+            public void onResponse(Call<ToggleResponse> call, Response<ToggleResponse> response) {
+                if (response.isSuccessful()) {
+                    ToggleResponse.ToggleResponseBody data = response.body().getData();
+                    if(!data.getStatus().equals("failed")) {
+                        if(data.getStatus().equals("1")) {
+                            presenter.successChangeBookmark(data.getPlaceId(), isBookmarked);
+                        }else{
+                            presenter.failedChangeBookmark(data.getMessage());
+                        }
+                    } else {
+                        presenter.failedChangeBookmark("Please check your connection");
+                    }
+                } else {
+                    presenter.failedChangeBookmark("Please check your connection");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ToggleResponse> call, Throwable t) {
+                presenter.failedChangeBookmark("Please check your connection");
+            }
+        });
+    }
+
+    public void changeBeenHere(int userId, int placeId, boolean hasBeenHere) {
+        ToggleRequest request = new ToggleRequest(userId, placeId);
+        ApiService svc = retrofit.create(ApiService.class);
+        Call<ToggleResponse> call;
+        if(hasBeenHere) {
+            call = svc.addBeenHere(request);
+        }else{
+            call = svc.removeBeenHere(request);
+        }
+        Log.e(TAG, String.valueOf(call.request().url())+" UID:"+userId+" PID:"+placeId);
+        call.enqueue(new Callback<ToggleResponse>() {
+            @Override
+            public void onResponse(Call<ToggleResponse> call, Response<ToggleResponse> response) {
+                if (response.isSuccessful()) {
+                    ToggleResponse.ToggleResponseBody data = response.body().getData();
+                    if(!data.getStatus().equals("failed")) {
+                        if(data.getStatus().equals("1")) {
+                            presenter.successChangeBeenHere(data.getPlaceId());
+                        }else{
+                            presenter.failedChangeBeenHere(data.getMessage());
+                        }
+                    } else {
+                        presenter.failedChangeBeenHere("Please check your connection");
+                    }
+                } else {
+                    presenter.failedChangeBeenHere("Please check your connection");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ToggleResponse> call, Throwable t) {
+                presenter.failedChangeBeenHere("Please check your connection");
             }
         });
     }

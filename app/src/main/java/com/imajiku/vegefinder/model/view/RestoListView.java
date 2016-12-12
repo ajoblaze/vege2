@@ -17,4 +17,12 @@ public interface RestoListView {
     void failedBrowseNearby();
 
     void sortData(ArrayList<Resto> data, String order);
+
+    void successChangeBookmark(int placeId, boolean isBookmarked);
+
+    void failedChangeBookmark(String message);
+
+    void successChangeBeenHere(int placeId);
+
+    void failedChangeBeenHere(String message);
 }

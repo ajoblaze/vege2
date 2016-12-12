@@ -16,11 +16,13 @@ import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.model.model.MessageModel;
 import com.imajiku.vegefinder.model.presenter.MessagePresenter;
 import com.imajiku.vegefinder.model.view.MessageView;
+import com.imajiku.vegefinder.utility.CurrentUser;
 
 public class SendReportActivity extends AppCompatActivity implements View.OnClickListener, MessageView {
 
     public static final int REPORT = 21;
     public static final int FEEDBACK = 22;
+    private static final String TAG = "exc";
     private EditText subject, message;
     private Button submit;
     private int restoId, userId, type;
@@ -36,11 +38,11 @@ public class SendReportActivity extends AppCompatActivity implements View.OnClic
         initToolbar(getResources().getString(R.string.title_report));
 
         restoId = getIntent().getIntExtra("placeId", -1);
-        userId = getIntent().getIntExtra("userId", -1);
+        userId = CurrentUser.getId();
         type = getIntent().getIntExtra("type", -1);
-        if(restoId == -1 || userId == -1){
-            throw new RuntimeException("send userid and placeid");
-        }
+//        if(restoId == -1 || userId == -1){
+//            throw new RuntimeException("send userid and placeid");
+//        }
 
         presenter = new MessagePresenter(this);
         MessageModel model = new MessageModel(presenter);
@@ -94,12 +96,22 @@ public class SendReportActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    public void successSendReview() {
+    public void successSendReview(String s) {
+
+    }
+
+    @Override
+    public void failedSendReview(String s) {
 
     }
 
     @Override
     public void successSendReport() {
+
+    }
+
+    @Override
+    public void failedSendContactUs(String s) {
 
     }
 }

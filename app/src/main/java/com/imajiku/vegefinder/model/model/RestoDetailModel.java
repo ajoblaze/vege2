@@ -52,110 +52,74 @@ public class RestoDetailModel {
         });
     }
 
-    public void addBookmark(int userId, int placeId){
+    public void changeBookmark(int userId, int placeId, final boolean isBookmarked) {
         ToggleRequest request = new ToggleRequest(userId, placeId);
         ApiService svc = retrofit.create(ApiService.class);
-        Call<ToggleResponse> call = svc.addBookmark(request);
+        Call<ToggleResponse> call;
+        if(isBookmarked) {
+            call = svc.addBookmark(request);
+        }else{
+            call = svc.removeBookmark(request);
+        }
+        Log.e(TAG, String.valueOf(call.request().url())+" UID:"+userId+" PID:"+placeId);
         call.enqueue(new Callback<ToggleResponse>() {
             @Override
             public void onResponse(Call<ToggleResponse> call, Response<ToggleResponse> response) {
                 if (response.isSuccessful()) {
                     ToggleResponse.ToggleResponseBody data = response.body().getData();
-                    if(data.getStatus().equals("1")) {
-                        presenter.successAddBookmark();
-                    } else if(data.getStatus().equals("2")) {
-                        presenter.failedAddBookmark("Place already bookmarked");
+                    if(!data.getStatus().equals("failed")) {
+                        if(data.getStatus().equals("1")) {
+                            presenter.successChangeBookmark();
+                        }else{
+                            presenter.failedChangeBookmark(data.getMessage());
+                        }
                     } else {
-                        presenter.failedAddBookmark("Failed to bookmark");
+                        presenter.failedChangeBookmark("Please check your connection");
                     }
                 } else {
-                    presenter.failedAddBookmark("Failed to bookmark");
+                    presenter.failedChangeBookmark("Please check your connection");
                 }
             }
 
             @Override
             public void onFailure(Call<ToggleResponse> call, Throwable t) {
-                presenter.failedAddBookmark("Failed to bookmark");
+                presenter.failedChangeBookmark("Please check your connection");
             }
         });
     }
 
-    public void removeBookmark(int userId, int placeId){
+    public void changeBeenHere(int userId, int placeId, boolean hasBeenHere) {
         ToggleRequest request = new ToggleRequest(userId, placeId);
         ApiService svc = retrofit.create(ApiService.class);
-        Call<ToggleResponse> call = svc.removeBookmark(request);
+        Call<ToggleResponse> call;
+        if(hasBeenHere) {
+            call = svc.addBeenHere(request);
+        }else{
+            call = svc.removeBeenHere(request);
+        }
+        Log.e(TAG, String.valueOf(call.request().url())+" UID:"+userId+" PID:"+placeId);
         call.enqueue(new Callback<ToggleResponse>() {
             @Override
             public void onResponse(Call<ToggleResponse> call, Response<ToggleResponse> response) {
                 if (response.isSuccessful()) {
                     ToggleResponse.ToggleResponseBody data = response.body().getData();
-                    if(data.getStatus().equals("1")) {
-                        presenter.successRemoveBookmark();
+                    if(!data.getStatus().equals("failed")) {
+                        if(data.getStatus().equals("1")) {
+                            presenter.successChangeBeenHere();
+                        }else{
+                            presenter.failedChangeBeenHere(data.getMessage());
+                        }
                     } else {
-                        presenter.failedRemoveBookmark("Failed to remove bookmark");
+                        presenter.failedChangeBeenHere("Please check your connection");
                     }
                 } else {
-                    presenter.failedRemoveBookmark("Failed to remove bookmark");
+                    presenter.failedChangeBeenHere("Please check your connection");
                 }
             }
 
             @Override
             public void onFailure(Call<ToggleResponse> call, Throwable t) {
-                presenter.failedRemoveBookmark("Failed to remove bookmark");
-            }
-        });
-    }
-
-    public void addBeenHere(int userId, int placeId){
-        ToggleRequest request = new ToggleRequest(userId, placeId);
-        ApiService svc = retrofit.create(ApiService.class);
-        Call<ToggleResponse> call = svc.addBeenHere(request);
-        call.enqueue(new Callback<ToggleResponse>() {
-            @Override
-            public void onResponse(Call<ToggleResponse> call, Response<ToggleResponse> response) {
-                if (response.isSuccessful()) {
-                    ToggleResponse.ToggleResponseBody data = response.body().getData();
-                    if(data.getStatus().equals("1")) {
-                        presenter.successAddBeenHere();
-                    } else if(data.getStatus().equals("2")) {
-                        presenter.failedAddBeenHere("Already been here");
-                    } else {
-                        presenter.failedAddBeenHere("Failed to set been here");
-                    }
-                } else {
-                    presenter.failedAddBeenHere("Failed to set been here");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ToggleResponse> call, Throwable t) {
-                presenter.failedAddBookmark("Failed to set been here");
-            }
-        });
-    }
-
-    public void removeBeenHere(int userId, int placeId){
-        ToggleRequest request = new ToggleRequest(userId, placeId);
-        ApiService svc = retrofit.create(ApiService.class);
-        Call<ToggleResponse> call = svc.removeBeenHere(request);
-        call.enqueue(new Callback<ToggleResponse>() {
-            @Override
-            public void onResponse(Call<ToggleResponse> call, Response<ToggleResponse> response) {
-                if (response.isSuccessful()) {
-                    ToggleResponse.ToggleResponseBody data = response.body().getData();
-                    if(data.getStatus().equals("1")) {
-                        presenter.successRemoveBeenHere();
-                    } else {
-                        presenter.failedRemoveBeenHere("Failed to undo been here");
-                    }
-                } else {
-                    presenter.failedRemoveBeenHere("Failed to undo been here");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ToggleResponse> call, Throwable t) {
-                presenter.failedRemoveBeenHere("Failed to undo been here");
+                presenter.failedChangeBeenHere("Please check your connection");
             }
         });
     }

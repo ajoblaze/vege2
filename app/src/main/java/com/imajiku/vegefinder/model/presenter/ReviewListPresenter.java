@@ -29,7 +29,7 @@ public class ReviewListPresenter {
     }
 
     public void successGetRestoDetail(RestoDetail data) {
-//        view.successGetRestoReviews();
+        view.successGetRestoReviews(data);
     }
 
     public void failedGetRestoDetail() {

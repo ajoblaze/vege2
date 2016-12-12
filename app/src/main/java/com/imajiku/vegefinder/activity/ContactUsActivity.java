@@ -107,12 +107,22 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    public void successSendReview() {
+    public void successSendReview(String s) {
+
+    }
+
+    @Override
+    public void failedSendReview(String s) {
 
     }
 
     @Override
     public void successSendReport() {
+
+    }
+
+    @Override
+    public void failedSendContactUs(String s) {
 
     }
 

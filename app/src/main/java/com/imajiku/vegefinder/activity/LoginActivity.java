@@ -38,6 +38,7 @@ import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.model.model.LoginModel;
 import com.imajiku.vegefinder.model.presenter.LoginPresenter;
 import com.imajiku.vegefinder.model.view.LoginView;
+import com.imajiku.vegefinder.utility.CurrentUser;
 
 import java.util.Arrays;
 
@@ -70,6 +71,10 @@ public class LoginActivity extends AppCompatActivity implements
         presenter = new LoginPresenter(this);
         LoginModel model = new LoginModel(presenter);
         presenter.setModel(model);
+
+        if(presenter.getCurrentLogin() > -1 && presenter.getCurrentUserId() > -1){
+            successLogin(presenter.getCurrentUserId());
+        }
 
         setupFbLogin();
         gplusLogin();
@@ -175,16 +180,21 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void successLogin() {
+    public void successLogin(int userId) {
+        Log.e(TAG, "successLogin "+userId);
+        CurrentUser.setId(userId);
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         i.putExtra("isLogin", true);
         i.putExtra("loginMethod", "normal");
         startActivity(i);
+        finish();
     }
 
     @Override
     public void failedLogin() {
         Toast.makeText(LoginActivity.this, "Your email has not been verified", Toast.LENGTH_SHORT).show();
+//        presenter.saveUserId(1); // TODO remove this
+//        successLogin(1); // TODO remove this
     }
 
     public boolean checkIfFbLoggedIn(){

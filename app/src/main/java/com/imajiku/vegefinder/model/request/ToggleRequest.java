@@ -15,4 +15,8 @@ public class ToggleRequest {
         this.userId = userId;
         this.placeID = placeID;
     }
+
+    public ToggleRequest(int userId) {
+        this.userId = userId;
+    }
 }

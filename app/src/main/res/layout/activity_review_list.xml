@@ -7,6 +7,10 @@
     android:orientation="vertical"
     tools:context=".activity.RestoListActivity">
 
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/toolbar" />
+
     <fragment
         android:id="@+id/review_list_fragment"
         android:name="com.imajiku.vegefinder.fragment.ReviewListFragment"

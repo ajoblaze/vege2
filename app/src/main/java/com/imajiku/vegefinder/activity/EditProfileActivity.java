@@ -1,5 +1,6 @@
 package com.imajiku.vegefinder.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,7 +10,6 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,17 +26,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.adapter.SpinnerAdapter;
 import com.imajiku.vegefinder.model.model.EditProfileModel;
 import com.imajiku.vegefinder.model.model.RegionModel;
 import com.imajiku.vegefinder.model.presenter.EditProfilePresenter;
 import com.imajiku.vegefinder.model.presenter.RegionPresenter;
-import com.imajiku.vegefinder.model.request.RegisterProfileRequest;
+import com.imajiku.vegefinder.model.request.EditProfileRequest;
 import com.imajiku.vegefinder.model.view.EditProfileView;
 import com.imajiku.vegefinder.model.view.RegionView;
 import com.imajiku.vegefinder.pojo.UserProfile;
 import com.imajiku.vegefinder.utility.CircularImageView;
+import com.imajiku.vegefinder.utility.CurrentUser;
 import com.imajiku.vegefinder.utility.ImageDecoderHelper;
 
 import java.io.ByteArrayOutputStream;
@@ -47,6 +49,7 @@ public class EditProfileActivity extends AppCompatActivity implements
         EditProfileView, RegionView, AdapterView.OnItemSelectedListener {
 
     private static final int REQUEST_LOAD_IMAGE = 5;
+    private static final int REQUEST_CAMERA = 6;
     private static final int REQUEST_VERIFY = 98;
     private static final int RESULT_VERIFY = 99;
     public static final int ACCOUNT = 21;
@@ -67,6 +70,7 @@ public class EditProfileActivity extends AppCompatActivity implements
     private int pageType;
     private UserProfile currProfile;
     private Typeface tf;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +86,18 @@ public class EditProfileActivity extends AppCompatActivity implements
         regionPresenter.setModel(regionModel);
 
         pageType = getIntent().getIntExtra("type", -1);
+        if(pageType == REGISTER) {
+            userId = getIntent().getIntExtra("userId", -1);
+        }else if(pageType == ACCOUNT){
+            userId = CurrentUser.getId();
+        }
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
         initToolbar(getResources().getString(R.string.title_profile));
 
         profPic = (CircularImageView) findViewById(R.id.profPic);
         FloatingActionButton camera = (FloatingActionButton) findViewById(R.id.fab_camera);
+        profPic.setOnClickListener(this);
         camera.setOnClickListener(this);
 
         labels[0] = (TextView) findViewById(R.id.name_label);
@@ -101,7 +111,7 @@ public class EditProfileActivity extends AppCompatActivity implements
         labels[8] = (TextView) findViewById(R.id.sex_label);
         labels[9] = (TextView) findViewById(R.id.pref_label);
 
-        for(int i=0;i<10;i++){
+        for (int i = 0; i < 10; i++) {
             labels[i].setTypeface(tf);
         }
 
@@ -170,7 +180,7 @@ public class EditProfileActivity extends AppCompatActivity implements
         save.setOnClickListener(this);
         save.setTypeface(tf);
 
-        if(pageType == ACCOUNT){
+        if (pageType == ACCOUNT) {
             currProfile = (UserProfile) getIntent().getSerializableExtra("profile");
             fillData(currProfile);
         }
@@ -180,7 +190,7 @@ public class EditProfileActivity extends AppCompatActivity implements
         Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
         ActionBar ab = getSupportActionBar();
-        if(ab != null) {
+        if (ab != null) {
             ab.setDisplayShowTitleEnabled(false);
             ab.setDisplayShowHomeEnabled(true);
         }
@@ -190,7 +200,7 @@ public class EditProfileActivity extends AppCompatActivity implements
     }
 
     private void fillData(UserProfile profile) {
-        for(int i=0;i<5;i++){
+        for (int i = 0; i < 5; i++) {
             layouts[i].setVisibility(View.VISIBLE);
         }
         name.setText(profile.getName());
@@ -227,6 +237,9 @@ public class EditProfileActivity extends AppCompatActivity implements
             } else {
                 Toast.makeText(EditProfileActivity.this, "Image not found", Toast.LENGTH_SHORT).show();
             }
+        } else if (requestCode == REQUEST_CAMERA && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            profPic.setImageBitmap(photo);
         }
     }
 
@@ -235,40 +248,46 @@ public class EditProfileActivity extends AppCompatActivity implements
         hideKeyboard();
         switch (v.getId()) {
             case R.id.fab_camera:
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, REQUEST_CAMERA);
+                break;
+            case R.id.profPic:
                 Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(i, REQUEST_LOAD_IMAGE);
                 break;
             case R.id.save_button:
-                if (name.getText().toString().length() == 0) {
-                    Toast.makeText(EditProfileActivity.this, "Name must be filled", Toast.LENGTH_SHORT).show();
-                } else {
-//                    submitRegister();
-                    Toast.makeText(EditProfileActivity.this, "Saved", Toast.LENGTH_SHORT).show();
-                }
+                submit();
                 break;
         }
     }
 
-    private void submitRegister() {
+    private void submit() {
         String selectedCountry = countrySpinner.getSelectedItem().toString();
         String selectedProvince = provinceSpinner.getSelectedItem().toString();
         String selectedCity = citySpinner.getSelectedItem().toString();
         String selectedSex = sex.getSelectedItem().toString();
         String selectedPref = pref.getSelectedItem().toString();
-        String imageCode = getImageCode();
-        int id = 1; // TODO: change into actual id
-        RegisterProfileRequest request = new RegisterProfileRequest(
-                id,
+        EditProfileRequest request = new EditProfileRequest(
+                userId,
                 regionPresenter.getCountryId(selectedCountry),
                 regionPresenter.getProvinceId(selectedProvince),
                 regionPresenter.getCityId(selectedCity),
                 selectedSex,
-                selectedPref,
-                picturePath,
-                imageCode
+                selectedPref
         );
-        // add other data
-        presenter.registerProfile(request);
+        if (pageType == ACCOUNT) {
+            String n = name.getText().toString();
+            if(n.isEmpty()){
+                Toast.makeText(EditProfileActivity.this, "Name must be filled", Toast.LENGTH_SHORT).show();
+            }else {
+                request.setName(n);
+                presenter.updateProfile(request);
+            }
+        } else {
+            request.setImage(picturePath);
+            request.setImageCode(getImageCode());
+            presenter.registerProfile(request);
+        }
     }
 
     private void hideKeyboard() {
@@ -300,7 +319,7 @@ public class EditProfileActivity extends AppCompatActivity implements
         }
         adapter.clear();
         adapter.addAll(content);
-        if(pageType == ACCOUNT){
+        if (pageType == ACCOUNT) {
             if (type == RegionPresenter.COUNTRY && currProfile.getCountry() != null) {
                 countrySpinner.setSelection(adapter.getPosition(currProfile.getCountry()));
             }
@@ -319,17 +338,40 @@ public class EditProfileActivity extends AppCompatActivity implements
 
     @Override
     public void successRegisterProfile() {
-        if(pageType == ACCOUNT){
+        if (pageType == ACCOUNT) {
             finish();
-        }else {
-            Intent i = new Intent(EditProfileActivity.this, VerifyActivity.class);
-            startActivityForResult(i, REQUEST_VERIFY);
+        } else {
+//            Intent i = new Intent(EditProfileActivity.this, VerifyActivity.class);
+//            startActivityForResult(i, REQUEST_VERIFY);
+            Intent intent = new Intent(EditProfileActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         }
     }
 
     @Override
     public void failedRegisterProfile() {
         Log.e(TAG, "failedRegisterProfile: ");
+    }
+
+    @Override
+    public void successUpdateProfile() {
+        presenter.updatePhotoProfile(new EditProfileRequest(CurrentUser.getId(), picturePath, getImageCode()));
+    }
+
+    @Override
+    public void failedUpdateProfile() {
+        Toast.makeText(EditProfileActivity.this, "failed update profile", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void successUpdatePhotoProfile() {
+        Toast.makeText(EditProfileActivity.this, "saved", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void failedUpdatePhotoProfile() {
+        Toast.makeText(EditProfileActivity.this, "failed update photo profile", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -356,7 +398,8 @@ public class EditProfileActivity extends AppCompatActivity implements
     }
 
     private String getImageCode() {
-        Bitmap bm = BitmapFactory.decodeFile(picturePath);
+        Bitmap bm =
+                ImageDecoderHelper.decodeSampledBitmapFromFile(picturePath, 170, 170);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
         byte[] b = baos.toByteArray();

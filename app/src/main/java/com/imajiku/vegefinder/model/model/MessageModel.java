@@ -1,5 +1,7 @@
 package com.imajiku.vegefinder.model.model;
 
+import android.util.Log;
+
 import com.imajiku.vegefinder.model.presenter.MessagePresenter;
 import com.imajiku.vegefinder.model.request.ContactUsRequest;
 import com.imajiku.vegefinder.model.request.ReviewRequest;
@@ -36,18 +38,19 @@ public class MessageModel {
                 if (response.isSuccessful()) {
                     presenter.successSendContactUs(response.body().getData().getMessage());
                 } else {
-
+                    presenter.failedSendContactUs("failed");
                 }
             }
 
             @Override
             public void onFailure(Call<ContactUsResponse> call, Throwable t) {
-
+                presenter.failedSendContactUs("failed");
             }
         });
     }
 
     public void sendReview(int userId, int restoId, int rate, String title, String comment) {
+        Log.e("exc", "userId "+userId+" restoId"+restoId+" rate"+rate+" title"+title+" comment"+comment);
         ReviewRequest request = new ReviewRequest(userId, restoId,  rate, title, comment);
         ApiService svc = retrofit.create(ApiService.class);
         Call<ReviewResponse> call = svc.sendReview(request);
@@ -58,15 +61,17 @@ public class MessageModel {
                     ReviewResponse.ReviewResponseBody data = response.body().getData();
                     if(data.getStatus().equals("1")) {
                         presenter.successSendReview(data.getMessage());
+                    }else{
+                        presenter.failedSendReview("failed");
                     }
                 } else {
-
+                    presenter.failedSendReview("failed");
                 }
             }
 
             @Override
             public void onFailure(Call<ReviewResponse> call, Throwable t) {
-
+                presenter.failedSendReview("failed");
             }
         });
     }

@@ -43,6 +43,7 @@ import com.imajiku.vegefinder.model.view.MainView;
 import com.imajiku.vegefinder.pojo.News;
 import com.imajiku.vegefinder.pojo.Resto;
 import com.imajiku.vegefinder.pojo.RestoPreview;
+import com.imajiku.vegefinder.utility.CurrentUser;
 
 import java.util.ArrayList;
 
@@ -91,10 +92,14 @@ public class MainActivity extends AppCompatActivity
         presenter.setModel(model);
 
         isLogin = getIntent().getBooleanExtra("isLogin", false);
-        isLogin = true; // TODO: remove this
         if(isLogin){
             loginMethod = getIntent().getStringExtra("loginMethod");
-            presenter.getPlaces();
+            int userId = CurrentUser.getId();
+            presenter.getPlaces(); // dummy method
+//            presenter.getBookmarks(userId);
+//            presenter.getBeenHere(userId, "asc");
+        }else{
+            CurrentUser.setId(-1);
         }
         presenter.getNews();
 
@@ -175,14 +180,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRecommend(int id) {
         Intent i = new Intent(MainActivity.this, RestoDetailActivity.class);
-        i.putExtra("resto", id);
+        i.putExtra("placeId", id);
         startActivity(i);
     }
 
     @Override
     public void onPlaces(int id) {
         Intent i = new Intent(MainActivity.this, RestoDetailActivity.class);
-        i.putExtra("resto", id);
+        i.putExtra("placeId", id);
         startActivity(i);
     }
 

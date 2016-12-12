@@ -16,6 +16,7 @@ public class AccountPresenter {
     private AccountModel model;
     private static final String LOGIN_PREF = "login_pref";
     private static final String LOGIN_KEY = "login";
+    private static final String USER_ID_KEY = "user_id";
 
     public AccountPresenter(AccountView v) {
         this.view =v;
@@ -45,8 +46,17 @@ public class AccountPresenter {
         SharedPreferences preferences = getContext().getSharedPreferences(LOGIN_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove(LOGIN_KEY);
+        editor.remove(USER_ID_KEY);
         editor.apply();
-//        model.logout();
+        model.logout();
+    }
+
+    public void successLogout(){
+        view.successLogout();
+    }
+
+    public void failedLogout(){
+        view.failedLogout();
     }
 
     private Context getContext(){

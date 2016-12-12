@@ -1,5 +1,7 @@
 package com.imajiku.vegefinder.model.model;
 
+import android.util.Log;
+
 import com.imajiku.vegefinder.model.presenter.VerifyForgotPresenter;
 import com.imajiku.vegefinder.model.request.VerifyForgotRequest;
 import com.imajiku.vegefinder.model.response.VerifyForgotResponse;
@@ -16,6 +18,7 @@ import retrofit2.Retrofit;
  */
 public class VerifyForgotModel {
 
+    private static final String TAG = "exc";
     private VerifyForgotPresenter presenter;
     private Retrofit retrofit;
 
@@ -28,6 +31,7 @@ public class VerifyForgotModel {
         VerifyForgotRequest request = new VerifyForgotRequest(code, password);
         ApiService svc = retrofit.create(ApiService.class);
         Call<VerifyForgotResponse> call = svc.resetPassword(request);
+        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<VerifyForgotResponse>() {
             @Override
             public void onResponse(Call<VerifyForgotResponse> call, Response<VerifyForgotResponse> response) {
@@ -35,30 +39,20 @@ public class VerifyForgotModel {
                     if (response.body().getData().getStatus() != null) {
                         if (response.body().getData().getStatus().toLowerCase().equals("success")) {
                             presenter.successVerifyCode();
+                        } else {
+                            presenter.failedVerifyCode();
                         }
                     } else {
                         presenter.failedVerifyCode();
                     }
                 } else {
                     presenter.failedVerifyCode();
-//                    try {
-//                        if(response.code()==500){
-//                            mIAccountView.showToast("Internal server error. Please try again later.");
-//                        }else {
-//                            String error = response.errorBody().string();
-//                            mIAccountView.showToast(getResponseErrorStatus(error));
-//                        }
-//                        mIAccountView.failedForgot();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
                 }
             }
 
             @Override
             public void onFailure(Call<VerifyForgotResponse> call, Throwable t) {
-//                mIAccountView.showToast("Forgot failed. Please check your connection.");
-//                mIAccountView.failedForgot();
+                presenter.failedVerifyCode();
             }
         });
     }

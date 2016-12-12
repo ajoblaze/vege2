@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.model.model;
 
 import com.imajiku.vegefinder.model.presenter.AccountPresenter;
 import com.imajiku.vegefinder.model.response.AccountResponse;
+import com.imajiku.vegefinder.model.response.StatusResponse;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;
 
@@ -50,6 +51,30 @@ public class AccountModel {
     }
 
     public void logout() {
+        ApiService svc = retrofit.create(ApiService.class);
+        Call<StatusResponse> call = svc.logout();
+        call.enqueue(new Callback<StatusResponse>() {
+            @Override
+            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getData().getStatus() != null) {
+                        if (response.body().getData().getStatus().toLowerCase().equals("success")) {
+                            presenter.successLogout();
+                        }else{
+                            presenter.failedLogout();
+                        }
+                    }else{
+                        presenter.failedLogout();
+                    }
+                } else {
+                    presenter.failedLogout();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<StatusResponse> call, Throwable t) {
+                presenter.failedGetProfile();
+            }
+        });
     }
 }

@@ -5,15 +5,15 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Alvin on 2016-10-08.
  */
-public class VerifyResponse {
+public class StatusResponse {
     @SerializedName("data")
-    private VerifyResponseBody data;
+    private StatusResponseBody data;
 
-    public VerifyResponseBody getData() {
+    public StatusResponseBody getData() {
         return data;
     }
 
-    public class VerifyResponseBody {
+    public class StatusResponseBody {
         @SerializedName("status")
         private String status;
 

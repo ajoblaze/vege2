@@ -41,6 +41,19 @@ public class Review {
     @SerializedName("status")
     int status;
 
+    public Review(String firstName, String lastName, int reviewId, int placeId, int userId, String title, String datePost, double rate, String comment, int status) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.reviewId = reviewId;
+        this.placeId = placeId;
+        this.userId = userId;
+        this.title = title;
+        this.datePost = datePost;
+        this.rate = rate;
+        this.comment = comment;
+        this.status = status;
+    }
+
     public String getDateDiff(String now) {
 //        datePost = "2016-09-28 21:55:55";
 //        String pattern = "yyyy-MM-dd HH:mm:ss";
@@ -107,7 +120,7 @@ public class Review {
 
     public String getRateString() {
         DecimalFormat df = new DecimalFormat("#.00");
-        return df.format(rate);
+        return df.format(rate)+" / 10";
     }
 
     public String getComment() {

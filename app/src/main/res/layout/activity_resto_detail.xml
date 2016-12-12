@@ -143,6 +143,7 @@
                     android:textColor="@color/white"
                     android:textAllCaps="false"
                     android:background="@drawable/rounded_green"
+                    android:visibility="gone"
                     android:text="@string/bookmark" />
 
                 <Button
@@ -155,6 +156,7 @@
                     android:textColor="@color/white"
                     android:textAllCaps="false"
                     android:background="@drawable/rounded_green"
+                    android:visibility="gone"
                     android:text="@string/been_here" />
             </LinearLayout>
 
@@ -174,6 +176,7 @@
                     android:textColor="@color/white"
                     android:textAllCaps="false"
                     android:background="@drawable/rounded_green"
+                    android:visibility="gone"
                     android:text="@string/book" />
 
                 <Button
@@ -186,6 +189,7 @@
                     android:textColor="@color/white"
                     android:textAllCaps="false"
                     android:background="@drawable/rounded_green"
+                    android:visibility="gone"
                     android:text="@string/check_in" />
             </LinearLayout>
 
@@ -326,7 +330,7 @@
         <!-- #5 -->
         <LinearLayout
             android:id="@+id/photo_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -346,13 +350,14 @@
                 android:layout_margin="8dp"
                 android:textAllCaps="false"
                 android:background="@drawable/rounded_green"
+                android:visibility="gone"
                 android:text="@string/add_photo" />
         </LinearLayout>
 
         <!-- #6 -->
         <LinearLayout
             android:id="@+id/review_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -370,8 +375,10 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:layout_margin="8dp"
+                android:textAllCaps="false"
                 android:background="@drawable/rounded_green"
-                android:text="Add Review" />
+                android:visibility="gone"
+                android:text="@string/add_review" />
         </LinearLayout>
 
         <LinearLayout

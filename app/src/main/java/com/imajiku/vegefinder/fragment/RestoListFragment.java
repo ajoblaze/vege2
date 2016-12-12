@@ -77,13 +77,13 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
     @Override
     public void goToDetail(Resto r) {
         Intent i = new Intent(getActivity(), RestoDetailActivity.class);
-        i.putExtra("resto", r.getId());
+        i.putExtra("placeId", r.getId());
         startActivity(i);
     }
 
     @Override
-    public void changeBookmark(int restoId) {
-        mListener.changeBookmark(restoId);
+    public void changeBookmark(int restoId, boolean isBookmarked) {
+        mListener.changeBookmark(restoId, isBookmarked);
     }
 
     @Override
@@ -105,10 +105,18 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
         new RestoSortTask(restoList, sortResult, isSavedPlace).execute();
     }
 
+    public void updateBookmark(int placeId, boolean isBookmarked) {
+        adapter.updateBookmark(placeId, isBookmarked);
+    }
+
+    public void removeData(int placeId) {
+        adapter.removeData(placeId);
+    }
+
     public interface RestoListListener {
         void onRestoList(Uri uri);
 
-        void changeBookmark(int restoId);
+        void changeBookmark(int restoId, boolean isBookmarked);
 
         void removeBeenHere(Resto r);
     }

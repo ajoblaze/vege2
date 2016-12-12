@@ -15,6 +15,7 @@ public class LoginPresenter {
     private LoginModel model;
     private static final String LOGIN_PREF = "login_pref";
     private static final String LOGIN_KEY = "login";
+    private static final String USER_ID_KEY = "user_id";
 
     public LoginPresenter(LoginView view) {
         this.view = view;
@@ -36,6 +37,18 @@ public class LoginPresenter {
         model.login(email, pass);
     }
 
+    public void saveUserId(int userId) {
+        SharedPreferences preferences = getContext().getSharedPreferences(LOGIN_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(USER_ID_KEY, userId);
+        editor.apply();
+    }
+
+    public int getCurrentUserId(){
+        SharedPreferences preferences = getContext().getSharedPreferences(LOGIN_PREF, Context.MODE_PRIVATE);
+        return preferences.getInt(USER_ID_KEY, -1);
+    }
+
     public int getCurrentLogin(){
         SharedPreferences preferences = getContext().getSharedPreferences(LOGIN_PREF, Context.MODE_PRIVATE);
         return preferences.getInt(LOGIN_KEY, -1);
@@ -45,8 +58,9 @@ public class LoginPresenter {
         return (Context) view;
     }
 
-    public void successLogin() {
-        view.successLogin();
+    public void successLogin(int userId) {
+        saveUserId(userId);
+        view.successLogin(userId);
     }
 
     public void failedLogin() {

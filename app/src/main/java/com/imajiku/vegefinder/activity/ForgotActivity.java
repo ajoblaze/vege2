@@ -64,7 +64,8 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
                 if (emailContent.length() == 0) {
                     Toast.makeText(ForgotActivity.this, "Please insert email or username", Toast.LENGTH_SHORT).show();
                 } else {
-                    presenter.forget(emailContent);
+                    successForgot();
+//                    presenter.forget(emailContent);
                 }
                 break;
             case R.id.register:

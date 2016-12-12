@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.imajiku.vegefinder.activity.EditProfileActivity">
@@ -36,10 +36,10 @@
                         android:layout_width="180dp"
                         android:layout_height="180dp"
                         android:layout_gravity="bottom|center_horizontal"
-                        android:adjustViewBounds="true"
                         android:layout_marginBottom="24dp"
-                        android:src="@drawable/empty_user"
-                        android:scaleType="fitCenter" />
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/empty_user" />
 
                     <com.github.clans.fab.FloatingActionButton
                         android:id="@+id/fab_camera"
@@ -71,149 +71,179 @@
                     android:id="@+id/name_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:padding="8dp">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-                    <TextView
-                        android:id="@+id/name_label"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="start"
-                        android:text="@string/name" />
+                        android:orientation="horizontal"
+                        android:padding="8dp">
 
-                    <EditText
-                        android:id="@+id/name_edittext"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3" />
+                        <TextView
+                            android:id="@+id/name_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="start"
+                            android:text="@string/name" />
+
+                        <EditText
+                            android:id="@+id/name_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/borderGray" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/borderGray" />
 
                 <!--email-->
                 <LinearLayout
                     android:id="@+id/email_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:visibility="gone"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-                    <TextView
-                        android:id="@+id/email_label"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="start"
-                        android:text="@string/email" />
+                        android:orientation="horizontal"
+                        android:padding="8dp">
 
-                    <EditText
-                        android:id="@+id/email_edittext"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3" />
+                        <TextView
+                            android:id="@+id/email_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="start"
+                            android:text="@string/email" />
+
+                        <EditText
+                            android:id="@+id/email_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/borderGray" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/borderGray" />
 
                 <!--old pass-->
                 <LinearLayout
                     android:id="@+id/old_pass_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="8dp"
+                    android:orientation="vertical"
                     android:visibility="gone">
 
-                    <TextView
-                        android:id="@+id/old_pass_label"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="start"
-                        android:text="@string/old_password" />
+                        android:orientation="horizontal"
+                        android:padding="8dp">
 
-                    <EditText
-                        android:id="@+id/old_pass_edittext"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:inputType="textPassword"/>
+                        <TextView
+                            android:id="@+id/old_pass_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="start"
+                            android:text="@string/old_password" />
+
+                        <EditText
+                            android:id="@+id/old_pass_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:inputType="textPassword" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/borderGray" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/borderGray" />
 
                 <!--new pass-->
                 <LinearLayout
                     android:id="@+id/new_pass_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="8dp"
+                    android:orientation="vertical"
                     android:visibility="gone">
 
-                    <TextView
-                        android:id="@+id/new_pass_label"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="start"
-                        android:text="@string/new_password" />
+                        android:orientation="horizontal"
+                        android:padding="8dp">
 
-                    <EditText
-                        android:id="@+id/new_pass_edittext"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:inputType="textPassword" />
+                        <TextView
+                            android:id="@+id/new_pass_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="start"
+                            android:text="@string/new_password" />
+
+                        <EditText
+                            android:id="@+id/new_pass_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:inputType="textPassword" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/borderGray" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/borderGray" />
 
                 <!--confirm pass-->
                 <LinearLayout
                     android:id="@+id/confirm_pass_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="8dp"
+                    android:orientation="vertical"
                     android:visibility="gone">
 
-                    <TextView
-                        android:id="@+id/confirm_pass_label"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:maxLines="2"
-                        android:gravity="start|center_vertical"
-                        android:text="@string/confirm_new_pass" />
+                        android:orientation="horizontal"
+                        android:padding="8dp">
 
-                    <EditText
-                        android:id="@+id/confirm_pass_edittext"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:inputType="textPassword" />
+                        <TextView
+                            android:id="@+id/confirm_pass_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="start|center_vertical"
+                            android:maxLines="2"
+                            android:text="@string/confirm_new_pass" />
+
+                        <EditText
+                            android:id="@+id/confirm_pass_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:inputType="textPassword" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/borderGray" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/borderGray" />
 
                 <!--country-->
                 <LinearLayout

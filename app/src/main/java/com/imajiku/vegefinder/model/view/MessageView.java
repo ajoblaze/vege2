@@ -5,6 +5,9 @@ package com.imajiku.vegefinder.model.view;
  */
 public interface MessageView {
     void successSendContactUs();
-    void successSendReview();
+    void successSendReview(String s);
+    void failedSendReview(String s);
     void successSendReport();
+
+    void failedSendContactUs(String s);
 }

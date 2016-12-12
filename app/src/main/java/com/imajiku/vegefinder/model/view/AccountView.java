@@ -9,4 +9,8 @@ public interface AccountView {
     void successGetProfile(UserProfile profile);
 
     void failedGetProfile();
+
+    void successLogout();
+
+    void failedLogout();
 }

@@ -12,8 +12,12 @@ public class VerifyForgotRequest {
     @SerializedName("password")
     String password;
 
+    @SerializedName("password_confirm")
+    String password2;
+
     public VerifyForgotRequest(String code, String password) {
         this.code = code;
         this.password = password;
+        this.password2 = password;
     }
 }

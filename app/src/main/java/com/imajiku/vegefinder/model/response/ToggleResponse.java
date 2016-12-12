@@ -37,7 +37,7 @@ public class ToggleResponse {
             return userId;
         }
 
-        public int getPlaceID() {
+        public int getPlaceId() {
             return placeID;
         }
 

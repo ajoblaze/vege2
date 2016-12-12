@@ -31,12 +31,20 @@ public class MessagePresenter {
         view.successSendContactUs();
     }
 
+    public void failedSendContactUs(String s) {
+        view.failedSendContactUs(s);
+    }
+
     public void sendReview(int userId, int restoId, int rate, String title, String comment){
         model.sendReview(userId, restoId,  rate, title, comment);
     }
 
     public void successSendReview(String s) {
-        view.successSendReview();
+        view.successSendReview(s);
+    }
+
+    public void failedSendReview(String s) {
+        view.failedSendReview(s);
     }
 
 //    public void sendReport(String name, String email, String phone, String subject, String message){

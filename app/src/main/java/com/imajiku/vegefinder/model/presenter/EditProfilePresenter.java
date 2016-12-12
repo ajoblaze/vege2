@@ -1,8 +1,10 @@
 package com.imajiku.vegefinder.model.presenter;
 
 
+import android.util.Log;
+
 import com.imajiku.vegefinder.model.model.EditProfileModel;
-import com.imajiku.vegefinder.model.request.RegisterProfileRequest;
+import com.imajiku.vegefinder.model.request.EditProfileRequest;
 import com.imajiku.vegefinder.model.view.EditProfileView;
 
 /**
@@ -24,7 +26,7 @@ public class EditProfilePresenter {
         this.model = model;
     }
 
-    public void registerProfile(RegisterProfileRequest request) {
+    public void registerProfile(EditProfileRequest request) {
         model.registerProfile(request);
     }
 
@@ -34,6 +36,30 @@ public class EditProfilePresenter {
 
     public void failedRegisterProfile() {
         view.failedRegisterProfile();
+    }
+
+    public void updateProfile(EditProfileRequest request) {
+        model.updateProfile(request);
+    }
+
+    public void successUpdateProfile() {
+        view.successUpdateProfile();
+    }
+
+    public void failedUpdateProfile() {
+        view.failedUpdateProfile();
+    }
+
+    public void updatePhotoProfile(EditProfileRequest request) {
+        model.updatePhotoProfile(request);
+    }
+
+    public void successUpdatePhotoProfile() {
+        view.successUpdatePhotoProfile();
+    }
+
+    public void failedUpdatePhotoProfile() {
+        view.failedUpdatePhotoProfile();
     }
 }
 
