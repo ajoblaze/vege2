@@ -42,7 +42,7 @@ public class PhotoListActivity extends AppCompatActivity implements ImageListAda
         initToolbar(getResources().getString(R.string.photos));
 
         restoId = getIntent().getIntExtra("restoId", -1);
-        userId = CurrentUser.getId();
+        userId = CurrentUser.getId(this);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3, LinearLayoutManager.VERTICAL, false));
@@ -84,6 +84,16 @@ public class PhotoListActivity extends AppCompatActivity implements ImageListAda
 
     @Override
     public void failedGetRestoImages() {
+
+    }
+
+    @Override
+    public void successAddPhoto(String message) {
+
+    }
+
+    @Override
+    public void failedAddPhoto(String message) {
 
     }
 }

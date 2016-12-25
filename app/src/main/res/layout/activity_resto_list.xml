@@ -175,6 +175,26 @@
                     android:text="@string/vegetarian" />
             </LinearLayout>
 
+            <!--line 4-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/vegeready"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/vegeready" />
+
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="invisible"/>
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/submit_filter"
                 android:layout_width="match_parent"

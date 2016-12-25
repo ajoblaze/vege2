@@ -6,6 +6,7 @@ import com.imajiku.vegefinder.model.presenter.RestoListPresenter;
 import com.imajiku.vegefinder.model.request.FindAllRequest;
 import com.imajiku.vegefinder.model.request.FindKeywordRequest;
 import com.imajiku.vegefinder.model.request.FindRegionRequest;
+import com.imajiku.vegefinder.model.request.SortFilterRequest;
 import com.imajiku.vegefinder.model.request.ToggleRequest;
 import com.imajiku.vegefinder.model.response.RestoListResponse;
 import com.imajiku.vegefinder.model.response.ToggleResponse;
@@ -25,6 +26,8 @@ import retrofit2.Retrofit;
  */
 public class RestoListModel {
 
+    public static final String BOOKMARK = "bookmark";
+    public static final String BEENHERE = "been here";
     private static final String TAG = "exc";
     private RestoListPresenter presenter;
     private Retrofit retrofit;
@@ -34,8 +37,8 @@ public class RestoListModel {
         retrofit = Utility.buildRetrofit();
     }
 
-    public void findByRegion(int provinceId, int cityId) {
-        FindRegionRequest request = new FindRegionRequest(provinceId, cityId);
+    public void findByRegion(int countryId, int provinceId, int cityId) {
+        FindRegionRequest request = new FindRegionRequest(countryId, provinceId, cityId);
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.findRegion(request);
         Log.e(TAG, String.valueOf(call.request().url()));
@@ -228,6 +231,36 @@ public class RestoListModel {
             @Override
             public void onFailure(Call<ToggleResponse> call, Throwable t) {
                 presenter.failedChangeBeenHere("Please check your connection");
+            }
+        });
+    }
+
+    public void getSortFilterList(final String type, SortFilterRequest request) {
+        ApiService svc = retrofit.create(ApiService.class);
+        Call<RestoListResponse> call;
+        if(type.equals(BOOKMARK)) {
+            call = svc.getBookmarks(request);
+        }else if(type.equals(BEENHERE)) {
+            call = svc.getBeenHere(request);
+        }else{
+            presenter.failedGetSortFilterList(type);
+            return;
+        }
+        Log.e(TAG, String.valueOf(call.request().url()));
+        call.enqueue(new Callback<RestoListResponse>() {
+            @Override
+            public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<Resto> data = response.body().getData();
+                    presenter.successGetSortFilterList(data);
+                } else {
+                    presenter.failedGetSortFilterList(type);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RestoListResponse> call, Throwable t) {
+                presenter.failedGetSortFilterList(type);
             }
         });
     }

@@ -9,6 +9,9 @@ public class VerifyForgotRequest {
     @SerializedName("code")
     String code;
 
+    @SerializedName("email")
+    String email;
+
     @SerializedName("password")
     String password;
 
@@ -19,5 +22,11 @@ public class VerifyForgotRequest {
         this.code = code;
         this.password = password;
         this.password2 = password;
+    }
+
+    public VerifyForgotRequest(String email, String password, String password2) {
+        this.email = email;
+        this.password = password;
+        this.password2 = password2;
     }
 }

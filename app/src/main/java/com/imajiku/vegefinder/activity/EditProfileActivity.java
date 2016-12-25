@@ -3,13 +3,14 @@ package com.imajiku.vegefinder.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -66,7 +67,7 @@ public class EditProfileActivity extends AppCompatActivity implements
     private EditText name, email, oldPass, newPass, confPass;
     private TextView[] labels = new TextView[10];
     private LinearLayout[] layouts = new LinearLayout[5];
-    private String picturePath;
+    private String picturePath, pictureFilename;
     private int pageType;
     private UserProfile currProfile;
     private Typeface tf;
@@ -89,8 +90,9 @@ public class EditProfileActivity extends AppCompatActivity implements
         if(pageType == REGISTER) {
             userId = getIntent().getIntExtra("userId", -1);
         }else if(pageType == ACCOUNT){
-            userId = CurrentUser.getId();
+            userId = CurrentUser.getId(this);
         }
+        Log.e(TAG, "onCreate: "+CurrentUser.getPassword(this));
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
         initToolbar(getResources().getString(R.string.title_profile));
@@ -229,8 +231,8 @@ public class EditProfileActivity extends AppCompatActivity implements
                 cursor.moveToFirst();
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 picturePath = cursor.getString(columnIndex);
+                pictureFilename = picturePath.substring(picturePath.lastIndexOf("/")+1);
                 cursor.close();
-//                profPic.setImageBitmap(BitmapFactory.decodeFile(picturePath));
                 profPic.setImageBitmap(
                         ImageDecoderHelper.decodeSampledBitmapFromFile(picturePath, 170, 170)
                 );
@@ -277,16 +279,49 @@ public class EditProfileActivity extends AppCompatActivity implements
         );
         if (pageType == ACCOUNT) {
             String n = name.getText().toString();
-            if(n.isEmpty()){
-                Toast.makeText(EditProfileActivity.this, "Name must be filled", Toast.LENGTH_SHORT).show();
-            }else {
-                request.setName(n);
-                presenter.updateProfile(request);
+            if (isResetPassword()) {
+                presenter.changePassword(email.getText().toString(), newPass.getText().toString());
+            } else {
+                if (n.isEmpty()) {
+                    Toast.makeText(EditProfileActivity.this, "Name must be filled", Toast.LENGTH_SHORT).show();
+                } else {
+                    request.setName(n);
+                    presenter.updateProfile(request);
+                }
             }
         } else {
-            request.setImage(picturePath);
+            request.setImage(pictureFilename);
             request.setImageCode(getImageCode());
             presenter.registerProfile(request);
+        }
+    }
+
+    private boolean isResetPassword() {
+        String oldP = oldPass.getText().toString();
+        String newP = newPass.getText().toString();
+        String confP = confPass.getText().toString();
+        // assume user doesn't want to change password
+        if(oldP.isEmpty() || newP.isEmpty() || confP.isEmpty()){
+            return false;
+        }
+        // assume user wants to change password
+        ColorStateList oldColor = labels[2].getTextColors();
+        if(!oldP.equals(CurrentUser.getPassword(this))){
+            Toast.makeText(EditProfileActivity.this, "Old Password doesn't match", Toast.LENGTH_LONG).show();
+            labels[2].setTextColor(ContextCompat.getColor(this, R.color.red));
+            return false;
+        }else{
+            labels[2].setTextColor(oldColor);
+            if(!newP.equals(confP)){
+                Toast.makeText(EditProfileActivity.this, "Confirm Password doesn't match", Toast.LENGTH_LONG).show();
+                labels[3].setTextColor(ContextCompat.getColor(this, R.color.red));
+                labels[4].setTextColor(ContextCompat.getColor(this, R.color.red));
+                return false;
+            }else{
+                labels[3].setTextColor(oldColor);
+                labels[4].setTextColor(oldColor);
+                return true;
+            }
         }
     }
 
@@ -320,14 +355,21 @@ public class EditProfileActivity extends AppCompatActivity implements
         adapter.clear();
         adapter.addAll(content);
         if (pageType == ACCOUNT) {
-            if (type == RegionPresenter.COUNTRY && currProfile.getCountry() != null) {
-                countrySpinner.setSelection(adapter.getPosition(currProfile.getCountry()));
+            int countryId = currProfile.getCountryId();
+            int provinceId = currProfile.getProvinceId();
+            int cityId = currProfile.getCityId();
+            String countryName = regionPresenter.getCountryName(countryId);
+            String provinceName = regionPresenter.getProvinceName(provinceId);
+            String cityName = regionPresenter.getCityName(cityId);
+
+            if (type == RegionPresenter.COUNTRY && countryName != null) {
+                countrySpinner.setSelection(adapter.getPosition(countryName));
             }
-            if (type == RegionPresenter.PROVINCE && currProfile.getProvince() != null) {
-                provinceSpinner.setSelection(adapter.getPosition(currProfile.getProvince()));
+            if (type == RegionPresenter.PROVINCE && provinceName != null) {
+                provinceSpinner.setSelection(adapter.getPosition(provinceName));
             }
-            if (type == RegionPresenter.CITY && currProfile.getCity() != null) {
-                citySpinner.setSelection(adapter.getPosition(currProfile.getCity()));
+            if (type == RegionPresenter.CITY && cityName != null) {
+                citySpinner.setSelection(adapter.getPosition(cityName));
             }
         } else {
             if (type == RegionPresenter.COUNTRY) {
@@ -341,8 +383,6 @@ public class EditProfileActivity extends AppCompatActivity implements
         if (pageType == ACCOUNT) {
             finish();
         } else {
-//            Intent i = new Intent(EditProfileActivity.this, VerifyActivity.class);
-//            startActivityForResult(i, REQUEST_VERIFY);
             Intent intent = new Intent(EditProfileActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -356,7 +396,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 
     @Override
     public void successUpdateProfile() {
-        presenter.updatePhotoProfile(new EditProfileRequest(CurrentUser.getId(), picturePath, getImageCode()));
+        presenter.updatePhotoProfile(new EditProfileRequest(CurrentUser.getId(this), pictureFilename, getImageCode()));
     }
 
     @Override
@@ -372,6 +412,16 @@ public class EditProfileActivity extends AppCompatActivity implements
     @Override
     public void failedUpdatePhotoProfile() {
         Toast.makeText(EditProfileActivity.this, "failed update photo profile", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void successResetPassword() {
+        Toast.makeText(EditProfileActivity.this, "password changed", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void failedResetPassword() {
+        Toast.makeText(EditProfileActivity.this, "failed change password", Toast.LENGTH_SHORT).show();
     }
 
     @Override

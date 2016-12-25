@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.imajiku.vegefinder.model.presenter.BookPresenter;
 import com.imajiku.vegefinder.model.request.BookRequest;
-import com.imajiku.vegefinder.model.response.BookResponse;
+import com.imajiku.vegefinder.model.response.StatusResponse;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;
 
@@ -29,11 +29,11 @@ public class BookModel {
     public void book(int userId, int placeId, String date, String time, String comment) {
         BookRequest request = new BookRequest(userId, placeId, date, time, comment);
         ApiService svc = retrofit.create(ApiService.class);
-        Call<BookResponse> call = svc.book(request);
+        Call<StatusResponse> call = svc.book(request);
         Log.e("exc", String.valueOf(call.request().url()));
-        call.enqueue(new Callback<BookResponse>() {
+        call.enqueue(new Callback<StatusResponse>() {
             @Override
-            public void onResponse(Call<BookResponse> call, Response<BookResponse> response) {
+            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getData() != null) {
                         if (!response.body().getData().getStatus().toLowerCase().equals("failed")) {
@@ -48,7 +48,7 @@ public class BookModel {
             }
 
             @Override
-            public void onFailure(Call<BookResponse> call, Throwable t) {
+            public void onFailure(Call<StatusResponse> call, Throwable t) {
                 presenter.failedBook("failed booking");
             }
         });

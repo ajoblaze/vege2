@@ -54,5 +54,17 @@ public class MessagePresenter {
     public void successSendReport(String s) {
         view.successSendReport();
     }
+
+    public void sendFeedback(int userId, String subject, String message) {
+        model.sendFeedback(userId, subject, message);
+    }
+
+    public void successSendFeedback(String message) {
+        view.successSendReport();
+    }
+
+    public void sendReport(int userId, int placeId, String subject, String message) {
+        model.sendReport(userId, placeId, subject, message);
+    }
 }
 

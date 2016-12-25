@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.imajiku.vegefinder.model.presenter.VerifyForgotPresenter;
 import com.imajiku.vegefinder.model.request.VerifyForgotRequest;
-import com.imajiku.vegefinder.model.response.VerifyForgotResponse;
+import com.imajiku.vegefinder.model.response.StatusResponse;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;
 
@@ -30,11 +30,11 @@ public class VerifyForgotModel {
     public void resetPassword(String code, String password) {
         VerifyForgotRequest request = new VerifyForgotRequest(code, password);
         ApiService svc = retrofit.create(ApiService.class);
-        Call<VerifyForgotResponse> call = svc.resetPassword(request);
+        Call<StatusResponse> call = svc.resetPassword(request);
         Log.e(TAG, String.valueOf(call.request().url()));
-        call.enqueue(new Callback<VerifyForgotResponse>() {
+        call.enqueue(new Callback<StatusResponse>() {
             @Override
-            public void onResponse(Call<VerifyForgotResponse> call, Response<VerifyForgotResponse> response) {
+            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getData().getStatus() != null) {
                         if (response.body().getData().getStatus().toLowerCase().equals("success")) {
@@ -51,7 +51,7 @@ public class VerifyForgotModel {
             }
 
             @Override
-            public void onFailure(Call<VerifyForgotResponse> call, Throwable t) {
+            public void onFailure(Call<StatusResponse> call, Throwable t) {
                 presenter.failedVerifyCode();
             }
         });

@@ -105,6 +105,17 @@
                 android:visibility="gone" />
         </RelativeLayout>
 
+        <Button
+            android:id="@+id/find_region"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/city_layout"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_orange"
+            android:padding="8dip"
+            android:text="@string/find_region"
+            android:textColor="@color/white" />
+
         <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
         <LinearLayout
             android:focusable="true"
@@ -116,8 +127,8 @@
             android:id="@+id/keyword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/city_layout"
-            android:layout_marginTop="20dp"
+            android:layout_below="@id/find_region"
+            android:layout_marginTop="24dp"
             android:background="@drawable/selector_rounded_edittext"
             android:hint="@string/keyword_hint"
             android:nextFocusUp="@id/keyword"
@@ -125,14 +136,14 @@
             android:padding="12dip" />
 
         <Button
-            android:id="@+id/find_btn"
+            android:id="@+id/find_keyword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/keyword"
             android:layout_marginTop="20dp"
             android:background="@drawable/rounded_orange"
             android:padding="8dip"
-            android:text="@string/find_now"
+            android:text="@string/find_keyword"
             android:textColor="@color/white" />
 
     </RelativeLayout>

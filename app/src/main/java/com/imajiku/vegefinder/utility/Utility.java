@@ -35,10 +35,18 @@ public class Utility {
         return retrofit;
     }
 
+    public static String changeImageUrl(String image){
+        String falseUrl = "http://localhost/imajiku_vegefinder/";
+        if (image.startsWith(falseUrl)) {
+            return Utility.BASE_URL + image.substring(falseUrl.length());
+        }
+        return image;
+    }
+
     public static void sendEmail(Context context, String email, String subject, String message) {
         BackgroundMail.newBuilder(context)
-                .withUsername("ajoblaze@gmail.com")
-                .withPassword("ucokzillaX")
+                .withUsername("email")
+                .withPassword("pass")
                 .withMailto(email)
                 .withSubject(subject)
                 .withBody(message)

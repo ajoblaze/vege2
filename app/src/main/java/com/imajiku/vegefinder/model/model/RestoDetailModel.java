@@ -56,7 +56,7 @@ public class RestoDetailModel {
         ToggleRequest request = new ToggleRequest(userId, placeId);
         ApiService svc = retrofit.create(ApiService.class);
         Call<ToggleResponse> call;
-        if(isBookmarked) {
+        if(!isBookmarked) {
             call = svc.addBookmark(request);
         }else{
             call = svc.removeBookmark(request);
@@ -92,7 +92,7 @@ public class RestoDetailModel {
         ToggleRequest request = new ToggleRequest(userId, placeId);
         ApiService svc = retrofit.create(ApiService.class);
         Call<ToggleResponse> call;
-        if(hasBeenHere) {
+        if(!hasBeenHere) {
             call = svc.addBeenHere(request);
         }else{
             call = svc.removeBeenHere(request);

@@ -3,7 +3,10 @@ package com.imajiku.vegefinder.model.model;
 import android.util.Log;
 
 import com.imajiku.vegefinder.model.presenter.PhotoListPresenter;
+import com.imajiku.vegefinder.model.request.PhotoRequest;
 import com.imajiku.vegefinder.model.response.RestoDetailResponse;
+import com.imajiku.vegefinder.model.response.StatusMessageResponse;
+import com.imajiku.vegefinder.model.response.StatusResponse;
 import com.imajiku.vegefinder.pojo.RestoDetail;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;
@@ -45,6 +48,36 @@ public class PhotoListModel {
             @Override
             public void onFailure(Call<RestoDetailResponse> call, Throwable t) {
                 presenter.failedGetRestoDetail();
+            }
+        });
+    }
+
+    public void addPhoto(int userId, int placeId, String image, String imageCode) {
+        PhotoRequest request = new PhotoRequest(userId, placeId, image, imageCode);
+        ApiService svc = retrofit.create(ApiService.class);
+        Call<StatusMessageResponse> call = svc.addPhoto(request);
+        Log.e(TAG, String.valueOf(call.request().url()));
+        call.enqueue(new Callback<StatusMessageResponse>() {
+            @Override
+            public void onResponse(Call<StatusMessageResponse> call, Response<StatusMessageResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getData().getStatus() != null) {
+                        if (response.body().getData().getStatus().equals("1")) {
+                            presenter.successAddPhoto(response.body().getData().getMessage());
+                        }else{
+                            presenter.failedAddPhoto(response.body().getData().getMessage());
+                        }
+                    }else{
+                        presenter.failedAddPhoto(response.body().getData().getMessage());
+                    }
+                } else {
+                    presenter.failedAddPhoto(response.body().getData().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StatusMessageResponse> call, Throwable t) {
+                presenter.failedAddPhoto("Connection failed");
             }
         });
     }

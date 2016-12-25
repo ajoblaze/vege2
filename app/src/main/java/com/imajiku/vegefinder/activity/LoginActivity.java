@@ -2,12 +2,16 @@ package com.imajiku.vegefinder.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -40,6 +44,8 @@ import com.imajiku.vegefinder.model.presenter.LoginPresenter;
 import com.imajiku.vegefinder.model.view.LoginView;
 import com.imajiku.vegefinder.utility.CurrentUser;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity implements
@@ -66,14 +72,30 @@ public class LoginActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+//        try {
+//            PackageInfo info = getPackageManager().getPackageInfo(
+//                    "com.imajiku.vegefinder",
+//                    PackageManager.GET_SIGNATURES);
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.e("excKeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            }
+//        } catch (PackageManager.NameNotFoundException e) {
+//
+//        } catch (NoSuchAlgorithmException e) {
+//
+//        }
+
         setContentView(R.layout.activity_login);
         initToolbar();
         presenter = new LoginPresenter(this);
         LoginModel model = new LoginModel(presenter);
         presenter.setModel(model);
 
-        if(presenter.getCurrentLogin() > -1 && presenter.getCurrentUserId() > -1){
-            successLogin(presenter.getCurrentUserId());
+        if(presenter.getCurrentLogin() > -1 && CurrentUser.getId(this) > -1){
+            successLogin(CurrentUser.getId(this));
         }
 
         setupFbLogin();
@@ -182,7 +204,7 @@ public class LoginActivity extends AppCompatActivity implements
     @Override
     public void successLogin(int userId) {
         Log.e(TAG, "successLogin "+userId);
-        CurrentUser.setId(userId);
+        CurrentUser.setId(this, userId);
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         i.putExtra("isLogin", true);
         i.putExtra("loginMethod", "normal");
@@ -193,8 +215,6 @@ public class LoginActivity extends AppCompatActivity implements
     @Override
     public void failedLogin() {
         Toast.makeText(LoginActivity.this, "Your email has not been verified", Toast.LENGTH_SHORT).show();
-//        presenter.saveUserId(1); // TODO remove this
-//        successLogin(1); // TODO remove this
     }
 
     public boolean checkIfFbLoggedIn(){

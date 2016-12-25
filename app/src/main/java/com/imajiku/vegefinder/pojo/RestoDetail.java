@@ -64,8 +64,8 @@ public class RestoDetail{
     private int restoType;
     @SerializedName("type")
     private int type;
-//    @SerializedName("facilities")
-//    private int facilities; //TODO change into arraylist
+    @SerializedName("facilities")
+    private ArrayList<RestoFacility> restoFacility;
     @SerializedName("menu")
     private ArrayList<RestoMenu> restoMenu;
     @SerializedName("tags")
@@ -248,11 +248,7 @@ public class RestoDetail{
     }
 
     public String getImage() {
-        String falseUrl = "http://localhost/imajiku_vegefinder/";
-        if (image.startsWith(falseUrl)) {
-            return Utility.BASE_URL + image.substring(falseUrl.length());
-        }
-        return image;
+        return Utility.changeImageUrl(image);
     }
 
     public String getDatePost() {
@@ -271,6 +267,10 @@ public class RestoDetail{
 //        return facilities;
 //    }
 
+    public ArrayList<RestoFacility> getRestoFacility() {
+        return restoFacility;
+    }
+
     public ArrayList<RestoMenu> getRestoMenu() {
         return restoMenu;
     }
@@ -280,6 +280,11 @@ public class RestoDetail{
     }
 
     public ArrayList<RestoImage> getRestoImg() {
+        for(RestoImage ri : restoImg){
+            ri.setImage(
+                    Utility.changeImageUrl(ri.getImage())
+            );
+        }
         return restoImg;
     }
 

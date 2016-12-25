@@ -53,7 +53,7 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
 
         restoId = getIntent().getIntExtra("placeId", -1);
-        userId = CurrentUser.getId();
+        userId = CurrentUser.getId(this);
         position = getIntent().getIntExtra("position", -1);
 
         presenter = new PhotoListPresenter(this);
@@ -94,6 +94,16 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
 
     @Override
     public void failedGetRestoImages() {
+
+    }
+
+    @Override
+    public void successAddPhoto(String message) {
+
+    }
+
+    @Override
+    public void failedAddPhoto(String message) {
 
     }
 

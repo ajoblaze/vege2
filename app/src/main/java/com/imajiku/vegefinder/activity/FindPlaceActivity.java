@@ -31,7 +31,7 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
     private Spinner countrySpinner, provinceSpinner, citySpinner;
     private ArrayAdapter<String> countryDataAdapter, provinceDataAdapter, cityDataAdapter;
     private RegionPresenter presenter;
-    private Button findBtn;
+    private Button findKeywordBtn, findRegionBtn;
     private String currCountry, currProvince, currCity;
     private EditText keywordText;
     private Typeface tf;
@@ -77,12 +77,15 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
         provinceSpinner.setOnItemSelectedListener(this);
         citySpinner.setOnItemSelectedListener(this);
 
-        findBtn = (Button) findViewById(R.id.find_btn);
-        findBtn.setOnClickListener(this);
+        findRegionBtn = (Button) findViewById(R.id.find_region);
+        findRegionBtn.setOnClickListener(this);
+        findKeywordBtn = (Button) findViewById(R.id.find_keyword);
+        findKeywordBtn.setOnClickListener(this);
 
         title.setTypeface(tf);
         keywordText.setTypeface(tf);
-        findBtn.setTypeface(tf);
+        findRegionBtn.setTypeface(tf);
+        findKeywordBtn.setTypeface(tf);
 
         arrow1 = (ImageView) findViewById(R.id.arrow1);
         arrow2 = (ImageView) findViewById(R.id.arrow2);
@@ -120,26 +123,28 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
         hideKeyboard();
         Intent i = new Intent(FindPlaceActivity.this, RestoListActivity.class);
         switch (v.getId()) {
-            case R.id.find_btn:
-                String keyword = keywordText.getText().toString();
-                if (keyword.equals("")) {
-                    if (currProvince.equals(ALL_PROVINCE)) {
-                        Toast.makeText(FindPlaceActivity.this, "Please pick a province", Toast.LENGTH_SHORT).show();
-                    }
-                    else if (currCity.equals(ALL_CITY)) {
-                        Toast.makeText(FindPlaceActivity.this, "Please pick a city", Toast.LENGTH_SHORT).show();
-                    }else{
-                        i.putExtra("page", RestoListActivity.PAGE_SEARCH);
-                        i.putExtra("country", presenter.getCountryId(currCountry));
-                        i.putExtra("province", presenter.getProvinceId(currProvince));
-                        i.putExtra("city", presenter.getCityId(currCity));
-                        startActivity(i);
-                    }
-                } else {
+            case R.id.find_region:
+                if (currProvince.equals(ALL_PROVINCE)) {
+                    Toast.makeText(FindPlaceActivity.this, "Please pick a province", Toast.LENGTH_SHORT).show();
+                }
+                else if (currCity.equals(ALL_CITY)) {
+                    Toast.makeText(FindPlaceActivity.this, "Please pick a city", Toast.LENGTH_SHORT).show();
+                }else{
                     i.putExtra("page", RestoListActivity.PAGE_SEARCH);
+                    i.putExtra("type", "region");
                     i.putExtra("country", presenter.getCountryId(currCountry));
                     i.putExtra("province", presenter.getProvinceId(currProvince));
                     i.putExtra("city", presenter.getCityId(currCity));
+                    startActivity(i);
+                }
+                break;
+            case R.id.find_keyword:
+                String keyword = keywordText.getText().toString();
+                if (keyword.equals("")) {
+                    Toast.makeText(FindPlaceActivity.this, "Please enter a keyword", Toast.LENGTH_SHORT).show();
+                } else {
+                    i.putExtra("page", RestoListActivity.PAGE_SEARCH);
+                    i.putExtra("type", "keyword");
                     i.putExtra("keyword", keyword);
                     startActivity(i);
                 }

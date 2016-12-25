@@ -2,6 +2,7 @@ package com.imajiku.vegefinder.model.presenter;
 
 
 import com.imajiku.vegefinder.model.model.MainModel;
+import com.imajiku.vegefinder.model.request.SortFilterRequest;
 import com.imajiku.vegefinder.model.response.ProvinceResponse;
 import com.imajiku.vegefinder.model.view.MainView;
 import com.imajiku.vegefinder.pojo.News;
@@ -39,10 +40,6 @@ public class MainPresenter {
         model.getRecommendation(latitude, longitude);
     }
 
-    public void getPlaces() {
-        model.getPlaces();
-    }
-
     public void successGetNews(ArrayList<News> news) {
         view.successGetNews(news);
     }
@@ -52,43 +49,51 @@ public class MainPresenter {
     }
 
     public void successGetRecommendation(ArrayList<Resto> list) {
-        ArrayList<Resto> shortList = new ArrayList<>();
-        for (int i=0;i<5;i++){
-            shortList.add(list.get(i));
+        if(list.size()>5) {
+            ArrayList<Resto> shortList = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+                shortList.add(list.get(i));
+            }
+            view.successGetRecommendation(shortList);
+        }else{
+            view.successGetRecommendation(list);
         }
-        view.successGetRecommendation(shortList);
     }
 
     public void failedGetRecommendation() {
         view.failedGetRecommendation();
     }
 
-    public void successGetPlaces(ArrayList<Resto> list) {
-        view.successGetPlaces(list);
+    public void getBookmarks(SortFilterRequest request) {
+        model.getBookmarks(request);
     }
 
-    public void failedGetPlaces() {
-        view.failedGetPlaces();
-    }
-
-    public void getBookmarks(int userId) {
-        model.getBookmarks(userId);
-    }
-
-    public void getBeenHere(int userId, String order) {
-        model.getBeenHere(userId, order);
-    }
-
-    public void successGetBookmarks() {
+    public void successGetBookmarks(ArrayList<Resto> list) {
+        if(list.size()>5) {
+            ArrayList<Resto> shortList = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+                shortList.add(list.get(i));
+            }
+            view.successGetBookmarks(shortList);
+        }else{
+            view.successGetBookmarks(list);
+        }
     }
 
     public void failedGetBookmarks() {
+        view.failedGetBookmarks();
     }
 
-    public void successGetBeenHere() {
+    public void getBeenHere(SortFilterRequest request) {
+        model.getBeenHere(request);
+    }
+
+    public void successGetBeenHere(ArrayList<Resto> data) {
+        view.successGetBeenHere(data);
     }
 
     public void failedGetBeenHere() {
+        view.failedGetBeenHere();
     }
 }
 

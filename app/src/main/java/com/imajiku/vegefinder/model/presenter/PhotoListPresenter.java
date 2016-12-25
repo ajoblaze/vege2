@@ -61,5 +61,20 @@ public class PhotoListPresenter {
     public void failedGetRestoDetail() {
         view.failedGetRestoImages();
     }
+
+    public void addPhoto(int userId, int restoId, String image, String imageCode){
+        model.addPhoto(userId, restoId, image, imageCode);
+    }
+
+    public void successAddPhoto(String message) {
+        view.successAddPhoto(message);
+    }
+
+    public void failedAddPhoto(String message) {
+        if(message.isEmpty()){
+            message = "Connection failed";
+        }
+        view.failedAddPhoto(message);
+    }
 }
 

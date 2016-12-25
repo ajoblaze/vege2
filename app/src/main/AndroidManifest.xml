@@ -28,6 +28,16 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key" />
 
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider1727680564210294"
+            android:exported="true" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="366027b6bfd8cfbd69b55acbcdcc91ad9fa5aea7"
+            />
+
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
@@ -39,7 +49,6 @@
         <activity android:name=".activity.RestoDetailActivity" />
         <activity android:name=".activity.RestoListActivity" />
         <activity android:name=".activity.NewsListActivity" />
-        <activity android:name=".activity.VerifyActivity" />
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.VerifyForgotActivity" />
         <activity android:name=".activity.EditProfileActivity" />
@@ -71,9 +80,9 @@
 
         <activity android:name=".activity.AddReviewActivity" />
         <activity android:name=".activity.ReviewListActivity" />
-        <activity android:name=".activity.SendReportActivity" />
+        <activity android:name=".activity.SendMessageActivity" />
         <activity android:name=".activity.AccountActivity" />
-        <activity android:name=".activity.AboutActivity"/>
+        <activity android:name=".activity.AboutActivity" />
     </application>
 
 </manifest>

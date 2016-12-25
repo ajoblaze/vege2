@@ -4,7 +4,9 @@ import android.util.Log;
 
 import com.imajiku.vegefinder.model.presenter.EditProfilePresenter;
 import com.imajiku.vegefinder.model.request.EditProfileRequest;
-import com.imajiku.vegefinder.model.response.RegisterProfileResponse;
+import com.imajiku.vegefinder.model.request.VerifyForgotRequest;
+import com.imajiku.vegefinder.model.response.AccountResponse;
+import com.imajiku.vegefinder.model.response.StatusResponse;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;
 
@@ -29,13 +31,13 @@ public class EditProfileModel {
 
     public void registerProfile(EditProfileRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
-        Call<RegisterProfileResponse> call = svc.registerProfile(request);
+        Call<StatusResponse> call = svc.registerProfile(request);
         Log.e(TAG, String.valueOf(call.request().url()));
-        call.enqueue(new Callback<RegisterProfileResponse>() {
+        call.enqueue(new Callback<StatusResponse>() {
             @Override
-            public void onResponse(Call<RegisterProfileResponse> call, Response<RegisterProfileResponse> response) {
+            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
                 if (response.isSuccessful()) {
-                    RegisterProfileResponse.RegisterProfileResponseBody data = response.body().getData();
+                    StatusResponse.StatusResponseBody data = response.body().getData();
                     if(data.getStatus().equals("success")) {
                         presenter.successRegisterProfile();
                     }else{
@@ -47,7 +49,7 @@ public class EditProfileModel {
             }
 
             @Override
-            public void onFailure(Call<RegisterProfileResponse> call, Throwable t) {
+            public void onFailure(Call<StatusResponse> call, Throwable t) {
                 presenter.failedRegisterProfile();
             }
         });
@@ -55,12 +57,12 @@ public class EditProfileModel {
 
     public void updateProfile(EditProfileRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
-        Call<RegisterProfileResponse> call = svc.updateProfile(request);
-        call.enqueue(new Callback<RegisterProfileResponse>() {
+        Call<StatusResponse> call = svc.updateProfile(request);
+        call.enqueue(new Callback<StatusResponse>() {
             @Override
-            public void onResponse(Call<RegisterProfileResponse> call, Response<RegisterProfileResponse> response) {
+            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
                 if (response.isSuccessful()) {
-                    RegisterProfileResponse.RegisterProfileResponseBody data = response.body().getData();
+                    StatusResponse.StatusResponseBody data = response.body().getData();
                     if(data.getStatus().equals("success")) {
                         presenter.successUpdateProfile();
                     }else{
@@ -72,7 +74,7 @@ public class EditProfileModel {
             }
 
             @Override
-            public void onFailure(Call<RegisterProfileResponse> call, Throwable t) {
+            public void onFailure(Call<StatusResponse> call, Throwable t) {
                 presenter.failedUpdateProfile();
             }
         });
@@ -80,12 +82,12 @@ public class EditProfileModel {
 
     public void updatePhotoProfile(EditProfileRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
-        Call<RegisterProfileResponse> call = svc.updatePhotoProfile(request);
-        call.enqueue(new Callback<RegisterProfileResponse>() {
+        Call<StatusResponse> call = svc.updatePhotoProfile(request);
+        call.enqueue(new Callback<StatusResponse>() {
             @Override
-            public void onResponse(Call<RegisterProfileResponse> call, Response<RegisterProfileResponse> response) {
+            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
                 if (response.isSuccessful()) {
-                    RegisterProfileResponse.RegisterProfileResponseBody data = response.body().getData();
+                    StatusResponse.StatusResponseBody data = response.body().getData();
                     if(data.getStatus().equals("success")) {
                         presenter.successUpdatePhotoProfile();
                     }else{
@@ -97,8 +99,38 @@ public class EditProfileModel {
             }
 
             @Override
-            public void onFailure(Call<RegisterProfileResponse> call, Throwable t) {
+            public void onFailure(Call<StatusResponse> call, Throwable t) {
                 presenter.failedUpdatePhotoProfile();
+            }
+        });
+    }
+
+    public void changePassword(String email, String pass) {
+        VerifyForgotRequest request = new VerifyForgotRequest(email, pass, pass);
+        ApiService svc = retrofit.create(ApiService.class);
+        Call<StatusResponse> call = svc.changePassword(request);
+        Log.e(TAG, String.valueOf(call.request().url()));
+        call.enqueue(new Callback<StatusResponse>() {
+            @Override
+            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getData().getStatus() != null) {
+                        if (response.body().getData().getStatus().toLowerCase().equals("success")) {
+                            presenter.successResetPassword();
+                        } else {
+                            presenter.failedResetPassword();
+                        }
+                    } else {
+                        presenter.failedResetPassword();
+                    }
+                } else {
+                    presenter.failedResetPassword();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StatusResponse> call, Throwable t) {
+                presenter.failedResetPassword();
             }
         });
     }

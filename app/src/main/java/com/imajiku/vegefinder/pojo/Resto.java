@@ -38,6 +38,8 @@ public class Resto implements Serializable{
     private int priceStart;
     @SerializedName("price_rate")
     private int priceRate;
+    @SerializedName("telephone")
+    private String phone;
     @SerializedName("image")
     private String image;
     @SerializedName("youtube_url")
@@ -180,6 +182,10 @@ public class Resto implements Serializable{
 
     public String getImage() {
         return image;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 
     public String getYoutubeUrl() {

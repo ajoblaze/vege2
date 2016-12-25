@@ -17,7 +17,11 @@ public interface MainView {
 
     void failedGetRecommendation();
 
-    void successGetPlaces(ArrayList<Resto> list);
+    void successGetBookmarks(ArrayList<Resto> shortList);
 
-    void failedGetPlaces();
+    void failedGetBookmarks();
+
+    void successGetBeenHere(ArrayList<Resto> data);
+
+    void failedGetBeenHere();
 }

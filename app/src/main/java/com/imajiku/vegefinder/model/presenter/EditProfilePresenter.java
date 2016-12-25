@@ -1,8 +1,6 @@
 package com.imajiku.vegefinder.model.presenter;
 
 
-import android.util.Log;
-
 import com.imajiku.vegefinder.model.model.EditProfileModel;
 import com.imajiku.vegefinder.model.request.EditProfileRequest;
 import com.imajiku.vegefinder.model.view.EditProfileView;
@@ -60,6 +58,18 @@ public class EditProfilePresenter {
 
     public void failedUpdatePhotoProfile() {
         view.failedUpdatePhotoProfile();
+    }
+
+    public void changePassword(String email, String pass) {
+        model.changePassword(email, pass);
+    }
+
+    public void successResetPassword() {
+        view.successResetPassword();
+    }
+
+    public void failedResetPassword() {
+        view.failedResetPassword();
     }
 }
 

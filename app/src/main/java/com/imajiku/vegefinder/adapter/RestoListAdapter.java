@@ -31,6 +31,7 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
     private String TAG = "exc";
     private boolean isSavedPlace;
     private boolean isBeenHere;
+    private boolean isLoadMore;
 
     public static final int NORMAL = 1;
     public static final int FOOTER = 2;
@@ -49,8 +50,12 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
      */
     public void setData(ArrayList<Resto> list, boolean isSavedPlace, boolean isBeenHere) {
         this.list = list;
+        isLoadMore = true;
         this.isSavedPlace = isSavedPlace;
         this.isBeenHere = isBeenHere;
+        if(isLoadMore) {
+            list.add(new Resto());
+        }
         notifyDataSetChanged();
     }
 
@@ -117,7 +122,7 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
                         .centerCrop()
                         .into(holder.image);
             }
-            holder.name.setText(r.getTitle());
+            holder.name.setText(r.getMetaTitle());
             holder.distance.setText(r.getDistance() + " ");
             holder.price.setText(" Rp " + r.getPriceStart());
             holder.rating.setText(r.getAverageRate());

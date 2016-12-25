@@ -41,7 +41,7 @@ public class AddReviewActivity extends AppCompatActivity implements View.OnClick
         initToolbar(getResources().getString(R.string.title_add_review));
 
         restoId = getIntent().getIntExtra("placeId", -1);
-        userId = CurrentUser.getId();
+        userId = CurrentUser.getId(this);
 //        if(restoId == -1 || userId == -1){
 //            throw new RuntimeException("send userid and placeid");
 //        }

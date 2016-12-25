@@ -135,7 +135,7 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_book:
                 presenter.book(
-                        CurrentUser.getId(),
+                        CurrentUser.getId(this),
                         placeId,
                         date.getText().toString(),
                         time.getText().toString(),

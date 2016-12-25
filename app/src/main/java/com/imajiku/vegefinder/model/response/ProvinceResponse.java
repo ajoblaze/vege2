@@ -48,6 +48,15 @@ public class ProvinceResponse {
             Log.e("excP", "getProvinceId: "+province);
             return -1;
         }
+
+        public String getProvinceName(int provinceId) {
+            for (Province p : getProvinces()) {
+                if (p.getId() == provinceId) {
+                    return p.getProvince();
+                }
+            }
+            return null;
+        }
     }
 
     public class Province {

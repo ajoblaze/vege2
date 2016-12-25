@@ -21,17 +21,33 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            fab:fab_colorNormal="@color/accentGreenBtn"
+            fab:fab_colorPressed="@color/accentGreenBg75"
+            fab:fab_colorRipple="@color/accentGreenBg50"
+            android:src="@drawable/ic_photo_white_24dp_m" />
+
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             fab:fab_colorNormal="@color/accentGreenBtn"
             fab:fab_colorPressed="@color/accentGreenBg75"
             fab:fab_colorRipple="@color/accentGreenBg50"
             android:src="@drawable/ic_camera_alt_white_24dp_m" />
+        </LinearLayout>
     </RelativeLayout>
 
     <TextView

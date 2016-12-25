@@ -73,16 +73,22 @@ public class NewsListActivity extends AppCompatActivity implements
         sortLinearLayout.setOnClickListener(this);
         sortButtonLayout = new LinearLayout[SORT_BUTTON_QTY];
         sortSelected = new boolean[]{false, false, false, false};
+        sort.setTypeface(tf);
 
         //sort
         sortButtonLayout[0] = (LinearLayout) findViewById(R.id.sort_alpha_ll);
         sortButtonLayout[1] = (LinearLayout) findViewById(R.id.sort_date_ll);
         orderGroup = (RadioGroup) findViewById(R.id.sort_order);
         submitSort = (TextView) findViewById(R.id.submit_sort);
+        for(int i=0;i<orderGroup.getChildCount();i++){
+            ((RadioButton) orderGroup.getChildAt(i)).setTypeface(tf);
+        }
+        submitSort.setTypeface(tf);
 
         //sort
         for (int i = 0; i < SORT_BUTTON_QTY; i++) {
             sortButtonLayout[i].setOnClickListener(this);
+            ((TextView) sortButtonLayout[i].getChildAt(1)).setTypeface(tf);
         }
         submitSort.setOnClickListener(this);
     }

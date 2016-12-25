@@ -39,6 +39,7 @@ import com.imajiku.vegefinder.fragment.PlacesFragment;
 import com.imajiku.vegefinder.fragment.RecommendFragment;
 import com.imajiku.vegefinder.model.model.MainModel;
 import com.imajiku.vegefinder.model.presenter.MainPresenter;
+import com.imajiku.vegefinder.model.request.SortFilterRequest;
 import com.imajiku.vegefinder.model.view.MainView;
 import com.imajiku.vegefinder.pojo.News;
 import com.imajiku.vegefinder.pojo.Resto;
@@ -92,14 +93,15 @@ public class MainActivity extends AppCompatActivity
         presenter.setModel(model);
 
         isLogin = getIntent().getBooleanExtra("isLogin", false);
+        Log.e(TAG, ""+isLogin);
         if(isLogin){
             loginMethod = getIntent().getStringExtra("loginMethod");
-            int userId = CurrentUser.getId();
-            presenter.getPlaces(); // dummy method
-//            presenter.getBookmarks(userId);
+            int userId = CurrentUser.getId(this);
+            presenter.getBookmarks(new SortFilterRequest(userId));
+//            presenter.getSortFilterList(userId);
 //            presenter.getBeenHere(userId, "asc");
         }else{
-            CurrentUser.setId(-1);
+            CurrentUser.setId(this, -1);
         }
         presenter.getNews();
 
@@ -316,7 +318,7 @@ public class MainActivity extends AppCompatActivity
         int size = min(list.size(), PREVIEW_MAX_QTY);
         for(int i=0;i<size;i++){
             Resto r = list.get(i);
-            recommendPreviewList.add(new RestoPreview(r.getId(), r.getImage(), r.getTitle(), r.getCityId()+""));
+            recommendPreviewList.add(new RestoPreview(r.getId(), r.getImage(), r.getMetaTitle(), r.getCityId()+""));
         }
         recommendFragment.setData(recommendPreviewList);
         if(isLocationEnabled(this)){
@@ -330,20 +332,30 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void successGetPlaces(ArrayList<Resto> list) {
+    public void successGetBookmarks(ArrayList<Resto> list) {
         placesList = list;
         ArrayList<RestoPreview> placesPreviewList = new ArrayList<>();
         int size = min(list.size(), PREVIEW_MAX_QTY);
         for(int i=0;i<size;i++){
             Resto r = list.get(i);
-            placesPreviewList.add(new RestoPreview(r.getId(), r.getImage(), r.getTitle(), r.getCityId()+""));
+            placesPreviewList.add(new RestoPreview(r.getId(), r.getImage(), r.getMetaTitle(), r.getCityId()+""));
         }
         placesFragment.setData(placesPreviewList);
     }
 
     @Override
-    public void failedGetPlaces() {
-        Log.e(TAG, "failedGetPlaces");
+    public void failedGetBookmarks() {
+        Log.e(TAG, "failedGetBookmarks");
+    }
+
+    @Override
+    public void successGetBeenHere(ArrayList<Resto> data) {
+
+    }
+
+    @Override
+    public void failedGetBeenHere() {
+
     }
 
     private void updateLocation() {

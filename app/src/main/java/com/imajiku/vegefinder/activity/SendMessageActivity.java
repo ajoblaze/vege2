@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.model.model.MessageModel;
@@ -18,7 +19,7 @@ import com.imajiku.vegefinder.model.presenter.MessagePresenter;
 import com.imajiku.vegefinder.model.view.MessageView;
 import com.imajiku.vegefinder.utility.CurrentUser;
 
-public class SendReportActivity extends AppCompatActivity implements View.OnClickListener, MessageView {
+public class SendMessageActivity extends AppCompatActivity implements View.OnClickListener, MessageView {
 
     public static final int REPORT = 21;
     public static final int FEEDBACK = 22;
@@ -38,11 +39,8 @@ public class SendReportActivity extends AppCompatActivity implements View.OnClic
         initToolbar(getResources().getString(R.string.title_report));
 
         restoId = getIntent().getIntExtra("placeId", -1);
-        userId = CurrentUser.getId();
+        userId = CurrentUser.getId(this);
         type = getIntent().getIntExtra("type", -1);
-//        if(restoId == -1 || userId == -1){
-//            throw new RuntimeException("send userid and placeid");
-//        }
 
         presenter = new MessagePresenter(this);
         MessageModel model = new MessageModel(presenter);
@@ -77,6 +75,11 @@ public class SendReportActivity extends AppCompatActivity implements View.OnClic
         hideKeyboard();
         switch (view.getId()) {
             case R.id.submit:
+                if(type == FEEDBACK) {
+                    presenter.sendFeedback(userId, subject.getText().toString(), message.getText().toString());
+                }else if(type == REPORT) {
+                    presenter.sendReport(userId, restoId, subject.getText().toString(), message.getText().toString());
+                }
                 break;
         }
     }
@@ -107,7 +110,8 @@ public class SendReportActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void successSendReport() {
-
+        Toast.makeText(SendMessageActivity.this, "Sent successfully", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override

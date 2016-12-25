@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/selectedGray"
-    tools:context=".activity.RestoListActivity">
+    tools:context=".activity.NewsListActivity">
 
     <include
         android:id="@+id/app_bar"

@@ -2,9 +2,9 @@ package com.imajiku.vegefinder.model.presenter;
 
 
 import android.location.Location;
-import android.util.Log;
 
 import com.imajiku.vegefinder.model.model.RestoListModel;
+import com.imajiku.vegefinder.model.request.SortFilterRequest;
 import com.imajiku.vegefinder.model.view.RestoListView;
 import com.imajiku.vegefinder.pojo.Resto;
 
@@ -29,8 +29,8 @@ public class RestoListPresenter {
         this.model = model;
     }
 
-    public void findByRegion(int provinceId, int cityId){
-        model.findByRegion(provinceId, cityId);
+    public void findByRegion(int countryId, int provinceId, int cityId){
+        model.findByRegion(countryId, provinceId, cityId);
     }
 
     public void findByKeyword(String keyword){
@@ -94,11 +94,15 @@ public class RestoListPresenter {
     }
 
     public void successGetRecommendation(ArrayList<Resto> list) {
-        ArrayList<Resto> shortList = new ArrayList<>();
-        for (int i=0;i<20;i++){
-            shortList.add(list.get(i));
+        if(list.size() > 20) {
+            ArrayList<Resto> shortList = new ArrayList<>();
+            for (int i = 0; i < 20; i++) {
+                shortList.add(list.get(i));
+            }
+            view.successBrowseNearby(shortList);
+        }else {
+            view.successBrowseNearby(list);
         }
-        view.successBrowseNearby(shortList);
     }
 
     public void failedGetRecommendation() {
@@ -127,6 +131,26 @@ public class RestoListPresenter {
 
     public void failedChangeBeenHere(String message) {
         view.failedChangeBeenHere(message);
+    }
+
+    public void getSortFilterList(String type, SortFilterRequest request) {
+        model.getSortFilterList(type, request);
+    }
+
+    public void successGetSortFilterList(ArrayList<Resto> list) {
+        if(list.size() > 20) {
+            ArrayList<Resto> shortList = new ArrayList<>();
+            for (int i = 0; i < 20; i++) {
+                shortList.add(list.get(i));
+            }
+            view.successGetSortFilterList(shortList);
+        }else {
+            view.successGetSortFilterList(list);
+        }
+    }
+
+    public void failedGetSortFilterList(String type) {
+        view.failedGetSortFilterList(type);
     }
 }
 

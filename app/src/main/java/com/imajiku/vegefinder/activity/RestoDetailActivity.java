@@ -21,6 +21,7 @@ import com.imajiku.vegefinder.model.model.RestoDetailModel;
 import com.imajiku.vegefinder.model.presenter.RestoDetailPresenter;
 import com.imajiku.vegefinder.model.view.RestoDetailView;
 import com.imajiku.vegefinder.pojo.RestoDetail;
+import com.imajiku.vegefinder.pojo.RestoFacility;
 import com.imajiku.vegefinder.pojo.RestoImage;
 import com.imajiku.vegefinder.pojo.RestoMenu;
 import com.imajiku.vegefinder.pojo.Review;
@@ -63,7 +64,7 @@ public class RestoDetailActivity extends AppCompatActivity
 
         restoDetail = null;
         restoId = getIntent().getIntExtra("placeId", -1);
-        userId = CurrentUser.getId();
+        userId = CurrentUser.getId(this);
         banner = (ImageView) findViewById(R.id.resto_img);
         rate = (TextView) findViewById(R.id.rating);
         guest = (TextView) findViewById(R.id.guest);
@@ -75,8 +76,8 @@ public class RestoDetailActivity extends AppCompatActivity
         buttonHead[0] = (Button) findViewById(R.id.btn_bookmark);
         buttonHead[1] = (Button) findViewById(R.id.btn_been_here);
         buttonHead[2] = (Button) findViewById(R.id.btn_book);
-        buttonHead[3] = (Button) findViewById(R.id.btn_call);
-        buttonHead[4] = (Button) findViewById(R.id.btn_check_in);
+        buttonHead[3] = (Button) findViewById(R.id.btn_check_in);
+        buttonHead[4] = (Button) findViewById(R.id.btn_call);
         restoContentTitle[0] = (TextView) findViewById(R.id.title_1);
         restoContentTitle[1] = (TextView) findViewById(R.id.title_2);
         restoContentTitle[2] = (TextView) findViewById(R.id.title_3);
@@ -143,12 +144,14 @@ public class RestoDetailActivity extends AppCompatActivity
         switch (view.getId()) {
             case R.id.btn_bookmark: {
                 int idx = 0;
+                Log.e(TAG, String.valueOf(buttonStatus[idx]));
                 // TODO: spinner
                 presenter.changeBookmark(userId, restoId, buttonStatus[idx]);
             }
             break;
             case R.id.btn_been_here: {
                 int idx = 1;
+                Log.e(TAG, String.valueOf(buttonStatus[idx]));
                 // TODO: spinner
                 presenter.changeBeenHere(userId, restoId, !buttonStatus[idx]);
             }
@@ -163,8 +166,6 @@ public class RestoDetailActivity extends AppCompatActivity
             case R.id.btn_call:
                 i = new Intent(RestoDetailActivity.this, CallActivity.class);
                 i.putExtra("placeId", restoDetail.getId());
-                i.putExtra("title", restoDetail.getTitle());
-                i.putExtra("image", restoDetail.getImage());
                 startActivity(i);
                 break;
             case R.id.btn_check_in:
@@ -194,15 +195,16 @@ public class RestoDetailActivity extends AppCompatActivity
                 startActivityForResult(i, 1);
                 break;
             case R.id.btn_report:
-                i = new Intent(RestoDetailActivity.this, SendReportActivity.class);
+                i = new Intent(RestoDetailActivity.this, SendMessageActivity.class);
                 i.putExtra("placeId", restoId);
+                i.putExtra("type", SendMessageActivity.REPORT);
                 startActivity(i);
                 break;
         }
     }
 
     private boolean isLoggedIn(boolean toast){
-        if(CurrentUser.getId() <= -1){
+        if(CurrentUser.getId(this) <= -1){
             if(toast) {
                 Toast.makeText(RestoDetailActivity.this, "You have to be logged in to use", Toast.LENGTH_SHORT).show();
             }
@@ -254,9 +256,9 @@ public class RestoDetailActivity extends AppCompatActivity
         reportProblem.setOnClickListener(this);
 
         restoDetail = data;
-        if (restoDetail.getRestoImg().size() == 0) {
-            photoLayout.setVisibility(View.GONE);
-        }
+//        if (restoDetail.getRestoImg().size() == 0) {
+//            photoLayout.setVisibility(View.GONE);
+//        }
 //        reviewLayout.setVisibility(View.GONE);
 
         // load data
@@ -319,6 +321,21 @@ public class RestoDetailActivity extends AppCompatActivity
         boolean facility = false;
 
         for (int i = 2; i < 6; i++) {
+            if (!facility && data.getRestoFacility() != null) {
+                facility = true;
+                restoContentTitle[i].setText("FACILITIES");
+                builder = new StringBuilder();
+                int idx = 0;
+                for (RestoFacility f : data.getRestoFacility()) {
+                    builder.append(f.getTitle());
+                    if (idx < data.getRestoFacility().size() - 1) {
+                        builder.append("\n");
+                    }
+                    idx++;
+                }
+                restoContent[i].setText(builder.toString());
+                continue;
+            }
             if (!menu && data.getRestoMenu() != null) {
                 menu = true;
                 restoContentTitle[i].setText("POPULAR MENU");
@@ -332,6 +349,7 @@ public class RestoDetailActivity extends AppCompatActivity
                     idx++;
                 }
                 restoContent[i].setText(builder.toString());
+                continue;
             }
 //            if (!facility && data.getResto().getWifi() != 0 && data.getResto().getDelivery() != 0){
 //                facility = true;

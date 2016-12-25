@@ -18,7 +18,6 @@ public class RestoPreview {
     }
 
     public RestoPreview(int id, String image, String title, String city) {
-
         this.id = id;
         this.image = image;
         this.title = title;

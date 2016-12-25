@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.imajiku.vegefinder.model.presenter.MainPresenter;
 import com.imajiku.vegefinder.model.request.FindKeywordRequest;
+import com.imajiku.vegefinder.model.request.SortFilterRequest;
 import com.imajiku.vegefinder.model.request.ToggleRequest;
 import com.imajiku.vegefinder.model.response.RestoListResponse;
 import com.imajiku.vegefinder.model.response.NewsResponse;
@@ -47,73 +48,13 @@ public class MainModel {
                         presenter.failedGetNews();
                     }
                 } else {
-//                    try {
-//                        if(response.code()==500){
-//                            mIAccountView.showToast("Internal server error. Please try again later.");
-//                        }else {
-//                            String error = response.errorBody().string();
-//                            mIAccountView.showToast(getResponseErrorStatus(error));
-//                        }
-//                        mIAccountView.failedMain();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
+                    presenter.failedGetNews();
                 }
             }
 
             @Override
             public void onFailure(Call<NewsResponse> call, Throwable t) {
-//                mIAccountView.showToast("Main failed. Please check your connection.");
-//                mIAccountView.failedMain();
-            }
-        });
-    }
-
-    public void getRecommendation() {
-        findPlaceKeyword("a", true);
-    }
-
-    public void getPlaces() {
-        findPlaceKeyword("i", false);
-    }
-
-    public void findPlaceKeyword(String keyword, final boolean x) {
-        FindKeywordRequest request = new FindKeywordRequest(keyword);
-        ApiService svc = retrofit.create(ApiService.class);
-        Call<RestoListResponse> call = svc.findKeyword(request);
-        call.enqueue(new Callback<RestoListResponse>() {
-            @Override
-            public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
-                if (response.isSuccessful()) {
-                    ArrayList<Resto> data = response.body().getData();
-                    if(x)
-                        presenter.successGetRecommendation(data);
-                    else
-                        presenter.successGetPlaces(data);
-//                    FindPlaceView.successFind(response.body().getSessionId());
-                } else {
-//                    try {
-//                        if(response.code()==500){
-//                            mIAccountView.showToast("Internal server error. Please try again later.");
-//                        }else {
-//                            String error = response.errorBody().string();
-//                            mIAccountView.showToast(getResponseErrorStatus(error));
-//                        }
-//                        mIAccountView.failedFindPlace();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RestoListResponse> call, Throwable t) {
-//                mIAccountView.showToast("FindPlace failed. Please check your connection.");
-                if(x)
-                    presenter.failedGetRecommendation();
-                else
-                    presenter.failedGetPlaces();
-
+                presenter.failedGetNews();
             }
         });
     }
@@ -141,8 +82,7 @@ public class MainModel {
         });
     }
 
-    public void getBookmarks(int userId) {
-        ToggleRequest request = new ToggleRequest(userId);
+    public void getBookmarks(SortFilterRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.getBookmarks(request);
         Log.e(TAG, String.valueOf(call.request().url()));
@@ -151,7 +91,7 @@ public class MainModel {
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
                 if (response.isSuccessful()) {
                     ArrayList<Resto> data = response.body().getData();
-                    presenter.successGetBookmarks();
+                    presenter.successGetBookmarks(data);
                 } else {
                     presenter.failedGetBookmarks();
                 }
@@ -164,16 +104,16 @@ public class MainModel {
         });
     }
 
-    public void getBeenHere(int userId, String order) {
+    public void getBeenHere(SortFilterRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
-        Call<RestoListResponse> call = svc.getBeenHere(userId, order);
+        Call<RestoListResponse> call = svc.getBeenHere(request);
         Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
                 if (response.isSuccessful()) {
                     ArrayList<Resto> data = response.body().getData();
-                    presenter.successGetBeenHere();
+                    presenter.successGetBeenHere(data);
                 } else {
                     presenter.failedGetBeenHere();
                 }

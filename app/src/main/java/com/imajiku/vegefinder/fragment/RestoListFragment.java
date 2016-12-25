@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -219,6 +220,7 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
 
         @Override
         protected ArrayList<Resto> doInBackground(Void... params) {
+            Log.e(TAG, "sortedList null = "+(sortedList==null));
             Collections.sort(sortedList, new Comparator<Resto>() {
                 @Override
                 public int compare(Resto r1, Resto r2) {

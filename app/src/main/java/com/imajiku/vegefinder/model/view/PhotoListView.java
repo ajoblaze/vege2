@@ -9,4 +9,8 @@ public interface PhotoListView {
     void successGetRestoImages(ArrayList<String> list, String title);
 
     void failedGetRestoImages();
+
+    void successAddPhoto(String message);
+
+    void failedAddPhoto(String message);
 }

@@ -45,6 +45,15 @@ public class CityResponse {
             }
             return -1;
         }
+
+        public String getCityName(int cityId) {
+            for (City p : getCities()) {
+                if (p.getId() == cityId) {
+                    return p.getCity();
+                }
+            }
+            return null;
+        }
     }
 
     public class City {

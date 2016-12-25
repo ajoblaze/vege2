@@ -26,7 +26,7 @@ public class LoginModel {
         retrofit = Utility.buildRetrofit();
     }
 
-    public void login(String email, String password) {
+    public void login(String email, final String password) {
         LoginRequest request = new LoginRequest(email, password);
         ApiService svc = retrofit.create(ApiService.class);
         Call<LoginResponse> call = svc.login(request);
@@ -35,9 +35,10 @@ public class LoginModel {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
                     Log.e("exc", response.raw().toString());
-                    if (response.body().getData().getStatus() != null) {
-                        if (response.body().getData().getStatus().toLowerCase().equals("success")) {
-                            presenter.successLogin(response.body().getData().getUserId());
+                    LoginResponse.LoginResponseBody data = response.body().getData();
+                    if (data != null) {
+                        if (data.getStatus().toLowerCase().equals("success")) {
+                            presenter.successLogin(data.getUserId(), password);
                         }else{
                             presenter.failedLogin();
                         }

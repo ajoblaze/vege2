@@ -28,7 +28,7 @@ public class ReviewListActivity extends AppCompatActivity implements ReviewListV
         setContentView(R.layout.activity_review_list);
 
         restoId = getIntent().getIntExtra("placeId", -1);
-        userId = CurrentUser.getId();
+        userId = CurrentUser.getId(this);
 //        if(restoId == -1 || userId == -1){
 //            throw new RuntimeException("send userid and placeid");
 //        }

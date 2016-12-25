@@ -2,8 +2,13 @@
     <string name="app_name">VegeFinder</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="facebook_app_id">910588845712421</string>
+    <!--<string name="facebook_app_id">910588845712421</string>-->
+    <string name="facebook_app_id">1727680564210294</string>
     <string name="google_maps_api_key">AIzaSyARP9mnW6i9FamSaTXyrwp_nxK2I88C1Oo</string>
+    <string name="twitter_api_key">zo1q8ILVfcGzQXVSJruxLpn6o</string>
+    <string name="twitter_secret_key">5hYGWmKvXHZZt3Wvpbo05rvQ8c5dDHXnbIonSMYK8TAhdIS4Yo</string>
+    <string name="twitter_access_token_key">70347771-5dgtxyepLGNECGQXl0fy2Veu9cK8eRxyNP9NxoXDC</string>
+    <string name="twitter_access_secret_key">8GF6MaquWxPo5kMuA52ocY2Oc42rej3Da2l9SvsvulAzz</string>
 
     <!--title strings-->
     <string name="title_profile">Your Profile</string>
@@ -56,8 +61,10 @@
     <string name="find_specific_place">Find Specific Place</string>
     <string name="browse_nearby_places">Browse Nearby Places</string>
     <string name="my_account">My Account</string>
-    <string name="keyword_hint">Name [optional]</string>
+    <string name="keyword_hint">Keyword</string>
     <string name="find_now">Find Now</string>
+    <string name="find_region">Find Region</string>
+    <string name="find_keyword">Find Keyword</string>
     <string name="filter">Filter</string>
     <string name="sort">Sort</string>
     <string name="select_all">Select All</string>
@@ -66,6 +73,7 @@
     <string name="rated_8">Rated 8+</string>
     <string name="bookmarked">Bookmarked</string>
     <string name="vegan">Vegan</string>
+    <string name="vegeready">Vegeready</string>
     <string name="been_here">Been Here</string>
     <string name="vegetarian">Vegetarian</string>
     <string name="show_result">Show Result</string>
@@ -94,7 +102,7 @@
     <string name="check_in_twitter">Share on Twitter</string>
     <string name="check_in_status">What\'s good here?</string>
     <string name="directions">Directions</string>
-    <string name="btn_gallery">Choose from Gallery</string>
+    <string name="btn_gallery">Upload Photo</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="add_review_label">Tap to rate</string>
     <string name="review_hint">Write your review, min 140 character (optional)</string>

@@ -60,12 +60,12 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
         hideKeyboard();
         switch (v.getId()) {
             case R.id.reset_btn:
+//                successForgot();
                 String emailContent = email.getText().toString();
                 if (emailContent.length() == 0) {
                     Toast.makeText(ForgotActivity.this, "Please insert email or username", Toast.LENGTH_SHORT).show();
                 } else {
-                    successForgot();
-//                    presenter.forget(emailContent);
+                    presenter.forget(emailContent);
                 }
                 break;
             case R.id.register:

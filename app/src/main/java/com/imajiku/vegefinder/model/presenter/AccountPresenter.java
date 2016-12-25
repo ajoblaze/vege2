@@ -5,8 +5,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.imajiku.vegefinder.model.model.AccountModel;
+import com.imajiku.vegefinder.model.request.SortFilterRequest;
 import com.imajiku.vegefinder.model.view.AccountView;
+import com.imajiku.vegefinder.pojo.Resto;
 import com.imajiku.vegefinder.pojo.UserProfile;
+import com.imajiku.vegefinder.utility.CurrentUser;
+
+import java.util.ArrayList;
 
 /**
  * Created by Alvin on 2016-10-08.
@@ -43,11 +48,7 @@ public class AccountPresenter {
     }
 
     public void logout() {
-        SharedPreferences preferences = getContext().getSharedPreferences(LOGIN_PREF, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.remove(LOGIN_KEY);
-        editor.remove(USER_ID_KEY);
-        editor.apply();
+        CurrentUser.logout(getContext());
         model.logout();
     }
 
@@ -61,6 +62,30 @@ public class AccountPresenter {
 
     private Context getContext(){
         return (Context) view;
+    }
+
+    public void getBookmarks(SortFilterRequest request) {
+        model.getBookmarks(request);
+    }
+
+    public void successGetBookmarks(ArrayList<Resto> list) {
+        view.successGetBookmarks(list);
+    }
+
+    public void failedGetBookmarks() {
+        view.failedGetBookmarks();
+    }
+
+    public void getBeenHere(SortFilterRequest request) {
+        model.getBeenHere(request);
+    }
+
+    public void successGetBeenHere(ArrayList<Resto> data) {
+        view.successGetBeenHere(data);
+    }
+
+    public void failedGetBeenHere() {
+        view.failedGetBeenHere();
     }
 }
 

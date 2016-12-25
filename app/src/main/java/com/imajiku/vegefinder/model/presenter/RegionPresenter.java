@@ -107,5 +107,27 @@ public class RegionPresenter {
         }
         return cityResponse.getData().getCityId(city);
     }
+
+
+    public String getCountryName(int countryId) {
+        if(countryResponse == null){
+            return null;
+        }
+        return countryResponse.getData().getCountryName(countryId);
+    }
+
+    public String getProvinceName(int provinceId) {
+        if(provinceResponse == null){
+            return null;
+        }
+        return provinceResponse.getData().getProvinceName(provinceId);
+    }
+
+    public String getCityName(int cityId) {
+        if(cityResponse == null){
+            return null;
+        }
+        return cityResponse.getData().getCityName(cityId);
+    }
 }
 

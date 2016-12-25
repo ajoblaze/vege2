@@ -42,6 +42,15 @@ public class CountryResponse {
             return -1;
         }
 
+        public String getCountryName(int countryId) {
+            for (Country p : getCountries()) {
+                if (p.getId() == countryId) {
+                    return p.getCountry();
+                }
+            }
+            return null;
+        }
+
         public String getStatus() {
             return status;
         }

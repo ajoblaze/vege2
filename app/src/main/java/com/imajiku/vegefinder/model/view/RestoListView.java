@@ -25,4 +25,8 @@ public interface RestoListView {
     void successChangeBeenHere(int placeId);
 
     void failedChangeBeenHere(String message);
+
+    void successGetSortFilterList(ArrayList<Resto> list);
+
+    void failedGetSortFilterList(String type);
 }

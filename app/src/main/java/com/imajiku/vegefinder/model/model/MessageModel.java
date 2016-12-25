@@ -4,8 +4,12 @@ import android.util.Log;
 
 import com.imajiku.vegefinder.model.presenter.MessagePresenter;
 import com.imajiku.vegefinder.model.request.ContactUsRequest;
+import com.imajiku.vegefinder.model.request.FeedbackRequest;
+import com.imajiku.vegefinder.model.request.ReportRequest;
 import com.imajiku.vegefinder.model.request.ReviewRequest;
-import com.imajiku.vegefinder.model.response.ContactUsResponse;
+import com.imajiku.vegefinder.model.response.StatusMessageResponse;
+import com.imajiku.vegefinder.model.response.FeedbackResponse;
+import com.imajiku.vegefinder.model.response.ReportResponse;
 import com.imajiku.vegefinder.model.response.ReviewResponse;
 import com.imajiku.vegefinder.service.ApiService;
 import com.imajiku.vegefinder.utility.Utility;
@@ -20,6 +24,7 @@ import retrofit2.Retrofit;
  */
 public class MessageModel {
 
+    private static final String TAG = "exc";
     private MessagePresenter presenter;
     private Retrofit retrofit;
 
@@ -31,10 +36,10 @@ public class MessageModel {
     public void sendContactUs(String name, String email, String phone, String subject, String message) {
         ContactUsRequest request = new ContactUsRequest(name, email, phone, subject, message);
         ApiService svc = retrofit.create(ApiService.class);
-        Call<ContactUsResponse> call = svc.sendContactUs(request);
-        call.enqueue(new Callback<ContactUsResponse>() {
+        Call<StatusMessageResponse> call = svc.sendContactUs(request);
+        call.enqueue(new Callback<StatusMessageResponse>() {
             @Override
-            public void onResponse(Call<ContactUsResponse> call, Response<ContactUsResponse> response) {
+            public void onResponse(Call<StatusMessageResponse> call, Response<StatusMessageResponse> response) {
                 if (response.isSuccessful()) {
                     presenter.successSendContactUs(response.body().getData().getMessage());
                 } else {
@@ -43,7 +48,7 @@ public class MessageModel {
             }
 
             @Override
-            public void onFailure(Call<ContactUsResponse> call, Throwable t) {
+            public void onFailure(Call<StatusMessageResponse> call, Throwable t) {
                 presenter.failedSendContactUs("failed");
             }
         });
@@ -76,27 +81,53 @@ public class MessageModel {
         });
     }
 
-//    public void sendReport(int userId, int restoId, int rate, String title, String comment) {
-//        ReportRequest request = new ReportRequest(userId, restoId,  rate, title, comment);
-//        ApiService svc = retrofit.create(ApiService.class);
-//        Call<ReportResponse> call = svc.sendReport(request);
-//        call.enqueue(new Callback<ReportResponse>() {
-//            @Override
-//            public void onResponse(Call<ReportResponse> call, Response<ReportResponse> response) {
-//                if (response.isSuccessful()) {
-//                    ReportResponse.ReportResponseBody data = response.body().getData();
-//                    if(data.getStatus().equals("1")) {
-//                        presenter.successSendReport(data.getMessage());
-//                    }
-//                } else {
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ReportResponse> call, Throwable t) {
-//
-//            }
-//        });
-//    }
+    public void sendFeedback(int userId, String subject, String comment) {
+        FeedbackRequest request = new FeedbackRequest(userId, subject, comment);
+        ApiService svc = retrofit.create(ApiService.class);
+        Call<FeedbackResponse> call = svc.sendFeedback(request);
+        Log.e(TAG, String.valueOf(call.request().url()));
+        call.enqueue(new Callback<FeedbackResponse>() {
+            @Override
+            public void onResponse(Call<FeedbackResponse> call, Response<FeedbackResponse> response) {
+                if (response.isSuccessful()) {
+                    FeedbackResponse.FeedbackResponseBody data = response.body().getData();
+                    if (data.getStatus().equals("1")) {
+                        presenter.successSendFeedback(data.getMessage());
+                    }
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FeedbackResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void sendReport(int userId, int restoId, String subject, String comment) {
+        ReportRequest request = new ReportRequest(userId, restoId, subject, comment);
+        ApiService svc = retrofit.create(ApiService.class);
+        Call<ReportResponse> call = svc.sendReport(request);
+        Log.e(TAG, String.valueOf(call.request().url()));
+        call.enqueue(new Callback<ReportResponse>() {
+            @Override
+            public void onResponse(Call<ReportResponse> call, Response<ReportResponse> response) {
+                if (response.isSuccessful()) {
+                    ReportResponse.ReportResponseBody data = response.body().getData();
+                    if(data.getStatus().equals("1")) {
+                        presenter.successSendReport(data.getMessage());
+                    }
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReportResponse> call, Throwable t) {
+
+            }
+        });
+    }
 }

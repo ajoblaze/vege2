@@ -58,6 +58,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         hideKeyboard();
         switch (v.getId()) {
             case R.id.regis_button:
+//                successRegister(64);
                 validate();
                 break;
         }
@@ -75,12 +76,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }else if(!confirmPass.getText().toString().equals(confirmPass.getText().toString())){
             toast("Password confirmation incorrect");
         }else{
-            successRegister(64);
-//            presenter.register(
-//                    username.getText().toString(),
-//                    email.getText().toString(),
-//                    pass.getText().toString()
-//            );
+            presenter.register(
+                    username.getText().toString(),
+                    email.getText().toString(),
+                    pass.getText().toString()
+            );
         }
     }
 
