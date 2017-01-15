@@ -37,28 +37,30 @@ public class MessageModel {
         ContactUsRequest request = new ContactUsRequest(name, email, phone, subject, message);
         ApiService svc = retrofit.create(ApiService.class);
         Call<StatusMessageResponse> call = svc.sendContactUs(request);
+        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<StatusMessageResponse>() {
             @Override
             public void onResponse(Call<StatusMessageResponse> call, Response<StatusMessageResponse> response) {
                 if (response.isSuccessful()) {
                     presenter.successSendContactUs(response.body().getData().getMessage());
                 } else {
-                    presenter.failedSendContactUs("failed");
+                    presenter.failedSendContactUs("Failed sending contact us");
                 }
             }
 
             @Override
             public void onFailure(Call<StatusMessageResponse> call, Throwable t) {
-                presenter.failedSendContactUs("failed");
+                presenter.failedSendContactUs("Failed sending contact us");
             }
         });
     }
 
-    public void sendReview(int userId, int restoId, int rate, String title, String comment) {
+    public void sendReview(int userId, int restoId, String rate, String title, String comment) {
         Log.e("exc", "userId "+userId+" restoId"+restoId+" rate"+rate+" title"+title+" comment"+comment);
-        ReviewRequest request = new ReviewRequest(userId, restoId,  rate, title, comment);
+        ReviewRequest request = new ReviewRequest(userId, restoId, rate, title, comment);
         ApiService svc = retrofit.create(ApiService.class);
         Call<ReviewResponse> call = svc.sendReview(request);
+        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<ReviewResponse>() {
             @Override
             public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
@@ -67,16 +69,16 @@ public class MessageModel {
                     if(data.getStatus().equals("1")) {
                         presenter.successSendReview(data.getMessage());
                     }else{
-                        presenter.failedSendReview("failed");
+                        presenter.failedSendReview("Failed adding review");
                     }
                 } else {
-                    presenter.failedSendReview("failed");
+                    presenter.failedSendReview("Failed adding review");
                 }
             }
 
             @Override
             public void onFailure(Call<ReviewResponse> call, Throwable t) {
-                presenter.failedSendReview("failed");
+                presenter.failedSendReview("Failed adding review");
             }
         });
     }
@@ -92,16 +94,18 @@ public class MessageModel {
                 if (response.isSuccessful()) {
                     FeedbackResponse.FeedbackResponseBody data = response.body().getData();
                     if (data.getStatus().equals("1")) {
-                        presenter.successSendFeedback(data.getMessage());
+                        presenter.successSendReport(data.getMessage());
+                    }else{
+                        presenter.failedSendReport("Failed sending feedback");
                     }
                 } else {
-
+                    presenter.failedSendReport("Failed sending feedback");
                 }
             }
 
             @Override
             public void onFailure(Call<FeedbackResponse> call, Throwable t) {
-
+                presenter.failedSendReport("Failed sending feedback");
             }
         });
     }
@@ -118,15 +122,17 @@ public class MessageModel {
                     ReportResponse.ReportResponseBody data = response.body().getData();
                     if(data.getStatus().equals("1")) {
                         presenter.successSendReport(data.getMessage());
+                    }else{
+                        presenter.failedSendReport("Failed sending report");
                     }
                 } else {
-
+                    presenter.failedSendReport("Failed sending report");
                 }
             }
 
             @Override
             public void onFailure(Call<ReportResponse> call, Throwable t) {
-
+                presenter.failedSendReport("Failed sending report");
             }
         });
     }

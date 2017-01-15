@@ -3,6 +3,7 @@ package com.imajiku.vegefinder.model.presenter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.imajiku.vegefinder.model.model.AccountModel;
 import com.imajiku.vegefinder.model.request.SortFilterRequest;

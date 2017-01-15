@@ -62,6 +62,7 @@ public class RecommendFragment extends Fragment implements PreviewListAdapter.Pr
         }
 //        populate();
         adapter = new PreviewListAdapter(getContext(), this, false);
+        adapter.setImageSize(120, 90);
         adapter.setTypeface(tf);
 //        adapter.setData(list);
         recyclerView.setAdapter(adapter);

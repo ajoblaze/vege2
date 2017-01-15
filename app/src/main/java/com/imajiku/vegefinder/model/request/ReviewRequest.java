@@ -11,13 +11,13 @@ public class ReviewRequest {
     @SerializedName("place_id")
     private int placeId;
     @SerializedName("rate")
-    private int rate;
+    private String rate;
     @SerializedName("title")
     private String title;
     @SerializedName("comment")
     private String comment;
 
-    public ReviewRequest(int userId, int placeId, int rate, String title, String comment) {
+    public ReviewRequest(int userId, int placeId, String rate, String title, String comment) {
         this.userId = userId;
         this.placeId = placeId;
         this.rate = rate;

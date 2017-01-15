@@ -78,7 +78,7 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
     @Override
     public void goToDetail(Resto r) {
         Intent i = new Intent(getActivity(), RestoDetailActivity.class);
-        i.putExtra("placeId", r.getId());
+        i.putExtra("restoId", r.getId());
         startActivity(i);
     }
 
@@ -92,9 +92,9 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
         mListener.removeBeenHere(r);
     }
 
-    public void setData(ArrayList<Resto> list, boolean isSavedPlace) {
+    public void setData(ArrayList<Resto> list, boolean isHideFlag) {
         if(adapter!=null){
-            adapter.setData(list, isSavedPlace, false);
+            adapter.setData(list, isHideFlag, false);
         }
     }
 
@@ -120,6 +120,8 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
         void changeBookmark(int restoId, boolean isBookmarked);
 
         void removeBeenHere(Resto r);
+
+        void toggleSpinner(boolean b);
     }
 
     /**
@@ -136,17 +138,17 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
     class RestoFilterTask extends AsyncTask<Void, Void, ArrayList<Resto>> {
 
         private final boolean[] filterResult;
-        private final boolean isSavedPlace;
+        private final boolean isHideFlag;
 
-        public RestoFilterTask(boolean[] filterResult, boolean isSavedPlace) {
+        public RestoFilterTask(boolean[] filterResult, boolean isHideFlag) {
             this.filterResult = filterResult;
-            this.isSavedPlace = isSavedPlace;
+            this.isHideFlag = isHideFlag;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // show loading spinner
+            mListener.toggleSpinner(true);
         }
 
         @Override
@@ -182,8 +184,8 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
         @Override
         protected void onPostExecute(ArrayList<Resto> restoList) {
             super.onPostExecute(restoList);
-            // hide loading spinner
-            setData(restoList, isSavedPlace);
+            mListener.toggleSpinner(false);
+            setData(restoList, isHideFlag);
         }
     }
 
@@ -203,19 +205,19 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
     class RestoSortTask extends AsyncTask<Void, Void, ArrayList<Resto>> {
 
         private final int[] sortResult;
-        private final boolean isSavedPlace;
+        private final boolean isHideFlag;
         private ArrayList<Resto> sortedList;
 
         public RestoSortTask(ArrayList<Resto> list, int[] sortResult, boolean isSavedPlace) {
             this.sortResult = sortResult;
             sortedList = list;
-            this.isSavedPlace = isSavedPlace;
+            this.isHideFlag = isSavedPlace;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // show loading spinner
+            mListener.toggleSpinner(true);
         }
 
         @Override
@@ -234,16 +236,16 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
                         b = r1;
                     }
                     // sort
-                    if(sortResult[0] == 0) {
+                    if (sortResult[0] == 0) {
                         return a.getTitle().compareTo(b.getTitle());
-                    } else if(sortResult[0] == 1) {
+                    } else if (sortResult[0] == 1) {
                         return Float.valueOf(a.getDistance()).compareTo(b.getDistance());
-                    } else if(sortResult[0] == 2) {
+                    } else if (sortResult[0] == 2) {
                         return a.getDatePost().compareTo(b.getDatePost());
-                    } else if(sortResult[0] == 3) {
+                    } else if (sortResult[0] == 3) {
                         return Integer.valueOf(a.getPriceStart()).compareTo(b.getPriceStart());
                     } else {
-                        throw new IllegalArgumentException("Invalid Parameter : "+sortResult[0]);
+                        throw new IllegalArgumentException("Invalid Parameter : " + sortResult[0]);
                     }
                 }
             });
@@ -253,8 +255,8 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
         @Override
         protected void onPostExecute(ArrayList<Resto> restoList) {
             super.onPostExecute(restoList);
-            // hide loading spinner
-            setData(restoList, isSavedPlace);
+            mListener.toggleSpinner(false);
+            setData(restoList, isHideFlag);
         }
     }
 }

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.net.Uri;
@@ -15,12 +16,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -76,7 +81,7 @@ public class RestoListActivity extends AppCompatActivity implements
     private TextView clear;
     private TextView submitFilter;
     private TextView submitSort;
-    private CheckBox[] filterBox;
+    private AppCompatCheckBox[] filterBox;
     private RadioGroup orderGroup;
     private boolean[] sortSelected;
     private LinearLayout[] sortButtonLayout;
@@ -93,6 +98,8 @@ public class RestoListActivity extends AppCompatActivity implements
     private LinearLayout filterLinearLayout, sortLinearLayout;
     private ImageView filterArrow, sortArrow;
     private int userId;
+    private int apiCallCounter = 0;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,22 +118,25 @@ public class RestoListActivity extends AppCompatActivity implements
         presenter.setModel(model);
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         Intent intent = getIntent();
         userId = CurrentUser.getId(this);
         pageType = intent.getIntExtra("page", PAGE_BROWSE);
         switch (pageType) {
             case PAGE_RECOMMEND:
-//                presenter.recommend();
                 initToolbar("You Might Like");
+                presenter.getRecommendation();
                 hasBrowsedNearby = false;
                 break;
             case PAGE_BOOKMARK:
                 presenter.getSortFilterList(RestoListModel.BOOKMARK, new SortFilterRequest(userId));
+                addApiCounter(true);
                 initToolbar("Saved Places");
                 break;
             case PAGE_BEENHERE:
                 presenter.getSortFilterList(RestoListModel.BEENHERE, new SortFilterRequest(userId));
+                addApiCounter(true);
                 initToolbar("Visited Places");
                 break;
             case PAGE_BROWSE:
@@ -137,13 +147,15 @@ public class RestoListActivity extends AppCompatActivity implements
                 initToolbar("Find a Specific Place");
                 String type = intent.getStringExtra("type");
                 if (type.equals("region")) {
-                    int countryId = intent.getIntExtra("country", -1);
-                    int provinceId = intent.getIntExtra("province", -1);
-                    int cityId = intent.getIntExtra("city", -1);
-                    presenter.findByRegion(countryId, provinceId, cityId);
+                    String countryId = intent.getStringExtra("country");
+                    String provinceId = intent.getStringExtra("province");
+                    String cityId = intent.getStringExtra("city");
+                    presenter.findByRegion(countryId, provinceId, cityId, userId);
+                    addApiCounter(true);
                 } else if (type.equals("keyword")) {
                     String keyword = intent.getStringExtra("keyword");
-                    presenter.findByKeyword(keyword);
+                    presenter.findByKeyword(keyword, userId);
+                    addApiCounter(true);
                 }
             }
         }
@@ -164,7 +176,7 @@ public class RestoListActivity extends AppCompatActivity implements
         sortLayout = (ExpandableRelativeLayout) findViewById(R.id.layout_sort);
         filterLinearLayout.setOnClickListener(this);
         sortLinearLayout.setOnClickListener(this);
-        filterBox = new CheckBox[FILTER_BOX_QTY];
+        filterBox = new AppCompatCheckBox[FILTER_BOX_QTY];
         sortButtonLayout = new LinearLayout[SORT_BUTTON_QTY];
         sortSelected = new boolean[]{false, false, false, false};
 
@@ -174,15 +186,15 @@ public class RestoListActivity extends AppCompatActivity implements
         selectAll.setTypeface(tf);
         clear.setTypeface(tf);
 
-        filterBox[0] = (CheckBox) findViewById(R.id.open_now);
-        filterBox[1] = (CheckBox) findViewById(R.id.rate_8);
-        filterBox[2] = (CheckBox) findViewById(R.id.bookmarked);
-        filterBox[3] = (CheckBox) findViewById(R.id.been_here);
-        filterBox[4] = (CheckBox) findViewById(R.id.vegan);
-        filterBox[5] = (CheckBox) findViewById(R.id.vege);
-        filterBox[6] = (CheckBox) findViewById(R.id.vegeready);
+        filterBox[0] = (AppCompatCheckBox) findViewById(R.id.open_now);
+        filterBox[1] = (AppCompatCheckBox) findViewById(R.id.rate_8);
+        filterBox[2] = (AppCompatCheckBox) findViewById(R.id.bookmarked);
+        filterBox[3] = (AppCompatCheckBox) findViewById(R.id.been_here);
+        filterBox[4] = (AppCompatCheckBox) findViewById(R.id.vegan);
+        filterBox[5] = (AppCompatCheckBox) findViewById(R.id.vege);
+        filterBox[6] = (AppCompatCheckBox) findViewById(R.id.vegeready);
         submitFilter = (TextView) findViewById(R.id.submit_filter);
-        if (pageType == PAGE_BROWSE) {
+        if (pageType == PAGE_BROWSE || pageType == PAGE_SEARCH) {
             for (int i = 0; i < 4; i++) {
                 filterBox[i].setVisibility(View.GONE);
             }
@@ -190,6 +202,9 @@ public class RestoListActivity extends AppCompatActivity implements
 
         for (int i = 0; i < FILTER_BOX_QTY; i++) {
             filterBox[i].setTypeface(tf);
+            filterBox[i].setSupportButtonTintList(setColorStateList(
+                    ContextCompat.getColor(this, R.color.darkGrey)
+            ));
         }
         submitFilter.setTypeface(tf);
 
@@ -201,7 +216,11 @@ public class RestoListActivity extends AppCompatActivity implements
         orderGroup = (RadioGroup) findViewById(R.id.sort_order);
         submitSort = (TextView) findViewById(R.id.submit_sort);
         for(int i=0;i<orderGroup.getChildCount();i++){
-            ((RadioButton) orderGroup.getChildAt(i)).setTypeface(tf);
+            AppCompatRadioButton radio = (AppCompatRadioButton) orderGroup.getChildAt(i);
+            radio.setTypeface(tf);
+            radio.setSupportButtonTintList(setColorStateList(
+                    ContextCompat.getColor(this, R.color.accentGreenBtnDark)
+            ));
         }
 
         // arrow
@@ -229,10 +248,29 @@ public class RestoListActivity extends AppCompatActivity implements
         if (ab != null) {
             ab.setDisplayShowTitleEnabled(false);
             ab.setDisplayShowHomeEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
         }
         TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
         tv.setText(title);
         tv.setTypeface(tf);
+    }
+
+    private ColorStateList setColorStateList(int color) {
+        return new ColorStateList(
+                new int[][]{
+                        new int[]{android.R.attr.state_enabled} //enabled
+                }, new int[]{color}
+        );
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -279,14 +317,19 @@ public class RestoListActivity extends AppCompatActivity implements
                 if (pageType == PAGE_BOOKMARK || pageType == PAGE_BEENHERE) {
                     sortFilter();
                 } else {
-                    if (pageType == PAGE_BROWSE || pageType == PAGE_RECOMMEND) {
+                    if (pageType == PAGE_BROWSE) {
+                        addApiCounter(true);
                         presenter.browseNearby(
+                                userId,
                                 mLongitudeText,
                                 mLatitudeText,
                                 (currSelectedSort == -1) ? "" : sortText[currSelectedSort],
                                 (orderGroup.getCheckedRadioButtonId() == R.id.asc) ? "asc" : "desc",
                                 getFilter()
                         );
+                    }else if(pageType == PAGE_RECOMMEND){
+                        addApiCounter(true);
+                        presenter.getRecommendation();
                     }
                 }
                 break;
@@ -295,8 +338,10 @@ public class RestoListActivity extends AppCompatActivity implements
                 if (pageType == PAGE_BOOKMARK || pageType == PAGE_BEENHERE) {
                     sortFilter();
                 } else {
-                    if (pageType == PAGE_BROWSE || pageType == PAGE_RECOMMEND) {
+                    if (pageType == PAGE_BROWSE) {
+                        addApiCounter(true);
                         presenter.browseNearby(
+                                userId,
                                 mLongitudeText,
                                 mLatitudeText,
                                 (currSelectedSort == -1) ? "" : sortText[currSelectedSort],
@@ -305,14 +350,17 @@ public class RestoListActivity extends AppCompatActivity implements
                         );
                     } else {
                         if (mLastLocation == null) {
-                            Toast.makeText(RestoListActivity.this, "Please turn on your location to sort by distance", Toast.LENGTH_SHORT).show();
+                            if(currSelectedSort == 1) {
+                                Toast.makeText(RestoListActivity.this, "Please turn on your location to sort by distance", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             if (currSelectedSort == 1) {
                                 for (Resto r : restoList) {
                                     r.setDistance(mLastLocation);
                                 }
                             }
-                            restoListFragment.sort(restoList, getSortResult(), pageType == PAGE_BOOKMARK);
+                            boolean isHideFlag = (userId == -1 || pageType == PAGE_BOOKMARK);
+                            restoListFragment.sort(restoList, getSortResult(), isHideFlag);
                         }
                     }
                 }
@@ -338,6 +386,7 @@ public class RestoListActivity extends AppCompatActivity implements
                 loc = mLastLocation.getLatitude() + "," + mLastLocation.getLongitude();
             }
         }
+        addApiCounter(true);
         presenter.getSortFilterList(type, new SortFilterRequest(
                 userId,
                 sortType,
@@ -439,6 +488,22 @@ public class RestoListActivity extends AppCompatActivity implements
         }
     }
 
+    public void addApiCounter(boolean isStart){
+        if(isStart){
+            apiCallCounter++;
+        }else{
+            if(apiCallCounter > 0) {
+                apiCallCounter--;
+            }
+        }
+        if(apiCallCounter == 1){
+            progressBar.setVisibility(View.VISIBLE);
+        }else if(apiCallCounter == 0){
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+        Log.e(TAG, "apiCallCounter: "+apiCallCounter);
+    }
+
     @Override
     public void onRestoList(Uri uri) {
 
@@ -446,14 +511,19 @@ public class RestoListActivity extends AppCompatActivity implements
 
     @Override
     public void changeBookmark(int restoId, boolean isBookmarked) {
-        // TODO: spinner
+        addApiCounter(true);
         presenter.changeBookmark(userId, restoId, isBookmarked);
     }
 
     @Override
     public void removeBeenHere(Resto r) {
-        // TODO: spinner
+        addApiCounter(true);
         presenter.changeBeenHere(userId, r.getId(), false);
+    }
+
+    @Override
+    public void toggleSpinner(boolean b) {
+        addApiCounter(b);
     }
 
     @Override
@@ -481,70 +551,106 @@ public class RestoListActivity extends AppCompatActivity implements
 
     @Override
     public void successFind(ArrayList<Resto> data) {
+        addApiCounter(false);
         restoList = data;
         filterLayout.setVisibility(View.VISIBLE);
         sortLayout.setVisibility(View.VISIBLE);
-        restoListFragment.sort(data, new int[]{0, 0}, false);
+        boolean isHideFlag = (userId == -1);
+        Log.e(TAG, "userId: "+userId);
+        restoListFragment.sort(data, new int[]{0, 0}, isHideFlag);
     }
 
     @Override
     public void failedFind() {
+        addApiCounter(false);
         Log.e(TAG, "failedFind: ");
+        Toast.makeText(RestoListActivity.this, "Failed search places", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void successBrowseNearby(ArrayList<Resto> data) {
+        addApiCounter(false);
         hasBrowsedNearby = true;
         filterLayout.setVisibility(View.VISIBLE);
         sortLayout.setVisibility(View.VISIBLE);
         restoList = data;
-        Toast.makeText(RestoListActivity.this, "Bookmark has not been set", Toast.LENGTH_SHORT).show();
-        restoListFragment.setData(restoList, false);
+        boolean isHideFlag = userId == -1; // if is not logged in, hide flag
+        restoListFragment.setData(restoList, isHideFlag);
     }
 
     @Override
     public void failedBrowseNearby() {
-        Log.e(TAG, "failedBrowseNearby: ");
+        addApiCounter(false);
+        Toast.makeText(RestoListActivity.this, "Failed getting data", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void successGetRecommendation(ArrayList<Resto> list) {
+        addApiCounter(false);
+        hasBrowsedNearby = true;
+        filterLayout.setVisibility(View.VISIBLE);
+        sortLayout.setVisibility(View.VISIBLE);
+        restoList = list;
+//        Toast.makeText(RestoListActivity.this, "Bookmark has not been set", Toast.LENGTH_SHORT).show();
+        restoListFragment.setData(restoList, true);
+    }
+
+    @Override
+    public void failedGetRecommendation() {
+        addApiCounter(false);
+        Toast.makeText(RestoListActivity.this, "Failed getting data", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void sortData(ArrayList<Resto> data, String order) {
+        addApiCounter(false);
         filterLayout.setVisibility(View.VISIBLE);
         sortLayout.setVisibility(View.VISIBLE);
         int o = order.equals("asc") ? 0 : 1;
-        restoListFragment.sort(data, new int[]{1, o}, false);
+        boolean isHideFlag = (userId == -1);
+        restoListFragment.sort(data, new int[]{1, o}, isHideFlag);
     }
 
     @Override
     public void successChangeBookmark(int placeId, boolean isBookmarked) {
+        addApiCounter(false);
         restoListFragment.updateBookmark(placeId, isBookmarked);
+        String change = isBookmarked ? "added" : "removed";
+        Toast.makeText(RestoListActivity.this, "Bookmark "+change+" successfully", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void failedChangeBookmark(String message) {
+        addApiCounter(false);
         Toast.makeText(RestoListActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void successChangeBeenHere(int placeId) {
+        addApiCounter(false);
         restoListFragment.removeData(placeId);
+        Toast.makeText(RestoListActivity.this, "Been here removed successfully", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void failedChangeBeenHere(String message) {
+        addApiCounter(false);
         Toast.makeText(RestoListActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void successGetSortFilterList(ArrayList<Resto> list) {
+        addApiCounter(false);
         filterLayout.setVisibility(View.VISIBLE);
         sortLayout.setVisibility(View.VISIBLE);
         restoList = list;
-        restoListFragment.setData(restoList, pageType == PAGE_BOOKMARK);
+        boolean isHideFlag = (userId == -1 || pageType == PAGE_BOOKMARK); // if not logged in or bookmark, hide flag
+        restoListFragment.setData(restoList, isHideFlag);
     }
 
     @Override
     public void failedGetSortFilterList(String type) {
+        addApiCounter(false);
         Toast.makeText(RestoListActivity.this, "Failed getting " + type, Toast.LENGTH_SHORT).show();
     }
 
@@ -567,10 +673,11 @@ public class RestoListActivity extends AppCompatActivity implements
         createLocationRequest();
         updateLocation();
         if (mLastLocation != null) {
+            mLatitudeText = String.valueOf(mLastLocation.getLatitude());
+            mLongitudeText = String.valueOf(mLastLocation.getLongitude());
             if (pageType == PAGE_BROWSE) {
-                presenter.browseNearby(mLongitudeText, mLatitudeText);
-            } else if (pageType == PAGE_RECOMMEND) {
-                presenter.browseNearby(mLongitudeText, mLatitudeText, "average_rate", "desc", "");
+                presenter.browseNearby(userId, mLongitudeText, mLatitudeText);
+                addApiCounter(true);
             }
         }
 
@@ -643,10 +750,8 @@ public class RestoListActivity extends AppCompatActivity implements
         updateLocation();
         if (mLastLocation != null && !hasBrowsedNearby) {
             if (pageType == PAGE_BROWSE) {
-                presenter.browseNearby(mLongitudeText, mLatitudeText);
-                hasBrowsedNearby = true;
-            } else if (pageType == PAGE_RECOMMEND) {
-                presenter.browseNearby(mLongitudeText, mLatitudeText, "average_rate", "desc", "");
+                presenter.browseNearby(userId, mLongitudeText, mLatitudeText);
+                addApiCounter(true);
                 hasBrowsedNearby = true;
             }
         }

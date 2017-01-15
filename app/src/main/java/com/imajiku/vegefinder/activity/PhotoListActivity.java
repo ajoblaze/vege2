@@ -10,7 +10,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.adapter.ImageListAdapter;
@@ -23,11 +28,13 @@ import java.util.ArrayList;
 
 public class PhotoListActivity extends AppCompatActivity implements ImageListAdapter.ImageListListener, PhotoListView {
 
+    private static final String TAG = "exc";
     private RecyclerView recyclerView;
     private ImageListAdapter adapter;
     private PhotoListPresenter presenter;
     private int restoId, userId;
     private Typeface tf;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +47,7 @@ public class PhotoListActivity extends AppCompatActivity implements ImageListAda
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
         initToolbar(getResources().getString(R.string.photos));
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         restoId = getIntent().getIntExtra("restoId", -1);
         userId = CurrentUser.getId(this);
@@ -54,6 +62,7 @@ public class PhotoListActivity extends AppCompatActivity implements ImageListAda
         recyclerView.setAdapter(adapter);
 
         presenter.getRestoImages(restoId, userId);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     public void initToolbar(String title) {
@@ -63,10 +72,21 @@ public class PhotoListActivity extends AppCompatActivity implements ImageListAda
         if(ab != null) {
             ab.setDisplayShowTitleEnabled(false);
             ab.setDisplayShowHomeEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
         }
         TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
         tv.setText(title);
         tv.setTypeface(tf);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -80,20 +100,24 @@ public class PhotoListActivity extends AppCompatActivity implements ImageListAda
     @Override
     public void successGetRestoImages(ArrayList<String> list, String title) {
         adapter.setData(list);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void failedGetRestoImages() {
-
+        progressBar.setVisibility(View.INVISIBLE);
+        Toast.makeText(PhotoListActivity.this, "Failed getting images", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void successAddPhoto(String message) {
-
+        progressBar.setVisibility(View.INVISIBLE);
+        Toast.makeText(PhotoListActivity.this, "Image sent successfully", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void failedAddPhoto(String message) {
-
+        progressBar.setVisibility(View.INVISIBLE);
+        Toast.makeText(PhotoListActivity.this, "Failed sending image", Toast.LENGTH_SHORT).show();
     }
 }

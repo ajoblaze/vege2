@@ -8,14 +8,17 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.imajiku.vegefinder.R;
@@ -49,6 +52,8 @@ public class NewsListActivity extends AppCompatActivity implements
     private LinearLayout sortLinearLayout;
     private boolean isSortToggled;
     private ImageView sortArrow;
+    private ProgressBar progressBar;
+    private int apiCallCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +65,9 @@ public class NewsListActivity extends AppCompatActivity implements
         presenter.setModel(model);
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
+        addApiCounter(true);
         presenter.loadNews();
         initToolbar("News and Ideas");
         isSortToggled = false;
@@ -93,6 +100,22 @@ public class NewsListActivity extends AppCompatActivity implements
         submitSort.setOnClickListener(this);
     }
 
+    public void addApiCounter(boolean isStart){
+        if(isStart){
+            apiCallCounter++;
+        }else{
+            if(apiCallCounter > 0) {
+                apiCallCounter--;
+            }
+        }
+        if(apiCallCounter == 1){
+            progressBar.setVisibility(View.VISIBLE);
+        }else if(apiCallCounter == 0){
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+        Log.e(TAG, "apiCallCounter: "+apiCallCounter);
+    }
+
     public void initToolbar(String title) {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
@@ -100,10 +123,21 @@ public class NewsListActivity extends AppCompatActivity implements
         if (ab != null) {
             ab.setDisplayShowTitleEnabled(false);
             ab.setDisplayShowHomeEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
         }
         TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
         tv.setText(title);
         tv.setTypeface(tf);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -180,11 +214,14 @@ public class NewsListActivity extends AppCompatActivity implements
     public void successLoadNews(ArrayList<News> data) {
         sortLayout.setVisibility(View.VISIBLE);
         newsListFragment.sort(data, new int[]{1, 1});
+        addApiCounter(false);
     }
 
     @Override
     public void failedLoadNews() {
         Log.e(TAG, "failedBrowseNearby: ");
+        Toast.makeText(NewsListActivity.this, "Failed getting news data", Toast.LENGTH_SHORT).show();
+        addApiCounter(false);
     }
 
     @Override

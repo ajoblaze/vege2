@@ -1,6 +1,9 @@
 package com.imajiku.vegefinder.pojo;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
+import com.imajiku.vegefinder.utility.Utility;
 
 import java.io.Serializable;
 
@@ -20,6 +23,8 @@ public class News implements Serializable {
     private String metaDescription;
     @SerializedName("image")
     private String image;
+    @SerializedName("image_url")
+    private String imageUrl;
     @SerializedName("date_post")
     private String datePost;
     @SerializedName("status")
@@ -55,6 +60,10 @@ public class News implements Serializable {
 
     public String getImage() {
         return image;
+    }
+
+    public String getImageUrl() {
+        return Utility.attachImageUrlNews(imageUrl);
     }
 
     public String getDatePost() {

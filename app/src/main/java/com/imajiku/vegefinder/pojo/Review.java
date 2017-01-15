@@ -3,6 +3,7 @@ package com.imajiku.vegefinder.pojo;
 import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
+import com.imajiku.vegefinder.utility.Utility;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -40,6 +41,12 @@ public class Review {
     String comment;
     @SerializedName("status")
     int status;
+    @SerializedName("image")
+    String image;
+    @SerializedName("image_url")
+    String imageUrl;
+    @SerializedName("id_rates_review")
+    int idRatesReview;
 
     public Review(String firstName, String lastName, int reviewId, int placeId, int userId, String title, String datePost, double rate, String comment, int status) {
         this.firstName = firstName;
@@ -129,5 +136,17 @@ public class Review {
 
     public int getStatus() {
         return status;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getImageUrl() {
+        return Utility.attachImageUrl(imageUrl);
+    }
+
+    public int getIdRatesReview() {
+        return idRatesReview;
     }
 }

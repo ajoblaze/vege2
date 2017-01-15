@@ -14,9 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.adapter.PhotoDetailAdapter;
@@ -44,6 +47,7 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
     private PhotoDetailAdapter adapter;
     private ArrayList<String> list;
     private Typeface tf;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +55,9 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
         setContentView(R.layout.activity_photo_detail);
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
-        restoId = getIntent().getIntExtra("placeId", -1);
+        restoId = getIntent().getIntExtra("restoId", -1);
         userId = CurrentUser.getId(this);
         position = getIntent().getIntExtra("position", -1);
 
@@ -65,6 +70,7 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
         share.setOnClickListener(this);
 
         presenter.getRestoImages(restoId, userId);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -77,6 +83,7 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
         if(position != -1) {
             viewPager.setCurrentItem(position);
         }
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     public void initToolbar(String title) {
@@ -86,6 +93,7 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
         if(ab != null) {
             ab.setDisplayShowTitleEnabled(false);
             ab.setDisplayShowHomeEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
         }
         TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
         tv.setText(title);
@@ -93,18 +101,31 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
     }
 
     @Override
-    public void failedGetRestoImages() {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
+    @Override
+    public void failedGetRestoImages() {
+        progressBar.setVisibility(View.INVISIBLE);
+        Toast.makeText(PhotoDetailActivity.this, "Failed getting images", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void successAddPhoto(String message) {
-
+        progressBar.setVisibility(View.INVISIBLE);
+        Toast.makeText(PhotoDetailActivity.this, "Image sent successfully", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void failedAddPhoto(String message) {
-
+        progressBar.setVisibility(View.INVISIBLE);
+        Toast.makeText(PhotoDetailActivity.this, "Failed sending image", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -152,7 +173,8 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
      */
     private void sharePhoto2(){
         int curPos = viewPager.getCurrentItem();
-        Picasso.with(this).load(list.get(curPos)).into(new Target() {
+        Picasso.with(this).load(list.get(curPos))
+                .placeholder(R.drawable.empty_image).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 try {

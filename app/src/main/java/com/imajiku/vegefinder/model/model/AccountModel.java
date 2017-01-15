@@ -35,6 +35,7 @@ public class AccountModel {
     public void getProfile(int userId) {
         ApiService svc = retrofit.create(ApiService.class);
         Call<AccountResponse> call = svc.getProfile(userId);
+        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<AccountResponse>() {
             @Override
             public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
@@ -61,6 +62,7 @@ public class AccountModel {
     public void logout() {
         ApiService svc = retrofit.create(ApiService.class);
         Call<StatusResponse> call = svc.logout();
+        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<StatusResponse>() {
             @Override
             public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
@@ -81,7 +83,7 @@ public class AccountModel {
 
             @Override
             public void onFailure(Call<StatusResponse> call, Throwable t) {
-                presenter.failedGetProfile();
+                presenter.failedLogout();
             }
         });
     }

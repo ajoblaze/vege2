@@ -44,6 +44,8 @@ public class RestoDetail{
     private String priceRate;
     @SerializedName("image")
     private String image;
+    @SerializedName("image_url")
+    private String imageUrl;
     @SerializedName("open_mon")
     private String openMon;
     @SerializedName("open_tue")
@@ -60,6 +62,8 @@ public class RestoDetail{
     private String openSun;
     @SerializedName("date_post")
     private String datePost;
+    @SerializedName("telephone")
+    private String phone;
     @SerializedName("restaurant_type")
     private int restoType;
     @SerializedName("type")
@@ -248,7 +252,11 @@ public class RestoDetail{
     }
 
     public String getImage() {
-        return Utility.changeImageUrl(image);
+        return Utility.attachImageUrl(image);
+    }
+
+    public String getImageUrl() {
+        return Utility.attachImageUrl(imageUrl);
     }
 
     public String getDatePost() {
@@ -267,6 +275,10 @@ public class RestoDetail{
 //        return facilities;
 //    }
 
+    public String getPhone() {
+        return phone;
+    }
+
     public ArrayList<RestoFacility> getRestoFacility() {
         return restoFacility;
     }
@@ -282,7 +294,7 @@ public class RestoDetail{
     public ArrayList<RestoImage> getRestoImg() {
         for(RestoImage ri : restoImg){
             ri.setImage(
-                    Utility.changeImageUrl(ri.getImage())
+                    Utility.attachImageUrl(ri.getImage())
             );
         }
         return restoImg;

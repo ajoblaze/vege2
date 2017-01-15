@@ -61,6 +61,7 @@ public class PlacesFragment extends Fragment implements PreviewListAdapter.Previ
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
         adapter = new PreviewListAdapter(getContext(), this, false);
+        adapter.setImageSize(120, 90);
         adapter.setTypeface(tf);
         recyclerView.setAdapter(adapter);
 

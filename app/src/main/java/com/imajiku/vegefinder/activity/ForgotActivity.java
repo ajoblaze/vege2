@@ -3,12 +3,14 @@ package com.imajiku.vegefinder.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,8 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
     private TextView title, subtitle, register, contactUs;
     private ForgotPresenter presenter;
     private Typeface tf;
+    private ProgressBar progressBar;
+    private boolean isSubmitting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,7 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
         presenter.setModel(model);
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         title = (TextView) findViewById(R.id.forget_title);
         subtitle = (TextView) findViewById(R.id.forget_subtitle);
@@ -53,6 +58,7 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
         reset.setOnClickListener(this);
         register.setOnClickListener(this);
         contactUs.setOnClickListener(this);
+        isSubmitting = false;
     }
 
     @Override
@@ -63,9 +69,15 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
 //                successForgot();
                 String emailContent = email.getText().toString();
                 if (emailContent.length() == 0) {
+                    changeBorder(email, true);
                     Toast.makeText(ForgotActivity.this, "Please insert email or username", Toast.LENGTH_SHORT).show();
                 } else {
-                    presenter.forget(emailContent);
+                    if(!isSubmitting) {
+                        isSubmitting = true;
+                        changeBorder(email, false);
+                        progressBar.setVisibility(View.VISIBLE);
+                        presenter.forget(emailContent);
+                    }
                 }
                 break;
             case R.id.register:
@@ -79,12 +91,16 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void successForgot() {
+        isSubmitting = false;
+        progressBar.setVisibility(View.INVISIBLE);
         Intent i = new Intent(ForgotActivity.this, VerifyForgotActivity.class);
         startActivity(i);
     }
 
     @Override
     public void failedForgot() {
+        isSubmitting = false;
+        progressBar.setVisibility(View.INVISIBLE);
         Toast.makeText(ForgotActivity.this, "Invalid email", Toast.LENGTH_SHORT).show();
     }
 
@@ -95,5 +111,15 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private void changeBorder(EditText et, boolean isError){
+        int id;
+        if(isError){
+            id = R.drawable.rounded_error;
+        }else{
+            id = R.drawable.selector_rounded_edittext;
+        }
+        et.setBackground(ContextCompat.getDrawable(this, id));
     }
 }

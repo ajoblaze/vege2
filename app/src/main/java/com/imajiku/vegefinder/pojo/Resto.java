@@ -3,6 +3,7 @@ package com.imajiku.vegefinder.pojo;
 import android.location.Location;
 
 import com.google.gson.annotations.SerializedName;
+import com.imajiku.vegefinder.utility.Utility;
 
 import java.io.Serializable;
 
@@ -20,6 +21,12 @@ public class Resto implements Serializable{
     private int provinceId;
     @SerializedName("city_id")
     private int cityId;
+    @SerializedName("country")
+    private String country;
+    @SerializedName("province")
+    private String province;
+    @SerializedName("city")
+    private String city;
     @SerializedName("slug")
     private String slug;
     @SerializedName("meta_title")
@@ -42,6 +49,8 @@ public class Resto implements Serializable{
     private String phone;
     @SerializedName("image")
     private String image;
+    @SerializedName("image_url")
+    private String imageUrl;
     @SerializedName("youtube_url")
     private String youtubeUrl;
     @SerializedName("open")
@@ -70,20 +79,25 @@ public class Resto implements Serializable{
     private String content;
     @SerializedName("average_rate")
     private String averageRate;
+    @SerializedName("status_bookmark")
+    private String statusBookmark;
 
     String imgPath;
     String name;
     private float distance;
     int rating;
     int price;
-    boolean bookmarked;
 
     public boolean isBookmarked() {
-        return bookmarked;
+        return statusBookmark.equals("active");
     }
 
     public void setBookmarked(boolean bookmarked) {
-        this.bookmarked = bookmarked;
+        if(bookmarked){
+            statusBookmark = "active";
+        }else{
+            statusBookmark = "nonactive";
+        }
     }
 
     public Resto(){
@@ -126,6 +140,18 @@ public class Resto implements Serializable{
 
     public int getId() {
         return id;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public String getCity() {
+        return city;
     }
 
     public int getUserId() {
@@ -184,6 +210,10 @@ public class Resto implements Serializable{
         return image;
     }
 
+    public String getImageUrl() {
+        return Utility.attachImageUrl(imageUrl);
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -229,11 +259,14 @@ public class Resto implements Serializable{
     }
 
     public int getPlaceId() {
+        if(placeId == 0){
+            return id;
+        }
         return placeId;
     }
 
     public String getTitle() {
-        return title;
+        return title == null? "" : title;
     }
 
     public String getContent() {
@@ -242,5 +275,9 @@ public class Resto implements Serializable{
 
     public String getAverageRate() {
         return averageRate;
+    }
+
+    public String getStatusBookmark() {
+        return statusBookmark;
     }
 }

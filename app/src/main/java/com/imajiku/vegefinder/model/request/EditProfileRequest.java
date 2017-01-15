@@ -45,10 +45,10 @@ public class EditProfileRequest {
         this.preference = preference;
     }
 
-    public EditProfileRequest(int id, String imageCode, String image) {
+    public EditProfileRequest(int id, String image, String imageCode) {
         this.id = id;
-        this.imageCode = imageCode;
         this.image = image;
+        this.imageCode = imageCode;
     }
 
     public void setName(String name) {
@@ -65,5 +65,9 @@ public class EditProfileRequest {
 
     public String getImageCode() {
         return imageCode;
+    }
+
+    public String getImage() {
+        return image;
     }
 }

@@ -31,7 +31,10 @@ public class RestoDetailModel {
 
     public void getRestoDetail(int placeId, int userId) {
         ApiService svc = retrofit.create(ApiService.class);
-        Call<RestoDetailResponse> call = svc.getDetailPlace(placeId, userId);
+        Call<RestoDetailResponse> call = svc.getDetailPlace(
+                String.valueOf(placeId),
+                userId == -1? "-" : String.valueOf(userId)
+        );
         Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoDetailResponse>() {
             @Override

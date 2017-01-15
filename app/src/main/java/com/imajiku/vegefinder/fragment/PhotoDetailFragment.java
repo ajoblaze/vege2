@@ -14,6 +14,7 @@ import android.widget.ImageView;
 
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.utility.ImageDecoderHelper;
+import com.imajiku.vegefinder.utility.TouchImageView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -26,7 +27,7 @@ public class PhotoDetailFragment extends Fragment {
 
     private static ArrayList<ImageCache> cache;
     private String imgPath;
-    private ImageView iv;
+    private TouchImageView iv;
     private Bitmap currBitmap;
 
     public static PhotoDetailFragment newInstance(String s) {
@@ -56,11 +57,12 @@ public class PhotoDetailFragment extends Fragment {
         View v = inflater.inflate(R.layout.item_photo_detail, container, false);
         Bundle args = getArguments();
         imgPath = args.getString("path");
-        iv = (ImageView) v.findViewById(R.id.image_gallery);
+        iv = (TouchImageView) v.findViewById(R.id.image_gallery);
 
         Picasso.with(getActivity())
                 .load(imgPath)
                 .noFade()
+                .placeholder(R.drawable.empty_image)
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {

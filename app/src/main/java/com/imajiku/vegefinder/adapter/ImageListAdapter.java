@@ -89,6 +89,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Imag
                     .load(item)
                     .resize(width, height)
                     .centerCrop()
+                    .placeholder(R.drawable.empty_image)
                     .into(holder.img);
         }
         itemView.setOnClickListener(new View.OnClickListener() {

@@ -29,30 +29,33 @@ public class RestoListPresenter {
         this.model = model;
     }
 
-    public void findByRegion(int countryId, int provinceId, int cityId){
-        model.findByRegion(countryId, provinceId, cityId);
+    public void findByRegion(String countryId, String provinceId, String cityId, int userId){
+        model.findByRegion(countryId, provinceId, cityId, getUserIdString(userId));
     }
 
-    public void findByKeyword(String keyword){
-        model.findByKeyword(keyword);
+    public void findByKeyword(String keyword, int userId){
+        model.findByKeyword(keyword, getUserIdString(userId));
     }
 
-    public void findAll(int countryId, int provinceId, int cityId, String keyword) {
-        model.findAll(countryId, provinceId, cityId, keyword);
+    private String getUserIdString(int userId){
+        if(userId != -1){
+            return String.valueOf(userId);
+        }
+        return "-";
     }
 
-    public void browseNearby(String longitude, String latitude) {
-        browseNearby(longitude, latitude, "distance", "asc", "");
+    public void browseNearby(int userId, String longitude, String latitude) {
+        browseNearby(userId, longitude, latitude, "distance", "asc", "");
     }
 
-    public void browseNearby(String longitude, String latitude, String sortType, String order, String filter) {
+    public void browseNearby(int userId, String longitude, String latitude, String sortType, String order, String filter) {
         if(sortType.equals("")){
             sortType = "distance";
         }
         if(order.equals("")){
             order = "asc";
         }
-        model.browseNearby(longitude, latitude, sortType, order, filter);
+        model.browseNearby(getUserIdString(userId), longitude, latitude, sortType, order, filter);
     }
 
     public void successFind(ArrayList<Resto> data) {
@@ -89,8 +92,8 @@ public class RestoListPresenter {
         view.failedBrowseNearby();
     }
 
-    public void getRecommendation(String longitude, String latitude) {
-        model.getRecommendation(latitude, longitude);
+    public void getRecommendation() {
+        model.getRecommendation();
     }
 
     public void successGetRecommendation(ArrayList<Resto> list) {
@@ -99,14 +102,14 @@ public class RestoListPresenter {
             for (int i = 0; i < 20; i++) {
                 shortList.add(list.get(i));
             }
-            view.successBrowseNearby(shortList);
+            view.successGetRecommendation(shortList);
         }else {
-            view.successBrowseNearby(list);
+            view.successGetRecommendation(list);
         }
     }
 
     public void failedGetRecommendation() {
-        view.failedBrowseNearby();
+        view.failedGetRecommendation();
     }
 
     public void changeBookmark(int userId, int placeId, boolean isBookmarked) {

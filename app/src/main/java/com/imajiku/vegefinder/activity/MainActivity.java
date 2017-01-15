@@ -58,6 +58,9 @@ public class MainActivity extends AppCompatActivity
 
     private static final int NEWS_MAX_QTY = 4;
     private static final int PREVIEW_MAX_QTY = 5;
+    private static final int PERMISSION_UPPER = 900;
+    private static final int PERMISSION_NETWORK_REQUEST_CODE = 901;
+    private static final int PERMISSION_LOWER = 902;
     private String TAG = "exc";
     private boolean isLogin;
     private RecommendFragment recommendFragment;
@@ -167,15 +170,23 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle("Confirm Exit")
-                .setMessage("Do you really want to exit application?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        finish();
-                    }
-                })
-                .setNegativeButton(android.R.string.no, null).show();
+        if(isLogin) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Confirm Exit")
+                    .setMessage("Do you really want to exit application?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            superBackPressed();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
+        }else{
+            super.onBackPressed();
+        }
+    }
+
+    private void superBackPressed(){
+        super.onBackPressed();
     }
 
     @Override
@@ -217,6 +228,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick(View v) {
         Intent i;
+        String[] permissions = new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.INTERNET
+        };
         switch (v.getId()){
             case R.id.find_specific:
                 i = new Intent(MainActivity.this, FindPlaceActivity.class);
@@ -224,9 +240,11 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.browse_nearby:
                 if(isLocationEnabled(this)) {
-                    i = new Intent(MainActivity.this, RestoListActivity.class);
-                    i.putExtra("page", RestoListActivity.PAGE_BROWSE);
-                    startActivity(i);
+                    if(hasPermissions(permissions)) {
+                        browseNearbyPlaces();
+                    }else{
+                        requestPerms(permissions);
+                    }
                 }else{
                     //show dialog
                     Toast.makeText(MainActivity.this, "Please turn on location to use this", Toast.LENGTH_SHORT).show();
@@ -236,6 +254,54 @@ public class MainActivity extends AppCompatActivity
                 i = new Intent(MainActivity.this, AccountActivity.class);
                 startActivity(i);
                 break;
+        }
+    }
+
+    private void browseNearbyPlaces(){
+        Intent i = new Intent(MainActivity.this, RestoListActivity.class);
+        i.putExtra("page", RestoListActivity.PAGE_BROWSE);
+        startActivity(i);
+    }
+
+    // CHECK PERMISSION FOR MARSHMALLOW
+    private boolean hasPermissions(String[] permissions) {
+        int res;
+        for (String perms : permissions) {
+            res = checkCallingOrSelfPermission(perms);
+            if (!(res == PackageManager.PERMISSION_GRANTED)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void requestPerms(String[] permissions) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(permissions, PERMISSION_NETWORK_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        boolean isAllowed = false;
+        if (requestCode > PERMISSION_UPPER && requestCode < PERMISSION_LOWER) {
+            for (int res : grantResults) {
+                isAllowed = (res == PackageManager.PERMISSION_GRANTED);
+                if (isAllowed) {
+                    break;
+                }
+            }
+        }
+        if (isAllowed) {
+            switch (requestCode) {
+                case PERMISSION_NETWORK_REQUEST_CODE:
+                    browseNearbyPlaces();
+                    break;
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Toast.makeText(MainActivity.this, "Location permission denied.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -283,15 +349,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private Resto findRestoById(ArrayList<Resto> list, int id) {
-        for(Resto r : list){
-            if(r.getId() == id){
-                return r;
-            }
-        }
-        return null;
-    }
-
     private News findNewsById(ArrayList<News> list, int id) {
         for(News n : list){
             if(n.getId() == id){
@@ -335,7 +392,7 @@ public class MainActivity extends AppCompatActivity
         int size = min(list.size(), PREVIEW_MAX_QTY);
         for(int i=0;i<size;i++){
             Resto r = list.get(i);
-            recommendPreviewList.add(new RestoPreview(r.getId(), r.getImageUrl(), r.getMetaTitle(), r.getCity()));
+            recommendPreviewList.add(new RestoPreview(r.getPlaceId(), r.getImageUrl(), r.getMetaTitle(), r.getCity()));
         }
         recommendFragment.setData(recommendPreviewList);
         addApiCounter(false);
@@ -355,7 +412,7 @@ public class MainActivity extends AppCompatActivity
         int size = min(list.size(), PREVIEW_MAX_QTY);
         for(int i=0;i<size;i++){
             Resto r = list.get(i);
-            placesPreviewList.add(new RestoPreview(r.getId(), r.getImageUrl(), r.getMetaTitle(), r.getCity()));
+            placesPreviewList.add(new RestoPreview(r.getPlaceId(), r.getImageUrl(), r.getMetaTitle(), r.getCity()));
         }
         placesFragment.setData(placesPreviewList);
         addApiCounter(false);

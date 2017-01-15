@@ -10,8 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/rounded_green"
-        android:layout_margin="12dp"
+        android:layout_margin="@dimen/activity_margin"
         android:textColor="@color/white"
         android:text="Load More"
+        android:visibility="gone"
         android:padding="8dp"/>
 </LinearLayout>

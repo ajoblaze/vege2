@@ -65,7 +65,7 @@ public class NewsFragment extends Fragment implements PreviewListAdapter.Preview
         }
 //        populate();
         adapter = new PreviewListAdapter(getContext(), this, true);
-        adapter.setImageSize(140, 140);
+        adapter.setImageSize(140, 100);
         adapter.setTypeface(tf);
 //        adapter.setData(list);
         recyclerView.setAdapter(adapter);

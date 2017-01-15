@@ -7,15 +7,18 @@ import com.google.gson.annotations.SerializedName;
  */
 public class FindRegionRequest {
     @SerializedName("country_idd")
-    private int countryId;
+    private String countryId;
     @SerializedName("province_id")
-    private int provinceId;
+    private String provinceId;
     @SerializedName("city_id")
-    private int cityId;
+    private String cityId;
+    @SerializedName("user_id")
+    private String userId;
 
-    public FindRegionRequest(int countryId, int provinceId, int cityId) {
-        this.countryId = countryId;
-        this.provinceId = provinceId;
-        this.cityId = cityId;
+    public FindRegionRequest(String countryId, String provinceId, String cityId, String userId) {
+        this.countryId = countryId == null ? "" : countryId;
+        this.provinceId = provinceId == null ? "" : provinceId;
+        this.cityId = cityId == null ? "" : cityId;
+        this.userId = userId;
     }
 }

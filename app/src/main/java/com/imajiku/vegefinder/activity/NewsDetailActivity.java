@@ -1,13 +1,13 @@
 package com.imajiku.vegefinder.activity;
 
 import android.graphics.Typeface;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,11 +34,12 @@ public class NewsDetailActivity extends AppCompatActivity {
         initToolbar(n.getTitle());
         image = (ImageView) findViewById(R.id.news_image);
         flowContent = (FlowTextView) findViewById(R.id.flow_news_content);
-        if(!n.getImage().isEmpty()) {
+        if(!n.getImageUrl().isEmpty()) {
             Picasso.with(this)
-                    .load(n.getImage())
+                    .load(n.getImageUrl())
                     .resize(90, 90)
                     .centerCrop()
+                    .placeholder(R.drawable.empty_image)
                     .into(image);
         }
         Spanned html;
@@ -59,9 +60,20 @@ public class NewsDetailActivity extends AppCompatActivity {
         if (ab != null) {
             ab.setDisplayShowTitleEnabled(false);
             ab.setDisplayShowHomeEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
         }
         TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
         tv.setText(title);
         tv.setTypeface(tf);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

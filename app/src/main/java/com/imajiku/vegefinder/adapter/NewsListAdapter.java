@@ -87,11 +87,12 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsLi
             holder.loadMore.setTypeface(tf);
         } else {
             final News n = list.get(position);
-            if(!n.getImage().isEmpty()) {
+            if(!n.getImageUrl().isEmpty()) {
                 Picasso.with(context)
-                        .load(n.getImage())
+                        .load(n.getImageUrl())
                         .resize(90, 90)
                         .centerCrop()
+                        .placeholder(R.drawable.empty_image)
                         .into(holder.image);
             }
             holder.title.setText(n.getTitle());

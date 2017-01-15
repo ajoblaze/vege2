@@ -29,4 +29,8 @@ public interface RestoListView {
     void successGetSortFilterList(ArrayList<Resto> list);
 
     void failedGetSortFilterList(String type);
+
+    void successGetRecommendation(ArrayList<Resto> list);
+
+    void failedGetRecommendation();
 }

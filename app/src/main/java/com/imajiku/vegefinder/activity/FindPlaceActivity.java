@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -12,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,14 +23,14 @@ import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.adapter.SpinnerAdapter;
 import com.imajiku.vegefinder.model.model.RegionModel;
 import com.imajiku.vegefinder.model.presenter.RegionPresenter;
-import com.imajiku.vegefinder.model.view.FindPlaceView;
 import com.imajiku.vegefinder.model.view.RegionView;
 import com.imajiku.vegefinder.pojo.Resto;
 
 import java.util.ArrayList;
 
-public class FindPlaceActivity extends AppCompatActivity implements FindPlaceView, RegionView, View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class FindPlaceActivity extends AppCompatActivity implements RegionView, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
+    private static final String TAG = "exc";
     private Spinner countrySpinner, provinceSpinner, citySpinner;
     private ArrayAdapter<String> countryDataAdapter, provinceDataAdapter, cityDataAdapter;
     private RegionPresenter presenter;
@@ -39,6 +42,8 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
     private ImageView arrow1, arrow2, arrow3;
     private final String ALL_PROVINCE = "All Province";
     private final String ALL_CITY = "All City";
+    private ProgressBar progressBar;
+    private int apiCallCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,7 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
         presenter.setModel(model);
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         title = (TextView) findViewById(R.id.find_title);
         countrySpinner = (Spinner) findViewById(R.id.country_spinner);
@@ -57,6 +63,7 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
         citySpinner = (Spinner) findViewById(R.id.city_spinner);
         keywordText = (EditText) findViewById(R.id.keyword);
 
+        addApiCounter(true);
         presenter.getCountry();
 
         countryDataAdapter = new SpinnerAdapter(this,
@@ -116,6 +123,7 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
         if (type == RegionPresenter.COUNTRY) {
             countrySpinner.setSelection(adapter.getPosition("Indonesia"));
         }
+        addApiCounter(false);
     }
 
     @Override
@@ -126,15 +134,18 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
             case R.id.find_region:
                 if (currProvince.equals(ALL_PROVINCE)) {
                     Toast.makeText(FindPlaceActivity.this, "Please pick a province", Toast.LENGTH_SHORT).show();
-                }
-                else if (currCity.equals(ALL_CITY)) {
-                    Toast.makeText(FindPlaceActivity.this, "Please pick a city", Toast.LENGTH_SHORT).show();
+                    changeBorder(provinceSpinner, true);
+                    changeBorder(keywordText, false);
                 }else{
                     i.putExtra("page", RestoListActivity.PAGE_SEARCH);
                     i.putExtra("type", "region");
-                    i.putExtra("country", presenter.getCountryId(currCountry));
-                    i.putExtra("province", presenter.getProvinceId(currProvince));
-                    i.putExtra("city", presenter.getCityId(currCity));
+                    i.putExtra("country", String.valueOf(presenter.getCountryId(currCountry)));
+                    i.putExtra("province", String.valueOf(presenter.getProvinceId(currProvince)));
+                    if (currCity.equals(ALL_CITY)) {
+                        i.putExtra("city", "");
+                    } else {
+                        i.putExtra("city", String.valueOf(presenter.getCityId(currCity)));
+                    }
                     startActivity(i);
                 }
                 break;
@@ -142,6 +153,8 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
                 String keyword = keywordText.getText().toString();
                 if (keyword.equals("")) {
                     Toast.makeText(FindPlaceActivity.this, "Please enter a keyword", Toast.LENGTH_SHORT).show();
+                    changeBorder(keywordText, true);
+                    changeBorder(provinceSpinner, false);
                 } else {
                     i.putExtra("page", RestoListActivity.PAGE_SEARCH);
                     i.putExtra("type", "keyword");
@@ -161,15 +174,43 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
         }
     }
 
+    private void changeBorder(View v, boolean isError){
+        int id;
+        if(isError){
+            id = R.drawable.rounded_error;
+        }else{
+            id = R.drawable.selector_rounded_edittext;
+        }
+        v.setBackground(ContextCompat.getDrawable(this, id));
+    }
+
+    public void addApiCounter(boolean isStart){
+        if(isStart){
+            apiCallCounter++;
+        }else{
+            if(apiCallCounter > 0) {
+                apiCallCounter--;
+            }
+        }
+        if(apiCallCounter == 1){
+            progressBar.setVisibility(View.VISIBLE);
+        }else if(apiCallCounter == 0){
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+        Log.e(TAG, "apiCallCounter: "+apiCallCounter);
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.country_spinner:
                 currCountry = countryDataAdapter.getItem(position);
+                addApiCounter(true);
                 presenter.getProvince(countryDataAdapter.getItem(position));
                 break;
             case R.id.province_spinner:
                 currProvince = provinceDataAdapter.getItem(position);
+                addApiCounter(true);
                 presenter.getCity(provinceDataAdapter.getItem(position));
                 citySpinner.setSelection(0);
                 break;
@@ -181,16 +222,6 @@ public class FindPlaceActivity extends AppCompatActivity implements FindPlaceVie
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    @Override
-    public void successFindKeyword(ArrayList<Resto> data) {
-
-    }
-
-    @Override
-    public void successFindPlace(ArrayList<Resto> data) {
 
     }
 }

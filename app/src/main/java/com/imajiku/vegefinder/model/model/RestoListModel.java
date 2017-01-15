@@ -3,7 +3,6 @@ package com.imajiku.vegefinder.model.model;
 import android.util.Log;
 
 import com.imajiku.vegefinder.model.presenter.RestoListPresenter;
-import com.imajiku.vegefinder.model.request.FindAllRequest;
 import com.imajiku.vegefinder.model.request.FindKeywordRequest;
 import com.imajiku.vegefinder.model.request.FindRegionRequest;
 import com.imajiku.vegefinder.model.request.SortFilterRequest;
@@ -37,8 +36,8 @@ public class RestoListModel {
         retrofit = Utility.buildRetrofit();
     }
 
-    public void findByRegion(int countryId, int provinceId, int cityId) {
-        FindRegionRequest request = new FindRegionRequest(countryId, provinceId, cityId);
+    public void findByRegion(String countryId, String provinceId, String cityId, String userId) {
+        FindRegionRequest request = new FindRegionRequest(countryId, provinceId, cityId, userId);
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.findRegion(request);
         Log.e(TAG, String.valueOf(call.request().url()));
@@ -49,19 +48,21 @@ public class RestoListModel {
                     ArrayList<Resto> data = response.body().getData();
                     presenter.successFind(data);
                 } else {
+                    Log.e(TAG, "as");
                     presenter.failedFind();
                 }
             }
 
             @Override
             public void onFailure(Call<RestoListResponse> call, Throwable t) {
+                Log.e(TAG, t.getMessage());
                 presenter.failedFind();
             }
         });
     }
 
-    public void findByKeyword(String keyword) {
-        FindKeywordRequest request = new FindKeywordRequest(keyword);
+    public void findByKeyword(String keyword, String userId) {
+        FindKeywordRequest request = new FindKeywordRequest(keyword, userId);
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.findKeyword(request);
         Log.e(TAG, String.valueOf(call.request().url()));
@@ -83,30 +84,7 @@ public class RestoListModel {
         });
     }
 
-    public void findAll(int countryId, int provinceId, int cityId, String keyword) {
-        FindAllRequest request = new FindAllRequest(provinceId, cityId, keyword);
-        ApiService svc = retrofit.create(ApiService.class);
-        Call<RestoListResponse> call = svc.findAll(request);
-        Log.e(TAG, String.valueOf(call.request().url()));
-        call.enqueue(new Callback<RestoListResponse>() {
-            @Override
-            public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
-                if (response.isSuccessful()) {
-                    ArrayList<Resto> data = response.body().getData();
-                    presenter.successFind(data);
-                } else {
-                    presenter.failedFind();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RestoListResponse> call, Throwable t) {
-                presenter.failedFind();
-            }
-        });
-    }
-
-    public void browseNearby(final String longitude, final String latitude, final String sortType, final String order, String filter) {
+    public void browseNearby(String userId, final String longitude, final String latitude, final String sortType, final String order, String filter) {
         String location = longitude + "," + latitude;
         String sort;
         if (sortType.equals("distance")) {
@@ -115,7 +93,7 @@ public class RestoListModel {
             sort = sortType + "-" + order;
         }
         ApiService svc = retrofit.create(ApiService.class);
-        Call<RestoListResponse> call = svc.browseNearby(location, sort, filter);
+        Call<RestoListResponse> call = svc.browseNearby(userId, location, sort, filter);
 //        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
@@ -140,10 +118,9 @@ public class RestoListModel {
         });
     }
 
-    public void getRecommendation(String latitude, String longitude) {
-        String location = longitude + "," + latitude;
+    public void getRecommendation() {
         ApiService svc = retrofit.create(ApiService.class);
-        Call<RestoListResponse> call = svc.browseNearby(location, "average_rate-desc", "");
+        Call<RestoListResponse> call = svc.mightLike();
         Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
@@ -158,10 +135,34 @@ public class RestoListModel {
 
             @Override
             public void onFailure(Call<RestoListResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure: "+t.getMessage());
                 presenter.failedGetRecommendation();
             }
         });
     }
+
+//    public void getRecommendation(String userId, String latitude, String longitude) {
+//        String location = longitude + "," + latitude;
+//        ApiService svc = retrofit.create(ApiService.class);
+//        Call<RestoListResponse> call = svc.browseNearby(userId, location, "average_rate-desc", "");
+//        Log.e(TAG, String.valueOf(call.request().url()));
+//        call.enqueue(new Callback<RestoListResponse>() {
+//            @Override
+//            public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
+//                if (response.isSuccessful()) {
+//                    ArrayList<Resto> data = response.body().getData();
+//                    presenter.successGetRecommendation(data);
+//                } else {
+//                    presenter.failedGetRecommendation();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<RestoListResponse> call, Throwable t) {
+//                presenter.failedGetRecommendation();
+//            }
+//        });
+//    }
 
     public void changeBookmark(int userId, int placeId, final boolean isBookmarked) {
         ToggleRequest request = new ToggleRequest(userId, placeId);

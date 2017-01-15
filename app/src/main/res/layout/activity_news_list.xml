@@ -1,159 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/selectedGray"
     tools:context=".activity.NewsListActivity">
 
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/toolbar" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <!--sort-->
-        <LinearLayout
-            android:id="@+id/sort_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@drawable/selector_normal"
-            android:gravity="center_vertical"
-            android:padding="4dp">
-
-            <TextView
-                android:id="@+id/sort_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:text="@string/sort" />
-
-            <ImageView
-                android:id="@+id/sort_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_keyboard_arrow_down_black_24dp_m"
-                android:tint="@color/accentGreenBtn" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <com.github.aakira.expandablelayout.ExpandableRelativeLayout
-        android:id="@+id/layout_sort"
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"
-        android:background="@color/white"
-        app:ael_duration="200"
-        app:ael_interpolator="accelerate"
-        app:ael_orientation="vertical">
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/toolbar" />
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!--sort-->
+            <LinearLayout
+                android:id="@+id/sort_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_normal"
+                android:gravity="center_vertical"
+                android:padding="4dp">
+
+                <TextView
+                    android:id="@+id/sort_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_margin"
+                    android:text="@string/sort" />
+
+                <ImageView
+                    android:id="@+id/sort_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_keyboard_arrow_down_black_24dp_m"
+                    android:tint="@color/accentGreenBtn" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+            android:id="@+id/layout_sort"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:background="@color/white"
+            android:visibility="invisible"
+            app:ael_duration="200"
+            app:ael_interpolator="accelerate"
+            app:ael_orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <!--alpha-->
-                <LinearLayout
-                    android:id="@+id/sort_alpha_ll"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="4dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_bookmark_border_black_24dp_m" />
-
-                    <TextView
-                        android:id="@+id/alpha"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/alphabet" />
-                </LinearLayout>
-
-                <!--date-->
-                <LinearLayout
-                    android:id="@+id/sort_date_ll"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="4dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_bookmark_border_black_24dp_m" />
-
-                    <TextView
-                        android:id="@+id/date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/date" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <RadioGroup
-                android:id="@+id/sort_order"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/asc"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    android:text="@string/ascending" />
-
-                <RadioButton
-                    android:id="@+id/desc"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/descending" />
-            </RadioGroup>
-
-            <TextView
-                android:id="@+id/submit_sort"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:padding="8dp"
-                android:layout_marginTop="12dp"
-                android:background="@color/accentGreenBtn"
-                android:textColor="@color/white"
-                android:text="@string/show_result" />
+                android:orientation="vertical">
 
-        </LinearLayout>
-    </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_margin"
+                    android:layout_marginRight="@dimen/activity_margin"
+                    android:orientation="horizontal">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/translucentBlack25"/>
+                    <!--alpha-->
+                    <LinearLayout
+                        android:id="@+id/sort_alpha_ll"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-    <fragment
-        android:id="@+id/news_list_fragment"
-        android:name="com.imajiku.vegefinder.fragment.NewsListFragment"
-        android:layout_width="match_parent"
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_sort_by_alpha_black_24dp_m" />
+
+                        <TextView
+                            android:id="@+id/alpha"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/alphabet" />
+                    </LinearLayout>
+
+                    <!--date-->
+                    <LinearLayout
+                        android:id="@+id/sort_date_ll"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_date_range_black_24dp_m" />
+
+                        <TextView
+                            android:id="@+id/date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/date" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RadioGroup
+                    android:id="@+id/sort_order"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_margin"
+                    android:layout_marginRight="@dimen/activity_margin"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatRadioButton
+                        android:id="@+id/asc"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="@string/ascending" />
+
+                    <android.support.v7.widget.AppCompatRadioButton
+                        android:id="@+id/desc"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/descending" />
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/submit_sort"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/accentGreenBtn"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="@string/show_result"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+        </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/translucentBlack25" />
+
+        <fragment
+            android:id="@+id/news_list_fragment"
+            android:name="com.imajiku.vegefinder.fragment.NewsListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/fragment_news_list" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:layout="@layout/fragment_news_list" />
-
-</LinearLayout>
+        android:visibility="gone"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

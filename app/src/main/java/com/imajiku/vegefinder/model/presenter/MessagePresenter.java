@@ -35,7 +35,7 @@ public class MessagePresenter {
         view.failedSendContactUs(s);
     }
 
-    public void sendReview(int userId, int restoId, int rate, String title, String comment){
+    public void sendReview(int userId, int restoId, String rate, String title, String comment){
         model.sendReview(userId, restoId,  rate, title, comment);
     }
 
@@ -59,12 +59,12 @@ public class MessagePresenter {
         model.sendFeedback(userId, subject, message);
     }
 
-    public void successSendFeedback(String message) {
-        view.successSendReport();
-    }
-
     public void sendReport(int userId, int placeId, String subject, String message) {
         model.sendReport(userId, placeId, subject, message);
+    }
+
+    public void failedSendReport(String s) {
+        view.failedSendReport(s);
     }
 }
 

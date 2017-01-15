@@ -118,7 +118,7 @@ public class NewsListFragment extends Fragment implements NewsListAdapter.NewsLi
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // show loading spinner
+            // TODO show loading spinner
         }
 
         @Override
@@ -151,7 +151,7 @@ public class NewsListFragment extends Fragment implements NewsListAdapter.NewsLi
         @Override
         protected void onPostExecute(ArrayList<News> NewsList) {
             super.onPostExecute(NewsList);
-            // hide loading spinner
+            // TODO hide loading spinner
             setData(NewsList);
         }
     }

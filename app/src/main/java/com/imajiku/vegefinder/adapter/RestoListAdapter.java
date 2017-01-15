@@ -29,7 +29,7 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
     private ArrayList<Resto> list;
     private Context context;
     private String TAG = "exc";
-    private boolean isSavedPlace;
+    private boolean isHideFlag;
     private boolean isBeenHere;
     private boolean isLoadMore;
 
@@ -48,10 +48,11 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
     /**
      * updates adapter with content
      */
-    public void setData(ArrayList<Resto> list, boolean isSavedPlace, boolean isBeenHere) {
+    public void setData(ArrayList<Resto> list, boolean isHideFlag, boolean isBeenHere) {
         this.list = list;
         isLoadMore = true;
-        this.isSavedPlace = isSavedPlace;
+        this.isHideFlag = isHideFlag;
+        Log.e(TAG, "isHideFlag: "+isHideFlag);
         this.isBeenHere = isBeenHere;
         if(isLoadMore) {
             list.add(new Resto());
@@ -115,11 +116,12 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
                 }
             });
 
-            if (!r.getImage().isEmpty()) {
+            if (!r.getImageUrl().isEmpty()) {
                 Picasso.with(context)
-                        .load(r.getImage())
+                        .load(r.getImageUrl())
                         .resize(90, 90)
                         .centerCrop()
+                        .placeholder(R.drawable.empty_image)
                         .into(holder.image);
             }
             holder.name.setText(r.getMetaTitle());
@@ -127,12 +129,12 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
             holder.price.setText(" Rp " + r.getPriceStart());
             holder.rating.setText(r.getAverageRate());
             holder.review.setText("20");
-            if (isSavedPlace) {
+            if (isHideFlag) {
                 holder.flagLayout.setVisibility(View.GONE);
             } else {
                 holder.flagLayout.setVisibility(View.VISIBLE);
+                changeFlag(r, holder.flag);
             }
-            changeFlag(r, holder.flag);
 
             holder.flag.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -15,10 +15,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/app_bar"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin">
+            android:paddingBottom="@dimen/activity_margin"
+            android:paddingLeft="@dimen/activity_margin"
+            android:paddingRight="@dimen/activity_margin"
+            android:paddingTop="@dimen/activity_margin">
 
             <LinearLayout
                 android:id="@+id/frame_profpic"
@@ -35,7 +35,7 @@
                         android:id="@+id/profPic"
                         android:layout_width="180dp"
                         android:layout_height="180dp"
-                        android:layout_gravity="bottom|center_horizontal"
+                        android:layout_gravity="bottom|center"
                         android:layout_marginBottom="24dp"
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
@@ -227,7 +227,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:gravity="start|center_vertical"
+                            android:gravity="start|center"
                             android:maxLines="2"
                             android:text="@string/confirm_new_pass" />
 
@@ -396,5 +396,14 @@
         <include
             android:id="@+id/app_bar"
             layout="@layout/toolbar" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </ScrollView>

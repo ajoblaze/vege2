@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <!--<color name="colorPrimary">#3F51B5</color>-->
+    <!--<color name="colorPrimaryDark">#303F9F</color>-->
     <color name="colorAccent">#FF4081</color>
     <color name="textColor">#FDFDFD</color>
     <color name="darkGrey">#424242</color>
@@ -21,9 +21,11 @@
     <color name="successGreen">#64DD17</color>
     <color name="actionBarDark">#303030</color>
     <color name="accentOrange">#EF5C0B</color>
+    <color name="accentGreenBg25">#4060aa2f</color>
     <color name="accentGreenBg50">#8060aa2f</color>
     <color name="accentGreenBg75">#BF60aa2f</color>
     <color name="accentGreenBtn">#78b74e</color>
+    <color name="accentGreenBtnDark">#5E8F3E</color>
 
     <color name="translucent">#00000000</color>
     <color name="translucentBlack25">#40000000</color>

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +51,8 @@ public class RestoDetailActivity extends AppCompatActivity
     private boolean[] buttonStatus = new boolean[2];
     private LinearLayout photoLayout, reviewLayout;
     private Typeface tf;
+    private ProgressBar progressBar;
+    private int apiCallCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +64,10 @@ public class RestoDetailActivity extends AppCompatActivity
         presenter.setModel(model);
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         restoDetail = null;
-        restoId = getIntent().getIntExtra("placeId", -1);
+        restoId = getIntent().getIntExtra("restoId", -1);
         userId = CurrentUser.getId(this);
         banner = (ImageView) findViewById(R.id.resto_img);
         rate = (TextView) findViewById(R.id.rating);
@@ -109,8 +113,8 @@ public class RestoDetailActivity extends AppCompatActivity
             addReview.setVisibility(View.VISIBLE);
         }
 
-        // TODO: spinner
-        presenter.getRestoDetail(restoId);
+        addApiCounter(true);
+        presenter.getRestoDetail(restoId, userId);
 
         //tf
         TextView of10 = (TextView) findViewById(R.id.of_10);
@@ -145,39 +149,40 @@ public class RestoDetailActivity extends AppCompatActivity
             case R.id.btn_bookmark: {
                 int idx = 0;
                 Log.e(TAG, String.valueOf(buttonStatus[idx]));
-                // TODO: spinner
+                addApiCounter(true);
                 presenter.changeBookmark(userId, restoId, buttonStatus[idx]);
             }
             break;
             case R.id.btn_been_here: {
                 int idx = 1;
                 Log.e(TAG, String.valueOf(buttonStatus[idx]));
-                // TODO: spinner
-                presenter.changeBeenHere(userId, restoId, !buttonStatus[idx]);
+                addApiCounter(true);
+                presenter.changeBeenHere(userId, restoId, buttonStatus[idx]);
             }
             break;
             case R.id.btn_book:
                 i = new Intent(RestoDetailActivity.this, BookActivity.class);
-                i.putExtra("placeId", restoDetail.getId());
+                i.putExtra("restoId", restoDetail.getId());
                 i.putExtra("title", restoDetail.getTitle());
-                i.putExtra("image", restoDetail.getImage());
+                i.putExtra("image", restoDetail.getImageUrl());
                 startActivity(i);
                 break;
             case R.id.btn_call:
                 i = new Intent(RestoDetailActivity.this, CallActivity.class);
-                i.putExtra("placeId", restoDetail.getId());
+                i.putExtra("restoId", restoDetail.getId());
+                i.putExtra("phone", restoDetail.getPhone());
                 startActivity(i);
                 break;
             case R.id.btn_check_in:
                 i = new Intent(RestoDetailActivity.this, CheckInActivity.class);
-                i.putExtra("placeId", restoDetail.getId());
+                i.putExtra("restoId", restoDetail.getId());
                 i.putExtra("title", restoDetail.getTitle());
-                i.putExtra("image", restoDetail.getImage());
+                i.putExtra("image", restoDetail.getImageUrl());
                 startActivity(i);
                 break;
             case R.id.btn_map:
                 i = new Intent(RestoDetailActivity.this, MapActivity.class);
-                i.putExtra("placeId", restoDetail.getId());
+                i.putExtra("restoId", restoDetail.getId());
                 i.putExtra("title", restoDetail.getTitle());
                 i.putExtra("address", restoDetail.getAddress());
                 i.putExtra("longitude", restoDetail.getLongitude());
@@ -186,21 +191,37 @@ public class RestoDetailActivity extends AppCompatActivity
                 break;
             case R.id.btn_add_photo:
                 i = new Intent(RestoDetailActivity.this, AddPhotoActivity.class);
-                i.putExtra("placeId", restoId);
-                startActivity(i);
+                i.putExtra("restoId", restoId);
+                startActivityForResult(i, 1);
                 break;
             case R.id.btn_add_review:
                 i = new Intent(RestoDetailActivity.this, AddReviewActivity.class);
-                i.putExtra("placeId", restoId);
+                i.putExtra("restoId", restoId);
                 startActivityForResult(i, 1);
                 break;
             case R.id.btn_report:
                 i = new Intent(RestoDetailActivity.this, SendMessageActivity.class);
-                i.putExtra("placeId", restoId);
+                i.putExtra("restoId", restoId);
                 i.putExtra("type", SendMessageActivity.REPORT);
                 startActivity(i);
                 break;
         }
+    }
+
+    public void addApiCounter(boolean isStart){
+        if(isStart){
+            apiCallCounter++;
+        }else{
+            if(apiCallCounter > 0) {
+                apiCallCounter--;
+            }
+        }
+        if(apiCallCounter == 1){
+            progressBar.setVisibility(View.VISIBLE);
+        }else if(apiCallCounter == 0){
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+        Log.e(TAG, "apiCallCounter: "+apiCallCounter);
     }
 
     private boolean isLoggedIn(boolean toast){
@@ -215,13 +236,14 @@ public class RestoDetailActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        presenter.getRestoDetail(restoId);
+        presenter.getRestoDetail(restoId, userId);
+        addApiCounter(true);
     }
 
     @Override
     public void onPhoto(int position) {
         Intent i = new Intent(this, PhotoDetailActivity.class);
-        i.putExtra("placeId", restoId);
+        i.putExtra("restoId", restoId);
         i.putExtra("position", position);
         startActivity(i);
     }
@@ -256,17 +278,14 @@ public class RestoDetailActivity extends AppCompatActivity
         reportProblem.setOnClickListener(this);
 
         restoDetail = data;
-//        if (restoDetail.getRestoImg().size() == 0) {
-//            photoLayout.setVisibility(View.GONE);
-//        }
-//        reviewLayout.setVisibility(View.GONE);
 
         // load data
         Picasso.with(this)
-                .load(restoDetail.getImage())
+                .load(restoDetail.getImageUrl())
                 .noFade()
                 .fit()
                 .centerCrop()
+                .placeholder(R.drawable.empty_image)
                 .into(banner);
         if (restoDetail.getAvgRate() != null) {
             rate.setText(restoDetail.getAvgRate());
@@ -307,7 +326,9 @@ public class RestoDetailActivity extends AppCompatActivity
             miniList.add(restoDetail.getRatesReview().get(i));
         }
         reviewFragment.setData(miniList, restoId);
+        openDaysTitle.setVisibility(View.VISIBLE);
         openDays.setText(restoDetail.getWeekOpenTime());
+        addApiCounter(false);
     }
 
     private void fillRestoContent(RestoDetail data) {
@@ -380,30 +401,38 @@ public class RestoDetailActivity extends AppCompatActivity
 
     @Override
     public void failedGetRestoDetail() {
+        addApiCounter(false);
+        toast("Failed getting place detail data");
         Log.e("exc", "failedGetRestoImages");
     }
 
     @Override
     public void successChangeBookmark() {
+        addApiCounter(false);
         int idx = 0;
         buttonStatus[idx] = !buttonStatus[idx];
         changeButtonColor(idx);
+        toast("Success "+(buttonStatus[idx]?"add":"remove")+" bookmark");
     }
 
     @Override
     public void failedChangeBookmark(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        addApiCounter(false);
+        toast(message);
     }
 
     @Override
     public void successChangeBeenHere() {
+        addApiCounter(false);
         int idx = 1;
         buttonStatus[idx] = !buttonStatus[idx];
         changeButtonColor(idx);
+        toast("Success "+(buttonStatus[idx]?"add":"remove")+" been here");
     }
 
     @Override
     public void failedChangeBeenHere(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        addApiCounter(false);
+        toast(message);
     }
 }

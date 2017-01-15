@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -45,6 +46,10 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         restoAddress.setText(address);
         direction.setOnClickListener(this);
 
+        restoTitle.setTypeface(tf);
+        restoAddress.setTypeface(tf);
+        direction.setTypeface(tf);
+
         // Pushing MapView Fragment
         MapViewFragment fragment = MapViewFragment.newInstance(longitude, latitude);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -59,10 +64,21 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         if(ab != null) {
             ab.setDisplayShowTitleEnabled(false);
             ab.setDisplayShowHomeEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
         }
         TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
         tv.setText(title);
         tv.setTypeface(tf);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**

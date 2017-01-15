@@ -8,8 +8,11 @@ import com.google.gson.annotations.SerializedName;
 public class FindKeywordRequest {
     @SerializedName("keywords")
     private String keyword;
+    @SerializedName("user_id")
+    private String userId;
 
-    public FindKeywordRequest(String keyword) {
+    public FindKeywordRequest(String keyword, String userId) {
         this.keyword = keyword;
+        this.userId = userId;
     }
 }

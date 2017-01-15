@@ -12,6 +12,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ public class PhotoFragment extends Fragment implements View.OnClickListener, Ima
     private ArrayList<String> list;
     private String TAG="exc";
     private int restoId, userId;
+    private TextView emptyPhoto;
 
     public PhotoFragment() {
         // Required empty public constructor
@@ -48,6 +50,8 @@ public class PhotoFragment extends Fragment implements View.OnClickListener, Ima
         seeMore.setOnClickListener(this);
         seeMore.setTypeface(tf);
         TextView label = (TextView) v.findViewById(R.id.photo_label);
+        emptyPhoto = (TextView) v.findViewById(R.id.empty_photo);
+        emptyPhoto.setTypeface(tf);
         label.setOnClickListener(this);
         label.setTypeface(tf);
 
@@ -110,7 +114,11 @@ public class PhotoFragment extends Fragment implements View.OnClickListener, Ima
     public void setData(ArrayList<String> list, int restoId, int userId) {
         this.restoId = restoId;
         this.userId = userId;
-        setData(list);
+        if(list.isEmpty()){
+            emptyPhoto.setVisibility(View.VISIBLE);
+        }else {
+            setData(list);
+        }
     }
 
     private void setData(ArrayList<String> list) {

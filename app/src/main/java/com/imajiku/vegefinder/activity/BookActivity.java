@@ -5,11 +5,13 @@ import android.app.TimePickerDialog;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ import java.util.Calendar;
 
 public class BookActivity extends AppCompatActivity implements View.OnClickListener, BookView {
 
+    private static final String[] MONTH_NAMES = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     private ImageView banner;
     private TextView restoTitle, dateTitle, timeTitle;
     private EditText date, time, comment;
@@ -32,6 +35,8 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
     private Typeface tf;
     private BookPresenter presenter;
     private int placeId;
+    private ProgressBar progressBar;
+    private boolean isBooking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +48,9 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
         presenter.setModel(model);
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
-        placeId = getIntent().getIntExtra("placeId", -1);
+        placeId = getIntent().getIntExtra("restoId", -1);
         String title = getIntent().getStringExtra("title");
         String image = getIntent().getStringExtra("image");
 
@@ -75,7 +81,10 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
                 .noFade()
                 .fit()
                 .centerCrop()
+                .placeholder(R.drawable.empty_image)
                 .into(banner);
+
+        isBooking = false;
     }
 
     @Override
@@ -95,17 +104,11 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 StringBuilder sb = new StringBuilder();
-                                sb.append(year)
-                                        .append("-");
-                                if (monthOfYear < 9) {
-                                    sb.append("0");
-                                }
-                                sb.append(monthOfYear + 1)
-                                        .append("-");
-                                if (dayOfMonth < 10) {
-                                    sb.append("0");
-                                }
-                                sb.append(dayOfMonth);
+                                sb.append(dayOfMonth)
+                                        .append(" ");
+                                sb.append(MONTH_NAMES[monthOfYear])
+                                        .append(" ");
+                                sb.append(year);
                                 date.setText(sb.toString());
                             }
                         }, mYear, mMonth, mDay);
@@ -127,32 +130,44 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
                                 if (minute < 9) {
                                     sb.append("0");
                                 }
-                                sb.append(minute + 1);
+                                sb.append(minute);
                                 time.setText(sb.toString());
                             }
                         }, mHour, mMinute, false);
                 timePickerDialog.show();
                 break;
             case R.id.btn_book:
-                presenter.book(
-                        CurrentUser.getId(this),
-                        placeId,
-                        date.getText().toString(),
-                        time.getText().toString(),
-                        comment.getText().toString()
-                );
+                if(!date.getText().toString().isEmpty() && !time.getText().toString().isEmpty()) {
+                    if(!isBooking) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        isBooking = true;
+                        presenter.book(
+                                CurrentUser.getId(this),
+                                placeId,
+                                date.getText().toString(),
+                                time.getText().toString(),
+                                comment.getText().toString()
+                        );
+                    }
+                }else{
+                    Toast.makeText(BookActivity.this, "Please specify date and time", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
 
     @Override
     public void successBook() {
+        isBooking = false;
+        progressBar.setVisibility(View.INVISIBLE);
         Toast.makeText(BookActivity.this, R.string.success_booking, Toast.LENGTH_SHORT).show();
         finish();
     }
 
     @Override
     public void failedBook(String s) {
+        isBooking = false;
+        progressBar.setVisibility(View.INVISIBLE);
         Toast.makeText(BookActivity.this, s, Toast.LENGTH_SHORT).show();
     }
 }

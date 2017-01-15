@@ -40,16 +40,16 @@ public class BookModel {
                             presenter.successBook();
                         }
                     } else {
-                        presenter.failedBook("failed booking");
+                        presenter.failedBook("Failed booking");
                     }
                 } else {
-                    presenter.failedBook("failed booking");
+                    presenter.failedBook("Failed booking");
                 }
             }
 
             @Override
             public void onFailure(Call<StatusResponse> call, Throwable t) {
-                presenter.failedBook("failed booking");
+                presenter.failedBook("Failed booking");
             }
         });
     }

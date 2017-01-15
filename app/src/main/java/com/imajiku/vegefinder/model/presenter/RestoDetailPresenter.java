@@ -27,10 +27,6 @@ public class RestoDetailPresenter {
         this.model = model;
     }
 
-    public void getRestoDetail(int placeId) {
-        getRestoDetail(placeId, 1);
-    }
-
     public void getRestoDetail(int placeId, int userId) {
         model.getRestoDetail(placeId, userId);
     }

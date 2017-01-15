@@ -1,6 +1,7 @@
 package com.imajiku.vegefinder.pojo;
 
 import com.google.gson.annotations.SerializedName;
+import com.imajiku.vegefinder.utility.Utility;
 
 /**
  * Created by Alvin on 2016-10-01.
@@ -29,7 +30,7 @@ public class RestoPreview {
     }
 
     public String getImage() {
-        return image;
+        return Utility.attachImageUrl(image);
     }
 
     public String getTitle() {

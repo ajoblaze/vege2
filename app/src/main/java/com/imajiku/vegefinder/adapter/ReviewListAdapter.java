@@ -59,11 +59,12 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
 
     @Override
     public void onBindViewHolder(ReviewListViewHolder holder, int position) {
-//        Picasso.with(context)
-//                .load(list.get(position).getProfileImg())
-//                .resize(36, 36)
-//                .noFade()
-//                .into(holder.img);
+        Picasso.with(context)
+                .load(list.get(position).getImageUrl())
+                .resize(36, 36)
+                .noFade()
+                .placeholder(R.drawable.empty_user)
+                .into(holder.img);
         holder.name.setText(list.get(position).getFirstName());
         holder.title.setText(list.get(position).getTitle());
         holder.date.setText(list.get(position).getDateDiff(now));

@@ -4,7 +4,6 @@ import com.imajiku.vegefinder.model.request.BookRequest;
 import com.imajiku.vegefinder.model.request.CheckInRequest;
 import com.imajiku.vegefinder.model.request.ContactUsRequest;
 import com.imajiku.vegefinder.model.request.FeedbackRequest;
-import com.imajiku.vegefinder.model.request.FindAllRequest;
 import com.imajiku.vegefinder.model.request.FindKeywordRequest;
 import com.imajiku.vegefinder.model.request.FindRegionRequest;
 import com.imajiku.vegefinder.model.request.ForgotRequest;
@@ -91,12 +90,13 @@ public interface ApiService {
     Call<StatusResponse> logout();
 
     //    CONTACT
-    @POST("contact/sendContactUs")
+    @POST("contact/sendMessage")
     Call<StatusMessageResponse> sendContactUs(@Body ContactUsRequest request);
 
     //    PLACES
-    @GET("place/generate_place/{location}/{sort}/{filter}")
+    @GET("place/generate_place/{user_id}/{location}/{sort}/{filter}")
     Call<RestoListResponse> browseNearby(
+            @Path ("user_id") String userId,
             @Path ("location") String location,
             @Path ("sort") String sort,
             @Path ("filter") String filter
@@ -108,6 +108,9 @@ public interface ApiService {
             @Path ("sort") String sort
     );
 
+    @GET("place/might_like")
+    Call<RestoListResponse> mightLike();
+
     @POST("place/checkin")
     Call<CheckInResponse> checkIn(@Body CheckInRequest request);
 
@@ -116,9 +119,6 @@ public interface ApiService {
 
     @POST("place/search_keyword")
     Call<RestoListResponse> findKeyword(@Body FindKeywordRequest request);
-
-    @POST("place/search_all")
-    Call<RestoListResponse> findAll(@Body FindAllRequest request);
 
     @POST("place/bookmark")
     Call<ToggleResponse> addBookmark(@Body ToggleRequest request);
@@ -152,8 +152,8 @@ public interface ApiService {
 
     @GET("place/get_detail_place/{placeId}/{userId}")
     Call<RestoDetailResponse> getDetailPlace(
-            @Path ("placeId") int placeId,
-            @Path ("userId") int userId
+            @Path ("placeId") String placeId,
+            @Path ("userId") String userId
     );
 
     //    NEWS

@@ -3,13 +3,19 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/accentGreenBtn</item>
+        <item name="colorPrimaryDark">@color/accentGreenBtnDark</item>
         <item name="colorAccent">@color/accentGreenBg50</item>
+        <item name="colorControlNormal">@color/white</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="RatingBar" parent="AppTheme">
+        <item name="colorAccent">@color/accentGreenBg75</item>
+        <item name="colorControlNormal">@color/accentGreenBg50</item>
+    </style>
 
 </resources>

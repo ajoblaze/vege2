@@ -3,9 +3,7 @@ package com.imajiku.vegefinder.model.model;
 import android.util.Log;
 
 import com.imajiku.vegefinder.model.presenter.MainPresenter;
-import com.imajiku.vegefinder.model.request.FindKeywordRequest;
 import com.imajiku.vegefinder.model.request.SortFilterRequest;
-import com.imajiku.vegefinder.model.request.ToggleRequest;
 import com.imajiku.vegefinder.model.response.RestoListResponse;
 import com.imajiku.vegefinder.model.response.NewsResponse;
 import com.imajiku.vegefinder.pojo.News;
@@ -59,10 +57,9 @@ public class MainModel {
         });
     }
 
-    public void getRecommendation(String latitude, String longitude) {
-        String location = longitude + "," + latitude;
+    public void getRecommendation() {
         ApiService svc = retrofit.create(ApiService.class);
-        Call<RestoListResponse> call = svc.browseNearby(location, "average_rate-desc", "");
+        Call<RestoListResponse> call = svc.mightLike();
         Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
@@ -77,10 +74,35 @@ public class MainModel {
 
             @Override
             public void onFailure(Call<RestoListResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure: "+t.getMessage());
                 presenter.failedGetRecommendation();
             }
         });
     }
+
+//    public void getRecommendation(String userId, String latitude, String longitude) {
+//        String location = longitude + "," + latitude;
+//        ApiService svc = retrofit.create(ApiService.class);
+//        Call<RestoListResponse> call = svc.browseNearby(userId, location, "average_rate-desc", "");
+//        Log.e(TAG, String.valueOf(call.request().url()));
+//        call.enqueue(new Callback<RestoListResponse>() {
+//            @Override
+//            public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
+//                if (response.isSuccessful()) {
+//                    ArrayList<Resto> data = response.body().getData();
+//                    presenter.successGetRecommendation(data);
+//                } else {
+//                    presenter.failedGetRecommendation();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<RestoListResponse> call, Throwable t) {
+//                Log.e(TAG, "onFailure: "+t.getMessage());
+//                presenter.failedGetRecommendation();
+//            }
+//        });
+//    }
 
     public void getBookmarks(SortFilterRequest request) {
         ApiService svc = retrofit.create(ApiService.class);

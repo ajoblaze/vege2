@@ -3,6 +3,7 @@ package com.imajiku.vegefinder.pojo;
 import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
+import com.imajiku.vegefinder.utility.Utility;
 
 import java.io.Serializable;
 
@@ -11,7 +12,7 @@ import java.io.Serializable;
  */
 public class UserProfile implements Serializable {
     @SerializedName("id")
-    private int id;
+    private String id;
     @SerializedName("ip_address")
     private String ipAddress;
     @SerializedName("username")
@@ -35,7 +36,7 @@ public class UserProfile implements Serializable {
     @SerializedName("last_login")
     private String lastLogin;
     @SerializedName("active")
-    private int isActive;
+    private String isActive;
     @SerializedName("first_name")
     private String firstName;
     @SerializedName("last_name")
@@ -47,11 +48,11 @@ public class UserProfile implements Serializable {
     @SerializedName("address")
     private String address;
     @SerializedName("country")
-    private int countryId;
+    private String country;
     @SerializedName("province")
-    private int provinceId;
+    private String province;
     @SerializedName("city")
-    private int cityId;
+    private String city;
     @SerializedName("phone")
     private String phone;
     @SerializedName("mobile")
@@ -60,6 +61,8 @@ public class UserProfile implements Serializable {
     private String preference;
     @SerializedName("image")
     private String image;
+    @SerializedName("img_url")
+    private String imageUrl;
     @SerializedName("how")
     private String how;
     @SerializedName("dob")
@@ -73,7 +76,17 @@ public class UserProfile implements Serializable {
     }
 
     public int getId() {
-        return id;
+        return parseInt(id);
+    }
+    
+    public int parseInt(String s){
+        int i;
+        try {
+            i = Integer.parseInt(s);
+        }catch(NumberFormatException e) {
+            i = 0;
+        }
+        return i;
     }
 
     public String getIpAddress() {
@@ -121,7 +134,7 @@ public class UserProfile implements Serializable {
     }
 
     public int getIsActive() {
-        return isActive;
+        return parseInt(isActive);
     }
 
     public String getFirstName() {
@@ -145,15 +158,15 @@ public class UserProfile implements Serializable {
     }
 
     public int getCountryId() {
-        return countryId;
+        return parseInt(country);
     }
 
     public int getProvinceId() {
-        return provinceId;
+        return parseInt(province);
     }
 
     public int getCityId() {
-        return cityId;
+        return parseInt(city);
     }
 
     public String getPhone() {
@@ -169,7 +182,11 @@ public class UserProfile implements Serializable {
     }
 
     public String getImage() {
-        return image;
+        return Utility.attachImageUrl(image);
+    }
+
+    public String getImageUrl() {
+        return Utility.attachImageUrl(imageUrl);
     }
 
     public String getHow() {

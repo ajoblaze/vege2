@@ -1,17 +1,15 @@
 package com.imajiku.vegefinder.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -19,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,8 +43,6 @@ import com.imajiku.vegefinder.model.presenter.LoginPresenter;
 import com.imajiku.vegefinder.model.view.LoginView;
 import com.imajiku.vegefinder.utility.CurrentUser;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity implements
@@ -67,6 +64,8 @@ public class LoginActivity extends AppCompatActivity implements
     private GoogleApiClient googleApiClient;
     private String TAG = "exc";
     private CallbackManager callbackManager;
+    private ProgressBar progressBar;
+    private boolean isLoggingIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,14 +93,15 @@ public class LoginActivity extends AppCompatActivity implements
         LoginModel model = new LoginModel(presenter);
         presenter.setModel(model);
 
-        if(presenter.getCurrentLogin() > -1 && CurrentUser.getId(this) > -1){
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+
+        if (presenter.getCurrentLogin() > -1 && CurrentUser.getId(this) > -1) {
             successLogin(CurrentUser.getId(this));
         }
 
         setupFbLogin();
         gplusLogin();
-
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
 
         username = (EditText) findViewById(R.id.username_field);
         pass = (EditText) findViewById(R.id.password_field);
@@ -134,21 +134,35 @@ public class LoginActivity extends AppCompatActivity implements
         skip.setOnClickListener(this);
         forgot.setOnClickListener(this);
         register.setOnClickListener(this);
+        isLoggingIn = false;
     }
 
     public void initToolbar() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
         ActionBar ab = getSupportActionBar();
-        if(ab != null) {
+        if (ab != null) {
             ab.setDisplayShowTitleEnabled(false);
             ab.setDisplayShowHomeEnabled(true);
         }
         ImageView iv = (ImageView) mToolbar.findViewById(R.id.toolbar_image);
     }
 
-    private String getString(EditText et){
+    private String getString(EditText et) {
         return et.getText().toString();
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm Exit")
+                .setMessage("Do you really want to exit application?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null).show();
     }
 
     @Override
@@ -156,8 +170,12 @@ public class LoginActivity extends AppCompatActivity implements
         hideKeyboard();
         switch (v.getId()) {
             case R.id.login_button:
-                if(!getString(username).equals("") && !getString(pass).equals("")){
-                    presenter.login(NORMAL, getString(username), getString(pass));
+                if(!isLoggingIn) {
+                    isLoggingIn = true;
+                    if (!getString(username).equals("") && !getString(pass).equals("")) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        presenter.login(NORMAL, getString(username), getString(pass));
+                    }
                 }
                 break;
             case R.id.skip_login: {
@@ -165,7 +183,7 @@ public class LoginActivity extends AppCompatActivity implements
                 i.putExtra("isLogin", false);
                 startActivity(i);
             }
-                break;
+            break;
             case R.id.forgot_password:
                 startActivity(new Intent(LoginActivity.this, ForgotActivity.class));
                 break;
@@ -173,13 +191,13 @@ public class LoginActivity extends AppCompatActivity implements
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                 break;
             case R.id.fb_button:
-                if(!checkIfFbLoggedIn()) {
+                if (!checkIfFbLoggedIn()) {
                     Log.e(TAG, "fb login");
                     LoginManager.getInstance().logInWithReadPermissions(
                             LoginActivity.this,
                             Arrays.asList("user_photos", "email", "user_birthday", "public_profile")
                     );
-                }else{
+                } else {
                     Log.e(TAG, "fb logout");
                     LoginManager.getInstance().logOut();
                     presenter.logout();
@@ -203,7 +221,9 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     public void successLogin(int userId) {
-        Log.e(TAG, "successLogin "+userId);
+        progressBar.setVisibility(View.INVISIBLE);
+        isLoggingIn = false;
+        Log.e(TAG, "successLogin " + userId);
         CurrentUser.setId(this, userId);
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         i.putExtra("isLogin", true);
@@ -214,10 +234,12 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     public void failedLogin() {
+        progressBar.setVisibility(View.INVISIBLE);
+        isLoggingIn = false;
         Toast.makeText(LoginActivity.this, "Your email has not been verified", Toast.LENGTH_SHORT).show();
     }
 
-    public boolean checkIfFbLoggedIn(){
+    public boolean checkIfFbLoggedIn() {
         // check if user is logged in
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if (accessToken != null) {
@@ -294,6 +316,7 @@ public class LoginActivity extends AppCompatActivity implements
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

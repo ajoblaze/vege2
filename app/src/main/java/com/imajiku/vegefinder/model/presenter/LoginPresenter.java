@@ -18,6 +18,8 @@ public class LoginPresenter {
     private static final String LOGIN_PREF = "login_pref";
     private static final String LOGIN_KEY = "login";
     private static final String USER_ID_KEY = "user_id";
+    private static final String FIRST_PREF = "first_time_user";
+    private static final String FIRST_KEY = "first";
 
     public LoginPresenter(LoginView view) {
         this.view = view;
@@ -61,6 +63,18 @@ public class LoginPresenter {
 
     public void logout() {
 
+    }
+
+    public void setFirstTime(boolean isFirst) {
+        SharedPreferences preferences = getContext().getSharedPreferences(FIRST_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(FIRST_KEY, isFirst);
+        editor.apply();
+    }
+
+    public boolean isFirstTime(){
+        SharedPreferences preferences = getContext().getSharedPreferences(FIRST_PREF, Context.MODE_PRIVATE);
+        return preferences.getBoolean(FIRST_KEY, false);
     }
 }
 

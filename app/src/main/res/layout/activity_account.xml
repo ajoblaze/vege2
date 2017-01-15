@@ -5,383 +5,397 @@
     android:layout_height="wrap_content"
     tools:context="com.imajiku.vegefinder.activity.AccountActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <include
-            android:id="@+id/app_bar"
-            layout="@layout/toolbar" />
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             android:orientation="vertical">
 
-            <com.imajiku.vegefinder.utility.CircularImageView
-                android:id="@+id/profPic"
-                android:layout_width="170dp"
-                android:layout_height="170dp"
-                android:layout_gravity="center_horizontal"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:src="@drawable/empty_user" />
+            <include
+                android:id="@+id/app_bar"
+                layout="@layout/toolbar" />
 
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/user_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/accentGreenBtn"
-                android:visibility="gone" />
-
-            <Button
-                android:id="@+id/edit_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/rounded_green"
-                android:drawableLeft="@drawable/ic_edit_white_24dp_m"
-                android:drawablePadding="5dp"
-                android:padding="8dp"
-                android:text="@string/edit_profile"
-                android:textColor="@color/white" />
-
-            <!--bookmark-->
             <LinearLayout
-                android:id="@+id/bookmark_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
+                android:layout_margin="@dimen/activity_margin"
+                android:orientation="vertical">
 
+                <com.imajiku.vegefinder.utility.CircularImageView
+                    android:id="@+id/profPic"
+                    android:layout_width="170dp"
+                    android:layout_height="170dp"
+                    android:layout_gravity="center_horizontal"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/empty_user" />
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/user_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/accentGreenBtn"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/edit_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/rounded_green"
+                    android:drawableLeft="@drawable/ic_edit_white_24dp_m"
+                    android:drawablePadding="5dp"
+                    android:padding="8dp"
+                    android:text="@string/edit_profile"
+                    android:textColor="@color/white" />
+
+                <!--bookmark-->
                 <LinearLayout
+                    android:id="@+id/bookmark_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
-                    <ImageView
-                        android:id="@+id/icon_bookmark"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_bookmark_border_black_24dp_m" />
+                        android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:text="@string/bookmark" />
+                        <ImageView
+                            android:id="@+id/icon_bookmark"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_bookmark_border_black_24dp_m" />
 
-                    <TextView
-                        android:id="@+id/bookmark_count"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:text="@string/bookmark" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text=">" />
+                        <TextView
+                            android:id="@+id/bookmark_count"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text=">" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:background="@color/black" />
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/black" />
 
-            <!--been here-->
-            <LinearLayout
-                android:id="@+id/been_here_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
+                <!--been here-->
                 <LinearLayout
+                    android:id="@+id/been_here_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
-                    <ImageView
-                        android:id="@+id/icon_beenhere"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_location_on_black_24dp_m" />
+                        android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:text="@string/been_here" />
+                        <ImageView
+                            android:id="@+id/icon_beenhere"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_location_on_black_24dp_m" />
 
-                    <TextView
-                        android:id="@+id/been_here_count"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:text="@string/been_here" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text=">" />
+                        <TextView
+                            android:id="@+id/been_here_count"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text=">" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:background="@color/black" />
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/black" />
 
-            <!--my booking-->
-            <LinearLayout
-                android:id="@+id/booking_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
+                <!--my booking-->
                 <LinearLayout
+                    android:id="@+id/booking_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
-                    <ImageView
-                        android:id="@+id/icon_booking"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_event_note_black_24dp_m" />
+                        android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="6"
-                        android:text="@string/my_booking"
-                        android:textColor="@color/selectedGrayDarker" />
+                        <ImageView
+                            android:id="@+id/icon_booking"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_event_note_black_24dp_m" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text=">"
-                        android:textColor="@color/selectedGrayDarker" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:text="@string/my_booking"
+                            android:textColor="@color/selectedGrayDarker" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text=">"
+                            android:textColor="@color/selectedGrayDarker" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:background="@color/black" />
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/black" />
 
-            <!--check in history-->
-            <LinearLayout
-                android:id="@+id/history_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
+                <!--check in history-->
                 <LinearLayout
+                    android:id="@+id/history_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
-                    <ImageView
-                        android:id="@+id/icon_history"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_history_black_24dp_m" />
+                        android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="6"
-                        android:text="@string/check_in_history"
-                        android:textColor="@color/selectedGrayDarker" />
+                        <ImageView
+                            android:id="@+id/icon_history"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_history_black_24dp_m" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text=">"
-                        android:textColor="@color/selectedGrayDarker" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:text="@string/check_in_history"
+                            android:textColor="@color/selectedGrayDarker" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text=">"
+                            android:textColor="@color/selectedGrayDarker" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:background="@color/black" />
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/black" />
 
-            <!--offers-->
-            <LinearLayout
-                android:id="@+id/offer_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
+                <!--offers-->
                 <LinearLayout
+                    android:id="@+id/offer_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
-                    <ImageView
-                        android:id="@+id/icon_offer"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_attach_money_black_24dp_m" />
+                        android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="6"
-                        android:text="@string/offers"
-                        android:textColor="@color/selectedGrayDarker" />
+                        <ImageView
+                            android:id="@+id/icon_offer"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_attach_money_black_24dp_m" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text=">"
-                        android:textColor="@color/selectedGrayDarker" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:text="@string/offers"
+                            android:textColor="@color/selectedGrayDarker" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text=">"
+                            android:textColor="@color/selectedGrayDarker" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:background="@color/black" />
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/black" />
 
-            <!--send feedback-->
-            <LinearLayout
-                android:id="@+id/feedback_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
+                <!--send feedback-->
                 <LinearLayout
+                    android:id="@+id/feedback_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
-                    <ImageView
-                        android:id="@+id/icon_feedback"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_feedback_black_24dp_m" />
+                        android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="6"
-                        android:text="@string/send_feedback" />
+                        <ImageView
+                            android:id="@+id/icon_feedback"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_feedback_black_24dp_m" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text=">" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:text="@string/send_feedback" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text=">" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:background="@color/black" />
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/black" />
 
-            <!--about-->
-            <LinearLayout
-                android:id="@+id/about_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
+                <!--about-->
                 <LinearLayout
+                    android:id="@+id/about_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
-                    <ImageView
-                        android:id="@+id/icon_about"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_info_outline_black_24dp_m" />
+                        android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="6"
-                        android:text="@string/about" />
+                        <ImageView
+                            android:id="@+id/icon_about"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_info_outline_black_24dp_m" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text=">" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:text="@string/about" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text=">" />
+                    </LinearLayout>
                 </LinearLayout>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/black" />
+
+                <Button
+                    android:id="@+id/google_play"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/rounded_green"
+                    android:drawableLeft="@drawable/ic_star_rate_white_18dp_m"
+                    android:drawablePadding="5dp"
+                    android:padding="8dp"
+                    android:text="@string/google_play"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/rounded_green"
+                    android:drawableLeft="@drawable/ic_edit_white_24dp_m"
+                    android:drawablePadding="5dp"
+                    android:padding="8dp"
+                    android:text="@string/logout"
+                    android:textColor="@color/white" />
+
             </LinearLayout>
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:background="@color/black" />
-
-            <Button
-                android:id="@+id/google_play"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/rounded_green"
-                android:drawableLeft="@drawable/ic_star_rate_white_18dp_m"
-                android:drawablePadding="5dp"
-                android:padding="8dp"
-                android:text="@string/google_play"
-                android:textColor="@color/white" />
-
-            <Button
-                android:id="@+id/logout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/rounded_green"
-                android:drawableLeft="@drawable/ic_edit_white_24dp_m"
-                android:drawablePadding="5dp"
-                android:padding="8dp"
-                android:text="@string/logout"
-                android:textColor="@color/white" />
-
         </LinearLayout>
-    </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 </ScrollView>

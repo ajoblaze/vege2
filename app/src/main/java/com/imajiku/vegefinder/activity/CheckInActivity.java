@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -65,6 +66,8 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
     private TwitterAuthClient twitterAuthClient;
     private TwitterFactory twitterFactory;
     private ProgressBar progressBar;
+    private int apiCallCounter = 0;
+    private boolean isCheckIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +87,7 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
         initToolbar("Check In");
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
-        placeId = getIntent().getIntExtra("placeId", -1);
+        placeId = getIntent().getIntExtra("restoId", -1);
         comment = (EditText) findViewById(R.id.comment);
         fb = (AppCompatCheckBox) findViewById(R.id.checkin_fb);
         twitter = (AppCompatCheckBox) findViewById(R.id.checkin_twit);
@@ -103,6 +106,8 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
         checkInBtn.setTypeface(tf);
 
         checkInBtn.setOnClickListener(this);
+
+        isCheckIn = false;
     }
 
     private ColorStateList setColorStateList(int color) {
@@ -120,6 +125,7 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
         if (ab != null) {
             ab.setDisplayShowTitleEnabled(false);
             ab.setDisplayShowHomeEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
         }
         TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
         tv.setText(title);
@@ -127,20 +133,35 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onClick(View view) {
         hideKeyboard();
         switch (view.getId()) {
             case R.id.btn_check_in:
-                presenter.checkIn(CurrentUser.getId(this), placeId, comment.getText().toString());
-                progressBar.setVisibility(View.VISIBLE);
-                if (fb.isChecked()) {
-                    if (AccessToken.getCurrentAccessToken() == null) { // not logged in
-                        fbLogin();
-                    } else { // logged in
-                        postToFb(AccessToken.getCurrentAccessToken());
+                if(!isCheckIn) {
+                    isCheckIn = true;
+                    presenter.checkIn(CurrentUser.getId(this), placeId, comment.getText().toString());
+                    addApiCounter(true);
+                    if (fb.isChecked()) {
+                        addApiCounter(true);
+                        if (AccessToken.getCurrentAccessToken() == null) { // not logged in
+                            fbLogin();
+                        } else { // logged in
+                            postToFb(AccessToken.getCurrentAccessToken());
+                        }
+                    } else if (twitter.isChecked()) {
+                        addApiCounter(true);
+                        new TweetTask().execute();
                     }
-                } else if (twitter.isChecked()) {
-                    new TweetTask().execute();
                 }
                 break;
         }
@@ -149,11 +170,16 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void successCheckIn() {
         Log.e("exc", "successCheckIn!");
+        Toast.makeText(CheckInActivity.this, "Checked in successfully", Toast.LENGTH_SHORT).show();
+        isCheckIn = false;
+        addApiCounter(false);
     }
 
     @Override
     public void failedCheckIn(String message) {
         Toast.makeText(CheckInActivity.this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(CheckInActivity.this, "Failed check in", Toast.LENGTH_SHORT).show();
+        addApiCounter(false);
     }
 
     @Override
@@ -175,6 +201,22 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    public void addApiCounter(boolean isStart){
+        if(isStart){
+            apiCallCounter++;
+        }else{
+            if(apiCallCounter > 0) {
+                apiCallCounter--;
+            }
+        }
+        if(apiCallCounter == 1){
+            progressBar.setVisibility(View.VISIBLE);
+        }else if(apiCallCounter == 0){
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+        Log.e(TAG, "apiCallCounter: "+apiCallCounter);
     }
 
     /**
@@ -225,10 +267,9 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
                 Log.e(TAG, "Response: " + response.getRawResponse());
                 Toast.makeText(CheckInActivity.this, "Successfully shared on Facebook", Toast.LENGTH_SHORT).show();
                 //post to twitter if selected
+                addApiCounter(false);
                 if (twitter.isChecked()) {
                     new TweetTask().execute();
-                } else {
-                    progressBar.setVisibility(View.GONE);
                 }
             }
         }).executeAsync();
@@ -262,7 +303,7 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
         twitterAuthClient.authorize(this, new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> twitterSessionResult) {
-                Log.e(TAG, "success login twitter");
+                Log.e(TAG, "Success login twitter");
                 TwitterSession session = TwitterCore.getInstance().getSessionManager()
                         .getActiveSession();
                 Intent intent = new ComposerActivity.Builder(CheckInActivity.this)
@@ -286,7 +327,8 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
         try {
             Status status = twitter.updateStatus(comment.getText().toString());
         } catch (twitter4j.TwitterException e) {
-            Log.e(TAG, "failed send tweet: " + Arrays.toString(e.getStackTrace()));
+            Log.e(TAG, "Failed send tweet: " + Arrays.toString(e.getStackTrace()));
+            Toast.makeText(CheckInActivity.this, "Failed sending tweet", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -302,7 +344,7 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             Toast.makeText(CheckInActivity.this, "Successfully shared on Twitter", Toast.LENGTH_SHORT).show();
-            progressBar.setVisibility(View.GONE);
+            addApiCounter(false);
         }
     }
 }

@@ -36,8 +36,15 @@ public class MainPresenter {
         model.getNews();
     }
 
-    public void getRecommendation(String longitude, String latitude) {
-        model.getRecommendation(latitude, longitude);
+    public void getRecommendation() {
+        model.getRecommendation();
+    }
+
+    private String getUserIdString(int userId){
+        if(userId != -1){
+            return String.valueOf(userId);
+        }
+        return "-";
     }
 
     public void successGetNews(ArrayList<News> news) {

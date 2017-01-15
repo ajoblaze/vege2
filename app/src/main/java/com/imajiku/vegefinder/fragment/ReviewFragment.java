@@ -1,5 +1,6 @@
 package com.imajiku.vegefinder.fragment;
 
+import android.app.MediaRouteButton;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -38,6 +39,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private ArrayList<Review> list;
     private String TAG="exc";
     private int restoId, userId;
+    private TextView emptyReview;
 
     public ReviewFragment() {
         // Required empty public constructor
@@ -53,6 +55,8 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         seeMore.setOnClickListener(this);
         seeMore.setTypeface(tf);
         TextView label = (TextView) v.findViewById(R.id.review_label);
+        emptyReview = (TextView) v.findViewById(R.id.empty_review);
+        emptyReview.setTypeface(tf);
         label.setOnClickListener(this);
         label.setTypeface(tf);
 
@@ -108,7 +112,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.see_more: {
                 Intent i = new Intent(getActivity(), ReviewListActivity.class);
-                i.putExtra("placeId", restoId);
+                i.putExtra("restoId", restoId);
                 startActivity(i);
             }
             break;
@@ -117,7 +121,11 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
 
     public void setData(ArrayList<Review> list, int restoId) {
         this.restoId = restoId;
-        setData(list);
+        if(list.isEmpty()){
+            emptyReview.setVisibility(View.VISIBLE);
+        }else {
+            setData(list);
+        }
     }
 
     private void setData(ArrayList<Review> list) {

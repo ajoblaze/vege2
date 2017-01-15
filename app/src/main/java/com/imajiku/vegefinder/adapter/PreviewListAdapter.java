@@ -3,6 +3,7 @@ package com.imajiku.vegefinder.adapter;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,10 +72,12 @@ public class PreviewListAdapter extends RecyclerView.Adapter<PreviewListAdapter.
         final RestoPreview item = list.get(position);
         View itemView = holder.itemView;
         if(!item.getImage().equals("")) {
+            Log.e(TAG, item.getImage());
             Picasso.with(context)
                     .load(item.getImage())
                     .resize(width, height)
                     .centerCrop()
+                    .placeholder(R.drawable.empty_image)
                     .into(holder.img);
         }
         holder.title.setText(item.getTitle());
