@@ -45,7 +45,7 @@ public class PhotoFragment extends Fragment implements View.OnClickListener, Ima
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_photo, container, false);
 
-        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Sniglet-Regular.ttf");
+        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/VDS_New.ttf");
         TextView seeMore = (TextView) v.findViewById(R.id.see_more);
         seeMore.setOnClickListener(this);
         seeMore.setTypeface(tf);

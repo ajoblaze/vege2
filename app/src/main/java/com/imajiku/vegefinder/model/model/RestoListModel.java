@@ -94,7 +94,7 @@ public class RestoListModel {
         }
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.browseNearby(userId, location, sort, filter);
-//        Log.e(TAG, String.valueOf(call.request().url()));
+        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {

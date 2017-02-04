@@ -59,7 +59,7 @@ public class AccountActivity extends AppCompatActivity implements AccountView, V
         AccountModel model = new AccountModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
 
         initToolbar(getString(R.string.title_account));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);

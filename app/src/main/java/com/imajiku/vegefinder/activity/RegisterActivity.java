@@ -39,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         RegisterModel model = new RegisterModel(presenter);
         presenter.setModel(model);
 
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         TextView title = (TextView) findViewById(R.id.title);

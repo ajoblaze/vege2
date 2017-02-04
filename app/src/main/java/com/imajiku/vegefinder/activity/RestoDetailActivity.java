@@ -50,7 +50,7 @@ public class RestoDetailActivity extends AppCompatActivity
     private RestoDetail restoDetail;
     private boolean[] buttonStatus = new boolean[2];
     private LinearLayout photoLayout, reviewLayout;
-    private Typeface tf;
+    private Typeface tf, tfBold;
     private ProgressBar progressBar;
     private int apiCallCounter = 0;
 
@@ -63,7 +63,8 @@ public class RestoDetailActivity extends AppCompatActivity
         RestoDetailModel model = new RestoDetailModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tfBold = Typeface.createFromAsset(getAssets(), "fonts/VDS_Bold_New.ttf");
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         restoDetail = null;
@@ -129,7 +130,7 @@ public class RestoDetailActivity extends AppCompatActivity
             b.setTypeface(tf);
         }
         for (TextView t : restoContentTitle) {
-            t.setTypeface(tf);
+            t.setTypeface(tfBold);
         }
         for (TextView t : restoContent) {
             t.setTypeface(tf);
@@ -137,7 +138,7 @@ public class RestoDetailActivity extends AppCompatActivity
         map.setTypeface(tf);
         addPhoto.setTypeface(tf);
         addReview.setTypeface(tf);
-        openDaysTitle.setTypeface(tf);
+        openDaysTitle.setTypeface(tfBold);
         openDays.setTypeface(tf);
         reportProblem.setTypeface(tf);
     }

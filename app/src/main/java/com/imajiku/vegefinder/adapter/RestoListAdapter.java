@@ -25,7 +25,7 @@ import java.util.Iterator;
  */
 public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.RestoListViewHolder> {
     private final RestoListListener listener;
-    private Typeface tf;
+    private Typeface tf, tfBold;
     private ArrayList<Resto> list;
     private Context context;
     private String TAG = "exc";
@@ -42,6 +42,8 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
     public RestoListAdapter(Context context, RestoListListener listener) {
         this.context = context;
         this.listener = listener;
+        tf = Typeface.createFromAsset(context.getAssets(), "fonts/VDS_New.ttf");
+        tfBold = Typeface.createFromAsset(context.getAssets(), "fonts/VDS_Bold_New.ttf");
         list = new ArrayList<>();
     }
 
@@ -151,7 +153,7 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
             });
             holder.flag.setColorFilter(ContextCompat.getColor(context, R.color.accentGreenBtn));
 //            holder.ratingBar.setRating(list.get(position).getRating());
-            holder.name.setTypeface(tf);
+            holder.name.setTypeface(tfBold);
             for (int i = 0; i < holder.restoLayouts.length; i++) {
                 for (int ii = 0; ii < holder.restoLayouts[i].getChildCount(); ii++) {
                     ((TextView) holder.restoLayouts[i].getChildAt(ii)).setTypeface(tf);
@@ -171,10 +173,6 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
     @Override
     public int getItemCount() {
         return list.size();
-    }
-
-    public void setTypeface(Typeface typeface) {
-        this.tf = typeface;
     }
 
     public void updateBookmark(int placeId, boolean isBookmarked) {

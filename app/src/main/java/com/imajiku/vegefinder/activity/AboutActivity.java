@@ -18,7 +18,7 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
 
         LinearLayout aboutLayout = (LinearLayout) findViewById(R.id.about_layout);
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
 
         for(int ii = 0; ii < aboutLayout.getChildCount(); ii++){
             if(aboutLayout.getChildAt(ii) instanceof TextView){

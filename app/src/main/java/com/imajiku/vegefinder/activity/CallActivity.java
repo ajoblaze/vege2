@@ -32,7 +32,7 @@ public class CallActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         initToolbar("Call");
 
         TextView title = (TextView) findViewById(R.id.title);

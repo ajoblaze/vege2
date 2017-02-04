@@ -42,7 +42,7 @@ public class ReviewListActivity extends AppCompatActivity implements ReviewListV
         ReviewListModel model = new ReviewListModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         initToolbar(getString(R.string.title_review));

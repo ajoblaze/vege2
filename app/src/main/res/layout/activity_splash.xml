@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/translucentWater25"
     tools:context=".activity.SplashActivity">
 
-    <ImageView
-        android:id="@+id/background"
+    <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:src="@drawable/splash3"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/logo" />
+    />
 
 </RelativeLayout>

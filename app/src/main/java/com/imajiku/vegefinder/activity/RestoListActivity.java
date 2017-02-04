@@ -85,7 +85,7 @@ public class RestoListActivity extends AppCompatActivity implements
     private RadioGroup orderGroup;
     private boolean[] sortSelected;
     private LinearLayout[] sortButtonLayout;
-    private String[] sortText = {"title", "distance", "date_post", "price_start"};
+    private String[] sortText = {"title", "distance", "date_post", "average_cost"};
     private int currSelectedSort = -1;
     private RestoListPresenter presenter;
     private int pageType, filterCode;
@@ -117,7 +117,7 @@ public class RestoListActivity extends AppCompatActivity implements
         RestoListModel model = new RestoListModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         Intent intent = getIntent();

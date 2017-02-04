@@ -50,6 +50,7 @@ public class EditProfileModel {
 
             @Override
             public void onFailure(Call<StatusResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure: "+t.getMessage());
                 presenter.failedRegisterProfile();
             }
         });

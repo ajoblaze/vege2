@@ -83,7 +83,7 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
 
         setupTwitter();
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         initToolbar("Check In");
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 

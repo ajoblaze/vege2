@@ -35,7 +35,7 @@ public class ReviewListFragment extends Fragment implements ReviewListAdapter.Re
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Sniglet-Regular.ttf");
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/VDS_New.ttf");
         adapter = new ReviewListAdapter(getContext());
         adapter.setTypeface(tf);
         recyclerView.setAdapter(adapter);

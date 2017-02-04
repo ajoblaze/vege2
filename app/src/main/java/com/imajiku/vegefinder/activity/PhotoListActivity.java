@@ -45,7 +45,7 @@ public class PhotoListActivity extends AppCompatActivity implements ImageListAda
         PhotoListModel model = new PhotoListModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         initToolbar(getResources().getString(R.string.photos));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 

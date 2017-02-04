@@ -38,7 +38,7 @@ public class VerifyForgotActivity extends AppCompatActivity implements View.OnCl
         VerifyForgotModel model = new VerifyForgotModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         title = (TextView) findViewById(R.id.vf_title);

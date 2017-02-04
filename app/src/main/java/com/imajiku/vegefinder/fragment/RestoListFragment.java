@@ -46,9 +46,7 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
 
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Sniglet-Regular.ttf");
         adapter = new RestoListAdapter(getContext(), this);
-        adapter.setTypeface(tf);
         recyclerView.setAdapter(adapter);
         return v;
     }

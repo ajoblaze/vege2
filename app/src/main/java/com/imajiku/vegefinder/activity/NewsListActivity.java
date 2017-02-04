@@ -1,11 +1,13 @@
 package com.imajiku.vegefinder.activity;
 
+import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -30,6 +32,7 @@ import com.imajiku.vegefinder.pojo.News;
 import com.imajiku.vegefinder.pojo.Resto;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class NewsListActivity extends AppCompatActivity implements
         NewsListFragment.NewsListListener,View.OnClickListener, NewsListView {
@@ -41,7 +44,6 @@ public class NewsListActivity extends AppCompatActivity implements
     private ExpandableRelativeLayout sortLayout;
     private TextView submitSort;
     private RadioGroup orderGroup;
-    private RadioButton desc;
     private boolean[] sortSelected;
     private LinearLayout[] sortButtonLayout;
     private int currSelectedSort = -1;
@@ -64,7 +66,7 @@ public class NewsListActivity extends AppCompatActivity implements
         NewsListModel model = new NewsListModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         addApiCounter(true);
@@ -88,7 +90,11 @@ public class NewsListActivity extends AppCompatActivity implements
         orderGroup = (RadioGroup) findViewById(R.id.sort_order);
         submitSort = (TextView) findViewById(R.id.submit_sort);
         for(int i=0;i<orderGroup.getChildCount();i++){
-            ((RadioButton) orderGroup.getChildAt(i)).setTypeface(tf);
+            AppCompatRadioButton radio = (AppCompatRadioButton) orderGroup.getChildAt(i);
+            radio.setTypeface(tf);
+            radio.setSupportButtonTintList(setColorStateList(
+                    ContextCompat.getColor(this, R.color.accentGreenBtnDark)
+            ));
         }
         submitSort.setTypeface(tf);
 
@@ -98,6 +104,14 @@ public class NewsListActivity extends AppCompatActivity implements
             ((TextView) sortButtonLayout[i].getChildAt(1)).setTypeface(tf);
         }
         submitSort.setOnClickListener(this);
+    }
+
+    private ColorStateList setColorStateList(int color) {
+        return new ColorStateList(
+                new int[][]{
+                        new int[]{android.R.attr.state_enabled} //enabled
+                }, new int[]{color}
+        );
     }
 
     public void addApiCounter(boolean isStart){
@@ -148,21 +162,19 @@ public class NewsListActivity extends AppCompatActivity implements
                 isSortToggled = !isSortToggled;
                 changeMenuButton();
                 break;
-            case R.id.alpha:
+            case R.id.sort_alpha_ll:
                 changeSortButton(0);
                 break;
-            case R.id.distance:
+            case R.id.sort_date_ll:
                 changeSortButton(1);
                 break;
-            case R.id.date:
-                changeSortButton(2);
-                break;
-            case R.id.price:
-                changeSortButton(3);
-                break;
             case R.id.submit_sort:
-                sortLayout.collapse();
-                newsListFragment.sort(newsList, getSortResult());
+                if(currSelectedSort == -1) {
+                    Toast.makeText(NewsListActivity.this, "Please choose sort type", Toast.LENGTH_SHORT).show();
+                }else{
+                    sortLayout.collapse();
+                    newsListFragment.sort(newsList, getSortResult());
+                }
                 break;
         }
     }
@@ -213,6 +225,7 @@ public class NewsListActivity extends AppCompatActivity implements
     @Override
     public void successLoadNews(ArrayList<News> data) {
         sortLayout.setVisibility(View.VISIBLE);
+        newsList = data;
         newsListFragment.sort(data, new int[]{1, 1});
         addApiCounter(false);
     }
@@ -227,5 +240,10 @@ public class NewsListActivity extends AppCompatActivity implements
     @Override
     public void onNewsList(Uri uri) {
 
+    }
+
+    @Override
+    public void toggleSpinner(boolean b) {
+        addApiCounter(b);
     }
 }

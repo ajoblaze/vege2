@@ -31,7 +31,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         initToolbar(getResources().getString(R.string.maps_and_directions));
 
         String title = getIntent().getStringExtra("title");

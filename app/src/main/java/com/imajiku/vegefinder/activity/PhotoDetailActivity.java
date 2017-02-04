@@ -54,7 +54,7 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_detail);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         restoId = getIntent().getIntExtra("restoId", -1);

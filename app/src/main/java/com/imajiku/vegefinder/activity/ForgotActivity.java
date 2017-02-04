@@ -38,7 +38,7 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
         ForgotModel model = new ForgotModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         title = (TextView) findViewById(R.id.forget_title);

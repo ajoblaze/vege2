@@ -24,7 +24,7 @@ import java.util.ArrayList;
  */
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsListViewHolder> {
     private final NewsListListener listener;
-    private Typeface tf;
+    private Typeface tf, tfBold, tfThin;
     private ArrayList<News> list;
     private Context context;
     private String TAG = "exc";
@@ -39,6 +39,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsLi
     public NewsListAdapter(Context context, NewsListListener listener) {
         this.context = context;
         this.listener = listener;
+        tf = Typeface.createFromAsset(context.getAssets(), "fonts/VDS_New.ttf");
+        tfBold = Typeface.createFromAsset(context.getAssets(), "fonts/VDS_Bold_New.ttf");
+        tfThin = Typeface.createFromAsset(context.getAssets(), "fonts/VDS_Thin.ttf");
         list = new ArrayList<>();
     }
 
@@ -120,19 +123,15 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsLi
             }
             itemView.setBackgroundColor(color);
 
-            holder.title.setTypeface(tf);
+            holder.title.setTypeface(tfBold);
             holder.content.setTypeface(tf);
-            holder.readMore.setTypeface(tf);
+            holder.readMore.setTypeface(tfThin);
         }
     }
 
     @Override
     public int getItemCount() {
         return list.size();
-    }
-
-    public void setTypeface(Typeface typeface) {
-        this.tf = typeface;
     }
 
     public interface NewsListListener {

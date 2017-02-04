@@ -55,7 +55,7 @@ public class AddPhotoActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_photo);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         initToolbar(getResources().getString(R.string.title_add_photo));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 

@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity
         placesFragment = (PlacesFragment) getSupportFragmentManager().findFragmentById(R.id.places_fragment);
         newsFragment = (NewsFragment) getSupportFragmentManager().findFragmentById(R.id.articles_fragment);
 
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
 
         find = (Button) findViewById(R.id.find_specific);
         browse = (Button) findViewById(R.id.browse_nearby);

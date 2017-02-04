@@ -43,7 +43,7 @@ public class AddReviewActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_review);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         initToolbar(getResources().getString(R.string.title_add_review));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 

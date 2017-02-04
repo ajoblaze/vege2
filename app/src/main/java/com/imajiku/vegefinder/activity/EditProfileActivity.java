@@ -108,7 +108,7 @@ public class EditProfileActivity extends AppCompatActivity implements
         }
         Log.e(TAG, "onCreate: "+CurrentUser.getPassword(this));
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         initToolbar(getResources().getString(R.string.title_profile));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 

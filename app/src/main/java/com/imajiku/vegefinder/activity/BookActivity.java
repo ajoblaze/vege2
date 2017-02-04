@@ -47,7 +47,7 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
         BookModel model = new BookModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         placeId = getIntent().getIntExtra("restoId", -1);

@@ -44,9 +44,7 @@ public class NewsListFragment extends Fragment implements NewsListAdapter.NewsLi
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Sniglet-Regular.ttf");
         adapter = new NewsListAdapter(getContext(), this);
-        adapter.setTypeface(tf);
         recyclerView.setAdapter(adapter);
         return v;
     }
@@ -80,8 +78,8 @@ public class NewsListFragment extends Fragment implements NewsListAdapter.NewsLi
         startActivity(i);
     }
 
-    public void sort(ArrayList<News> NewsList, int[] sortResult) {
-        new NewsSortTask(NewsList, sortResult).execute();
+    public void sort(ArrayList<News> newsList, int[] sortResult) {
+        new NewsSortTask(newsList, sortResult).execute();
     }
 
     private void setData(ArrayList<News> NewsList) {
@@ -92,6 +90,8 @@ public class NewsListFragment extends Fragment implements NewsListAdapter.NewsLi
 
     public interface NewsListListener {
         void onNewsList(Uri uri);
+
+        void toggleSpinner(boolean b);
     }
 
     /**
@@ -118,7 +118,7 @@ public class NewsListFragment extends Fragment implements NewsListAdapter.NewsLi
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // TODO show loading spinner
+            mListener.toggleSpinner(true);
         }
 
         @Override
@@ -151,7 +151,7 @@ public class NewsListFragment extends Fragment implements NewsListAdapter.NewsLi
         @Override
         protected void onPostExecute(ArrayList<News> NewsList) {
             super.onPostExecute(NewsList);
-            // TODO hide loading spinner
+            mListener.toggleSpinner(false);
             setData(NewsList);
         }
     }

@@ -21,7 +21,7 @@ public class NewsDetailActivity extends AppCompatActivity {
 
     private ImageView image;
     private FlowTextView flowContent;
-    private Typeface tf;
+    private Typeface tfThin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_detail);
         News n = (News) getIntent().getSerializableExtra("news");
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tfThin = Typeface.createFromAsset(getAssets(), "fonts/VDS_Thin.ttf");
 
         initToolbar(n.getTitle());
         image = (ImageView) findViewById(R.id.news_image);
@@ -50,7 +50,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
         flowContent.setText(html);
         flowContent.setTextSize(getResources().getDimension(R.dimen.text_size_news));
-        flowContent.setTypeface(tf);
+        flowContent.setTypeface(tfThin);
     }
 
     public void initToolbar(String title) {
@@ -64,7 +64,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
         TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
         tv.setText(title);
-        tv.setTypeface(tf);
+        tv.setTypeface(tfThin);
     }
 
     @Override

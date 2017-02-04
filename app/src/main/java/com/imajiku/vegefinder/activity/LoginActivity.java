@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity implements
         LoginModel model = new LoginModel(presenter);
         presenter.setModel(model);
 
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         if (presenter.getCurrentLogin() > -1 && CurrentUser.getId(this) > -1) {

@@ -39,7 +39,7 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
         MessageModel model = new MessageModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Sniglet-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         initToolbar(getResources().getString(R.string.title_contact_us));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
