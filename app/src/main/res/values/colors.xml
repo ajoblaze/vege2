@@ -24,6 +24,7 @@
     <color name="accentGreenBg25">#4060aa2f</color>
     <color name="accentGreenBg50">#8060aa2f</color>
     <color name="accentGreenBg75">#BF60aa2f</color>
+    <color name="accentGreenBg">#60aa2f</color>
     <color name="accentGreenBtn">#78b74e</color>
     <color name="accentGreenBtnDark">#5E8F3E</color>
 

@@ -1,8 +1,11 @@
 package com.imajiku.vegefinder.activity;
 
 import android.graphics.Typeface;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,6 +20,8 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
+        initToolbar("About");
+
         LinearLayout aboutLayout = (LinearLayout) findViewById(R.id.about_layout);
         tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
 
@@ -25,5 +30,19 @@ public class AboutActivity extends AppCompatActivity {
                 ((TextView)aboutLayout.getChildAt(ii)).setTypeface(tf);
             }
         }
+    }
+
+    public void initToolbar(String title) {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayShowTitleEnabled(false);
+            ab.setDisplayShowHomeEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
+        TextView tv = (TextView) mToolbar.findViewById(R.id.toolbar_title);
+        tv.setText(title);
+        tv.setTypeface(tf);
     }
 }
