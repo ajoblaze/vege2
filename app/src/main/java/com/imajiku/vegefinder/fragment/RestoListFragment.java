@@ -215,7 +215,9 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mListener.toggleSpinner(true);
+            if(mListener != null) {
+                mListener.toggleSpinner(true);
+            }
         }
 
         @Override
@@ -253,7 +255,9 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
         @Override
         protected void onPostExecute(ArrayList<Resto> restoList) {
             super.onPostExecute(restoList);
-            mListener.toggleSpinner(false);
+            if(mListener != null) {
+                mListener.toggleSpinner(false);
+            }
             setData(restoList, isHideFlag);
         }
     }

@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -65,6 +68,7 @@ public class RestoDetailActivity extends AppCompatActivity
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         tfBold = Typeface.createFromAsset(getAssets(), "fonts/VDS_Bold_New.ttf");
+        initToolbar();
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         restoDetail = null;
@@ -141,6 +145,27 @@ public class RestoDetailActivity extends AppCompatActivity
         openDaysTitle.setTypeface(tfBold);
         openDays.setTypeface(tf);
         reportProblem.setTypeface(tf);
+    }
+
+    public void initToolbar() {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayShowTitleEnabled(false);
+            ab.setDisplayShowHomeEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
