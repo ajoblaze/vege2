@@ -305,7 +305,9 @@ public class RestoDetail{
     }
 
     public ArrayList<Review> getRatesReview() {
-//        ratesReview = getDummyRatesReview();
+        if(ratesReview == null){
+            return new ArrayList<>();
+        }
         return ratesReview;
     }
 
