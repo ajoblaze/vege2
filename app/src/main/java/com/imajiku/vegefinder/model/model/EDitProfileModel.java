@@ -32,7 +32,7 @@ public class EditProfileModel {
     public void registerProfile(EditProfileRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
         Call<StatusResponse> call = svc.registerProfile(request);
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<StatusResponse>() {
             @Override
             public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
@@ -50,7 +50,6 @@ public class EditProfileModel {
 
             @Override
             public void onFailure(Call<StatusResponse> call, Throwable t) {
-                Log.e(TAG, "onFailure: "+t.getMessage());
                 presenter.failedRegisterProfile();
             }
         });
@@ -110,7 +109,7 @@ public class EditProfileModel {
         VerifyForgotRequest request = new VerifyForgotRequest(email, pass, pass);
         ApiService svc = retrofit.create(ApiService.class);
         Call<StatusResponse> call = svc.changePassword(request);
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<StatusResponse>() {
             @Override
             public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {

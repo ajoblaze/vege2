@@ -499,7 +499,6 @@ public class RestoListActivity extends AppCompatActivity implements
         }else if(apiCallCounter == 0){
             progressBar.setVisibility(View.INVISIBLE);
         }
-        Log.e(TAG, "apiCallCounter: "+apiCallCounter);
     }
 
     @Override
@@ -554,14 +553,12 @@ public class RestoListActivity extends AppCompatActivity implements
         filterLayout.setVisibility(View.VISIBLE);
         sortLayout.setVisibility(View.VISIBLE);
         boolean isHideFlag = (userId == -1);
-        Log.e(TAG, "userId: "+userId);
         restoListFragment.sort(data, new int[]{0, 0}, isHideFlag);
     }
 
     @Override
     public void failedFind() {
         addApiCounter(false);
-        Log.e(TAG, "failedFind: ");
         Toast.makeText(RestoListActivity.this, "Failed search places", Toast.LENGTH_SHORT).show();
     }
 
@@ -757,12 +754,10 @@ public class RestoListActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.e(TAG, "u2");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e(TAG, "u3");
     }
 
     private void createLocationRequest() {
@@ -791,8 +786,8 @@ public class RestoListActivity extends AppCompatActivity implements
                     case LocationSettingsStatusCodes.SUCCESS:
                         // All location settings are satisfied. The client can
                         // initialize location requests here.
-                        Log.e(TAG, status.getStatusMessage());
-                        Log.e(TAG, locationSettingsStates.toString());
+//                        Log.e(TAG, status.getStatusMessage());
+//                        Log.e(TAG, locationSettingsStates.toString());
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         // Location settings are not satisfied, but this can be fixed

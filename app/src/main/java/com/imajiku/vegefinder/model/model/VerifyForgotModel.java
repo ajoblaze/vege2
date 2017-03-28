@@ -31,7 +31,7 @@ public class VerifyForgotModel {
         VerifyForgotRequest request = new VerifyForgotRequest(code, password);
         ApiService svc = retrofit.create(ApiService.class);
         Call<StatusResponse> call = svc.resetPassword(request);
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<StatusResponse>() {
             @Override
             public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {

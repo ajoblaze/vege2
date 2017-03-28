@@ -40,7 +40,7 @@ public class RestoListModel {
         FindRegionRequest request = new FindRegionRequest(countryId, provinceId, cityId, userId);
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.findRegion(request);
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
@@ -48,14 +48,12 @@ public class RestoListModel {
                     ArrayList<Resto> data = response.body().getData();
                     presenter.successFind(data);
                 } else {
-                    Log.e(TAG, "as");
                     presenter.failedFind();
                 }
             }
 
             @Override
             public void onFailure(Call<RestoListResponse> call, Throwable t) {
-                Log.e(TAG, t.getMessage());
                 presenter.failedFind();
             }
         });
@@ -65,7 +63,7 @@ public class RestoListModel {
         FindKeywordRequest request = new FindKeywordRequest(keyword, userId);
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.findKeyword(request);
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
@@ -94,7 +92,7 @@ public class RestoListModel {
         }
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.browseNearby(userId, location, sort, filter);
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
@@ -121,7 +119,7 @@ public class RestoListModel {
     public void getRecommendation() {
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.mightLike();
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
@@ -135,7 +133,6 @@ public class RestoListModel {
 
             @Override
             public void onFailure(Call<RestoListResponse> call, Throwable t) {
-                Log.e(TAG, "onFailure: "+t.getMessage());
                 presenter.failedGetRecommendation();
             }
         });
@@ -173,7 +170,7 @@ public class RestoListModel {
         }else{
             call = svc.removeBookmark(request);
         }
-        Log.e(TAG, String.valueOf(call.request().url())+" UID:"+userId+" PID:"+placeId);
+//        Log.e(TAG, String.valueOf(call.request().url())+" UID:"+userId+" PID:"+placeId);
         call.enqueue(new Callback<ToggleResponse>() {
             @Override
             public void onResponse(Call<ToggleResponse> call, Response<ToggleResponse> response) {
@@ -209,7 +206,7 @@ public class RestoListModel {
         }else{
             call = svc.removeBeenHere(request);
         }
-        Log.e(TAG, String.valueOf(call.request().url())+" UID:"+userId+" PID:"+placeId);
+//        Log.e(TAG, String.valueOf(call.request().url())+" UID:"+userId+" PID:"+placeId);
         call.enqueue(new Callback<ToggleResponse>() {
             @Override
             public void onResponse(Call<ToggleResponse> call, Response<ToggleResponse> response) {
@@ -247,7 +244,7 @@ public class RestoListModel {
             presenter.failedGetSortFilterList(type);
             return;
         }
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {

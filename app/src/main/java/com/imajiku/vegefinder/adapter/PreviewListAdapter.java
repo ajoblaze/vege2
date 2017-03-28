@@ -72,7 +72,6 @@ public class PreviewListAdapter extends RecyclerView.Adapter<PreviewListAdapter.
         final RestoPreview item = list.get(position);
         View itemView = holder.itemView;
         if(!item.getImage().equals("")) {
-            Log.e(TAG, item.getImage());
             Picasso.with(context)
                     .load(item.getImage())
                     .resize(width, height)

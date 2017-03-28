@@ -95,7 +95,6 @@ public class RestoDetail{
         String[] open = {openMon, openTue, openWed, openThu, openFri, openSat, openSun};
         int currDay = new LocalDate().getDayOfWeek();
         String str = open[currDay - 1];
-        Log.e(TAG, "isOpenNow: "+str);
         return str.length() >= 5 &&
                 !str.toLowerCase().startsWith("close") &&
                 compareTime(getOpenCloseHour(open[currDay - 1]));
@@ -129,10 +128,8 @@ public class RestoDetail{
         boolean isEarly = false;
         boolean isLate = false;
         LocalTime now = LocalTime.now();
-        Log.e(TAG, "compareTime: " + open);
         LocalTime left = new LocalTime(open);
         isEarly = now.isBefore(left);
-        Log.e(TAG, now.toString()+" - "+left.toString());
         if (close != null) {
             try {
                 LocalTime right = new LocalTime(close);

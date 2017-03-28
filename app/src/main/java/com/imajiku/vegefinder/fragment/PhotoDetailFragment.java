@@ -79,7 +79,6 @@ public class PhotoDetailFragment extends Fragment {
                             cache.add(new ImageCache(imgPath, bitmap));
                         }
                         iv.setImageBitmap(currBitmap);
-                        Log.e("exc", "isbitmapnull: "+(currBitmap==null));
                     }
 
                     @Override

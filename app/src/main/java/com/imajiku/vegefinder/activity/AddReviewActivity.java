@@ -121,7 +121,6 @@ public class AddReviewActivity extends AppCompatActivity implements View.OnClick
         }else if(apiCallCounter == 0){
             progressBar.setVisibility(View.INVISIBLE);
         }
-        Log.e(TAG, "apiCallCounter: "+apiCallCounter);
     }
 
     @Override
@@ -165,7 +164,6 @@ public class AddReviewActivity extends AppCompatActivity implements View.OnClick
     public void failedSendReview(String s) {
         addApiCounter(false);
         isSubmitting = false;
-        Log.e("exc", "failedSendReview "+s);
         Toast.makeText(AddReviewActivity.this, s, Toast.LENGTH_LONG).show();
     }
 

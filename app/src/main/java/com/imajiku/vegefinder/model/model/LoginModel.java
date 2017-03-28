@@ -34,7 +34,6 @@ public class LoginModel {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
-                    Log.e("exc", response.raw().toString());
                     LoginResponse.LoginResponseBody data = response.body().getData();
                     if (data != null) {
                         if (data.getStatus().toLowerCase().equals("success")) {

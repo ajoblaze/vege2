@@ -33,7 +33,7 @@ public class ReviewListModel {
                 String.valueOf(placeId),
                 userId == -1? "-" : String.valueOf(userId)
         );
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoDetailResponse>() {
             @Override
             public void onResponse(Call<RestoDetailResponse> call, Response<RestoDetailResponse> response) {

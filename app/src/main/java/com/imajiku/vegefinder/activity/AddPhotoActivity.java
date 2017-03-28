@@ -129,7 +129,6 @@ public class AddPhotoActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.btn_gallery:
                 progressBar.setVisibility(View.VISIBLE);
-                Log.e("exc", "onClick: " + pictureFilename);
                 presenter.addPhoto(userId, placeId, pictureFilename, getImageCode());
                 break;
         }

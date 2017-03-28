@@ -35,7 +35,7 @@ public class RestoDetailModel {
                 String.valueOf(placeId),
                 userId == -1? "-" : String.valueOf(userId)
         );
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoDetailResponse>() {
             @Override
             public void onResponse(Call<RestoDetailResponse> call, Response<RestoDetailResponse> response) {
@@ -49,7 +49,6 @@ public class RestoDetailModel {
 
             @Override
             public void onFailure(Call<RestoDetailResponse> call, Throwable t) {
-                Log.e(TAG, "onFailure: "+t.getMessage());
                 presenter.failedGetRestoDetail();
             }
         });
@@ -64,7 +63,7 @@ public class RestoDetailModel {
         }else{
             call = svc.removeBookmark(request);
         }
-        Log.e(TAG, String.valueOf(call.request().url())+" UID:"+userId+" PID:"+placeId);
+//        Log.e(TAG, String.valueOf(call.request().url())+" UID:"+userId+" PID:"+placeId);
         call.enqueue(new Callback<ToggleResponse>() {
             @Override
             public void onResponse(Call<ToggleResponse> call, Response<ToggleResponse> response) {
@@ -100,7 +99,7 @@ public class RestoDetailModel {
         }else{
             call = svc.removeBeenHere(request);
         }
-        Log.e(TAG, String.valueOf(call.request().url())+" UID:"+userId+" PID:"+placeId);
+//        Log.e(TAG, String.valueOf(call.request().url())+" UID:"+userId+" PID:"+placeId);
         call.enqueue(new Callback<ToggleResponse>() {
             @Override
             public void onResponse(Call<ToggleResponse> call, Response<ToggleResponse> response) {

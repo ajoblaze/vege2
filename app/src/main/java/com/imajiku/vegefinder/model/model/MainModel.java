@@ -60,7 +60,7 @@ public class MainModel {
     public void getRecommendation() {
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.mightLike();
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
@@ -74,7 +74,6 @@ public class MainModel {
 
             @Override
             public void onFailure(Call<RestoListResponse> call, Throwable t) {
-                Log.e(TAG, "onFailure: "+t.getMessage());
                 presenter.failedGetRecommendation();
             }
         });
@@ -98,7 +97,6 @@ public class MainModel {
 //
 //            @Override
 //            public void onFailure(Call<RestoListResponse> call, Throwable t) {
-//                Log.e(TAG, "onFailure: "+t.getMessage());
 //                presenter.failedGetRecommendation();
 //            }
 //        });
@@ -107,7 +105,7 @@ public class MainModel {
     public void getBookmarks(SortFilterRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.getBookmarks(request);
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
@@ -129,7 +127,7 @@ public class MainModel {
     public void getBeenHere(SortFilterRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.getBeenHere(request);
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {

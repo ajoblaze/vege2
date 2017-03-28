@@ -160,7 +160,6 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
             icon.compress(Bitmap.CompressFormat.JPEG, 100, outstream);
             outstream.close();
         } catch (Exception e) {
-            Log.e("exc", e.getMessage());
         }
 
         share.putExtra(Intent.EXTRA_STREAM, uri);

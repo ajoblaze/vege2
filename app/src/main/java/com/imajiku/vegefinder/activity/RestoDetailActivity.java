@@ -174,14 +174,12 @@ public class RestoDetailActivity extends AppCompatActivity
         switch (view.getId()) {
             case R.id.btn_bookmark: {
                 int idx = 0;
-                Log.e(TAG, String.valueOf(buttonStatus[idx]));
                 addApiCounter(true);
                 presenter.changeBookmark(userId, restoId, buttonStatus[idx]);
             }
             break;
             case R.id.btn_been_here: {
                 int idx = 1;
-                Log.e(TAG, String.valueOf(buttonStatus[idx]));
                 addApiCounter(true);
                 presenter.changeBeenHere(userId, restoId, buttonStatus[idx]);
             }
@@ -247,7 +245,6 @@ public class RestoDetailActivity extends AppCompatActivity
         }else if(apiCallCounter == 0){
             progressBar.setVisibility(View.INVISIBLE);
         }
-        Log.e(TAG, "apiCallCounter: "+apiCallCounter);
     }
 
     private boolean isLoggedIn(boolean toast){
@@ -429,7 +426,6 @@ public class RestoDetailActivity extends AppCompatActivity
     public void failedGetRestoDetail() {
         addApiCounter(false);
         toast("Failed getting place detail data");
-        Log.e("exc", "failedGetRestoImages");
     }
 
     @Override

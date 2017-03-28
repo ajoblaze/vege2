@@ -222,7 +222,6 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
 
         @Override
         protected ArrayList<Resto> doInBackground(Void... params) {
-            Log.e(TAG, "sortedList null = "+(sortedList==null));
             Collections.sort(sortedList, new Comparator<Resto>() {
                 @Override
                 public int compare(Resto r1, Resto r2) {

@@ -30,7 +30,7 @@ public class CheckInModel {
         CheckInRequest request = new CheckInRequest(userId, placeId, comment);
         ApiService svc = retrofit.create(ApiService.class);
         Call<CheckInResponse> call = svc.checkIn(request);
-        Log.e("exc", String.valueOf(call.request().url()));
+//        Log.e("exc", String.valueOf(call.request().url()));
         call.enqueue(new Callback<CheckInResponse>() {
             @Override
             public void onResponse(Call<CheckInResponse> call, Response<CheckInResponse> response) {

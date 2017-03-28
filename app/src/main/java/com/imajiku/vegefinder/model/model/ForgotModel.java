@@ -31,7 +31,7 @@ public class ForgotModel {
         ForgotRequest request = new ForgotRequest(email);
         ApiService svc = retrofit.create(ApiService.class);
         Call<StatusResponse> call = svc.forgot(request);
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<StatusResponse>() {
             @Override
             public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {

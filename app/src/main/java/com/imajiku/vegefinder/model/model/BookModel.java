@@ -30,7 +30,7 @@ public class BookModel {
         BookRequest request = new BookRequest(userId, placeId, date, time, comment);
         ApiService svc = retrofit.create(ApiService.class);
         Call<StatusResponse> call = svc.book(request);
-        Log.e("exc", String.valueOf(call.request().url()));
+//        Log.e("exc", String.valueOf(call.request().url()));
         call.enqueue(new Callback<StatusResponse>() {
             @Override
             public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {

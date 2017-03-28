@@ -169,7 +169,6 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void successCheckIn() {
-        Log.e("exc", "successCheckIn!");
         Toast.makeText(CheckInActivity.this, "Checked in successfully", Toast.LENGTH_SHORT).show();
         isCheckIn = false;
         addApiCounter(false);
@@ -216,7 +215,6 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
         }else if(apiCallCounter == 0){
             progressBar.setVisibility(View.INVISIBLE);
         }
-        Log.e(TAG, "apiCallCounter: "+apiCallCounter);
     }
 
     /**
@@ -237,18 +235,15 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        Log.e(TAG, "Success");
                         postToFb(loginResult.getAccessToken());
                     }
 
                     @Override
                     public void onCancel() {
-                        Log.d(TAG, "On cancel");
                     }
 
                     @Override
                     public void onError(FacebookException error) {
-                        Log.d(TAG, error.toString());
                     }
                 });
     }
@@ -264,7 +259,7 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
                 HttpMethod.POST, new GraphRequest.Callback() {
             @Override
             public void onCompleted(GraphResponse response) {
-                Log.e(TAG, "Response: " + response.getRawResponse());
+//                Log.e(TAG, "Response: " + response.getRawResponse());
                 Toast.makeText(CheckInActivity.this, "Successfully shared on Facebook", Toast.LENGTH_SHORT).show();
                 //post to twitter if selected
                 addApiCounter(false);
@@ -303,7 +298,6 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
         twitterAuthClient.authorize(this, new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> twitterSessionResult) {
-                Log.e(TAG, "Success login twitter");
                 TwitterSession session = TwitterCore.getInstance().getSessionManager()
                         .getActiveSession();
                 Intent intent = new ComposerActivity.Builder(CheckInActivity.this)
@@ -314,7 +308,7 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void failure(TwitterException e) {
-                Log.e(TAG, "failed login twitter: " + Arrays.toString(e.getStackTrace()));
+//                Log.e(TAG, "failed login twitter: " + Arrays.toString(e.getStackTrace()));
             }
         });
     }
@@ -327,7 +321,7 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
         try {
             Status status = twitter.updateStatus(comment.getText().toString());
         } catch (twitter4j.TwitterException e) {
-            Log.e(TAG, "Failed send tweet: " + Arrays.toString(e.getStackTrace()));
+//            Log.e(TAG, "Failed send tweet: " + Arrays.toString(e.getStackTrace()));
             Toast.makeText(CheckInActivity.this, "Failed sending tweet", Toast.LENGTH_SHORT).show();
         }
     }

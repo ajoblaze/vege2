@@ -144,6 +144,5 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         progressBar.setVisibility(View.INVISIBLE);
         isSubmitting = false;
         Toast.makeText(RegisterActivity.this, "Failed register", Toast.LENGTH_SHORT).show();
-        Log.e(TAG, "failedRegister: ");
     }
 }

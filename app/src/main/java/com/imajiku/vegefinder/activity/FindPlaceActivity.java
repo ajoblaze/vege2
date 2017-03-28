@@ -197,7 +197,6 @@ public class FindPlaceActivity extends AppCompatActivity implements RegionView, 
         }else if(apiCallCounter == 0){
             progressBar.setVisibility(View.INVISIBLE);
         }
-        Log.e(TAG, "apiCallCounter: "+apiCallCounter);
     }
 
     @Override

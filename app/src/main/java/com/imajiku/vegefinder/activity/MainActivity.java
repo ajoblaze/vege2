@@ -165,7 +165,6 @@ public class MainActivity extends AppCompatActivity
         }else if(apiCallCounter == 0){
             progressBar.setVisibility(View.INVISIBLE);
         }
-        Log.e(TAG, "apiCallCounter: "+apiCallCounter);
     }
 
     @Override
@@ -381,7 +380,6 @@ public class MainActivity extends AppCompatActivity
     public void failedGetNews() {
         addApiCounter(false);
         Toast.makeText(MainActivity.this, "Failed getting news data", Toast.LENGTH_SHORT).show();
-        Log.e(TAG, "failedGetNews");
     }
 
     @Override
@@ -401,7 +399,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void failedGetRecommendation() {
         Toast.makeText(MainActivity.this, "Failed getting recommendation", Toast.LENGTH_SHORT).show();
-        Log.e(TAG, "failedGetRecommendation");
         addApiCounter(false);
     }
 
@@ -421,7 +418,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void failedGetBookmarks() {
         Toast.makeText(MainActivity.this, "Failed getting bookmark data", Toast.LENGTH_SHORT).show();
-        Log.e(TAG, "failedGetBookmarks");
         addApiCounter(false);
     }
 
@@ -433,7 +429,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void failedGetBeenHere() {
         Toast.makeText(MainActivity.this, "Failed getting been here data", Toast.LENGTH_SHORT).show();
-        Log.e(TAG, "failedGetBeenHere");
         addApiCounter(false);
     }
 }

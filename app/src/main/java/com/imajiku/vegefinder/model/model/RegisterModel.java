@@ -29,7 +29,6 @@ public class RegisterModel {
 
     public void register(String name, String email, String password) {
         ApiService svc = retrofit.create(ApiService.class);
-        Log.e(TAG, "register: "+name+" "+email+" "+password);
         RegisterRequest request = new RegisterRequest(name, email, password);
         Call<RegisterResponse> call = svc.register(request);
         call.enqueue(new Callback<RegisterResponse>() {

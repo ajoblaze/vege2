@@ -44,7 +44,6 @@ public class RegionPresenter {
             return;
         }
         int countryId = countryResponse.getData().getCountryId(country);
-        Log.e("exc", "getProvince: "+countryId);
         model.getProvince(countryId);
     }
 
@@ -53,7 +52,6 @@ public class RegionPresenter {
             return;
         }
         int provinceId = provinceResponse.getData().getProvinceId(province);
-        Log.e("exc", "getCity: "+provinceId);
         model.getCity(provinceId);
     }
 

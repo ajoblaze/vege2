@@ -54,7 +54,6 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
         this.list = list;
         isLoadMore = true;
         this.isHideFlag = isHideFlag;
-        Log.e(TAG, "isHideFlag: "+isHideFlag);
         this.isBeenHere = isBeenHere;
         if(isLoadMore) {
             list.add(new Resto());

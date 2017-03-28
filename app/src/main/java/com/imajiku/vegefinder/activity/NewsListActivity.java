@@ -127,7 +127,6 @@ public class NewsListActivity extends AppCompatActivity implements
         }else if(apiCallCounter == 0){
             progressBar.setVisibility(View.INVISIBLE);
         }
-        Log.e(TAG, "apiCallCounter: "+apiCallCounter);
     }
 
     public void initToolbar(String title) {
@@ -232,7 +231,6 @@ public class NewsListActivity extends AppCompatActivity implements
 
     @Override
     public void failedLoadNews() {
-        Log.e(TAG, "failedBrowseNearby: ");
         Toast.makeText(NewsListActivity.this, "Failed getting news data", Toast.LENGTH_SHORT).show();
         addApiCounter(false);
     }

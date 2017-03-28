@@ -45,7 +45,6 @@ public class ProvinceResponse {
                     return p.getId();
                 }
             }
-            Log.e("excP", "getProvinceId: "+province);
             return -1;
         }
 

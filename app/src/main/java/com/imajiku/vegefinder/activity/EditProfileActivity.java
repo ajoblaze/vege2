@@ -106,7 +106,6 @@ public class EditProfileActivity extends AppCompatActivity implements
         }else if(pageType == ACCOUNT){
             userId = CurrentUser.getId(this);
         }
-        Log.e(TAG, "onCreate: "+CurrentUser.getPassword(this));
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
         initToolbar(getResources().getString(R.string.title_profile));
@@ -466,7 +465,6 @@ public class EditProfileActivity extends AppCompatActivity implements
         }else if(apiCallCounter == 0){
             progressBar.setVisibility(View.INVISIBLE);
         }
-        Log.e(TAG, "apiCallCounter: "+apiCallCounter);
     }
 
     private void hideKeyboard() {
@@ -542,7 +540,6 @@ public class EditProfileActivity extends AppCompatActivity implements
     public void failedRegisterProfile() {
         addApiCounter(false);
         isSubmitting = false;
-        Log.e(TAG, "failedRegisterProfile: ");
         Toast.makeText(EditProfileActivity.this, "Failed register profile", Toast.LENGTH_SHORT).show();
     }
 

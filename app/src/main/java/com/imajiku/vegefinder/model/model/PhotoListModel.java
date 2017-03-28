@@ -36,7 +36,7 @@ public class PhotoListModel {
                 String.valueOf(placeId),
                 userId == -1? "-" : String.valueOf(userId)
         );
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoDetailResponse>() {
             @Override
             public void onResponse(Call<RestoDetailResponse> call, Response<RestoDetailResponse> response) {
@@ -59,7 +59,7 @@ public class PhotoListModel {
         PhotoRequest request = new PhotoRequest(userId, placeId, image, imageCode);
         ApiService svc = retrofit.create(ApiService.class);
         Call<StatusMessageResponse> call = svc.addPhoto(request);
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<StatusMessageResponse>() {
             @Override
             public void onResponse(Call<StatusMessageResponse> call, Response<StatusMessageResponse> response) {

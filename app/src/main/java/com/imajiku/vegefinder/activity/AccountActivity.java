@@ -183,7 +183,6 @@ public class AccountActivity extends AppCompatActivity implements AccountView, V
         }else if(apiCallCounter == 0){
             progressBar.setVisibility(View.INVISIBLE);
         }
-        Log.e(TAG, "apiCallCounter: "+apiCallCounter);
     }
 
     @Override
@@ -258,7 +257,6 @@ public class AccountActivity extends AppCompatActivity implements AccountView, V
     public void failedGetProfile() {
         addApiCounter(false);
         Toast.makeText(AccountActivity.this, "Failed getting profile", Toast.LENGTH_SHORT).show();
-        Log.e(TAG, "failedGetProfile");
     }
 
     @Override
@@ -273,7 +271,6 @@ public class AccountActivity extends AppCompatActivity implements AccountView, V
     @Override
     public void failedLogout() {
         addApiCounter(false);
-        Log.e(TAG, "failedLogout");
         Toast.makeText(AccountActivity.this, "Failed logout", Toast.LENGTH_SHORT).show();
     }
 
@@ -297,11 +294,9 @@ public class AccountActivity extends AppCompatActivity implements AccountView, V
     @Override
     public void successGetBeenHere(ArrayList<Resto> data) {
         addApiCounter(false);
-        Log.e(TAG, " "+(data==null));
         if(data == null){
             counts[1].setText("0");
         } else {
-            Log.e(TAG, " "+(data.size()));
             counts[1].setText(String.valueOf(data.size()));
         }
     }

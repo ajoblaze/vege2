@@ -192,19 +192,16 @@ public class LoginActivity extends AppCompatActivity implements
                 break;
             case R.id.fb_button:
                 if (!checkIfFbLoggedIn()) {
-                    Log.e(TAG, "fb login");
                     LoginManager.getInstance().logInWithReadPermissions(
                             LoginActivity.this,
                             Arrays.asList("user_photos", "email", "user_birthday", "public_profile")
                     );
                 } else {
-                    Log.e(TAG, "fb logout");
                     LoginManager.getInstance().logOut();
                     presenter.logout();
                 }
                 break;
             case R.id.gplus_button:
-                Log.e(TAG, "gplus login");
                 signIn();
                 break;
         }
@@ -223,7 +220,6 @@ public class LoginActivity extends AppCompatActivity implements
     public void successLogin(int userId) {
         progressBar.setVisibility(View.INVISIBLE);
         isLoggingIn = false;
-        Log.e(TAG, "successLogin " + userId);
         CurrentUser.setId(this, userId);
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         i.putExtra("isLogin", true);
@@ -243,14 +239,14 @@ public class LoginActivity extends AppCompatActivity implements
         // check if user is logged in
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if (accessToken != null) {
-            Log.e(TAG, "User ID: "
-                    + accessToken.getUserId()
-                    + "\n" +
-                    "Auth Token: "
-                    + accessToken.getToken());
+//            Log.e(TAG, "User ID: "
+//                    + accessToken.getUserId()
+//                    + "\n" +
+//                    "Auth Token: "
+//                    + accessToken.getToken());
             return true;
         }
-        Log.e(TAG, "not logged in");
+//        Log.e(TAG, "not logged in");
         return false;
     }
 
@@ -267,7 +263,6 @@ public class LoginActivity extends AppCompatActivity implements
                         + "\n" +
                         "Auth Token: "
                         + loginResult.getAccessToken().getToken();
-                Log.e(TAG, s);
                 accessTokenTracker.startTracking(); // start fb logout listener
                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
                 i.putExtra("isLogin", false);
@@ -277,12 +272,10 @@ public class LoginActivity extends AppCompatActivity implements
 
             @Override
             public void onCancel() {
-                Log.e(TAG, "Login attempt canceled.");
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.e(TAG, "Login attempt error.");
             }
         });
 
@@ -292,7 +285,6 @@ public class LoginActivity extends AppCompatActivity implements
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
                                                        AccessToken currentAccessToken) {
                 if (currentAccessToken == null) {
-                    Log.e(TAG, "Successfully Logged Out");
                 }
             }
         };
@@ -359,7 +351,7 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+//        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
@@ -372,7 +364,6 @@ public class LoginActivity extends AppCompatActivity implements
 
             s += ", name: " + personName + ", email: " + email;
 
-            Log.e(TAG, s);
 //            Glide.with(getApplicationContext()).load(personPhotoUrl)
 //                    .thumbnail(0.5f)
 //                    .crossFade()

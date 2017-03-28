@@ -35,7 +35,7 @@ public class AccountModel {
     public void getProfile(int userId) {
         ApiService svc = retrofit.create(ApiService.class);
         Call<AccountResponse> call = svc.getProfile(userId);
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<AccountResponse>() {
             @Override
             public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
@@ -62,7 +62,7 @@ public class AccountModel {
     public void logout() {
         ApiService svc = retrofit.create(ApiService.class);
         Call<StatusResponse> call = svc.logout();
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<StatusResponse>() {
             @Override
             public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
@@ -91,7 +91,7 @@ public class AccountModel {
     public void getBookmarks(SortFilterRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.getBookmarks(request);
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
@@ -114,23 +114,20 @@ public class AccountModel {
     public void getBeenHere(SortFilterRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call = svc.getBeenHere(request);
-        Log.e(TAG, String.valueOf(call.request().url()));
+//        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
                 if (response.isSuccessful()) {
                     ArrayList<Resto> data = response.body().getData();
-                    Log.e(TAG, "1");
                     presenter.successGetBeenHere(data);
                 } else {
-                    Log.e(TAG, "2");
                     presenter.failedGetBeenHere();
                 }
             }
 
             @Override
             public void onFailure(Call<RestoListResponse> call, Throwable t) {
-                Log.e(TAG, "3");
                 presenter.failedGetBeenHere();
             }
         });
