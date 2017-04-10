@@ -122,7 +122,7 @@
                     android:layout_marginRight="@dimen/activity_margin"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatRadioButton
+                    <RadioButton
                         android:id="@+id/asc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -130,7 +130,7 @@
                         android:checked="true"
                         android:text="@string/ascending" />
 
-                    <android.support.v7.widget.AppCompatRadioButton
+                    <RadioButton
                         android:id="@+id/desc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.CompoundButtonCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
@@ -90,9 +91,9 @@ public class NewsListActivity extends AppCompatActivity implements
         orderGroup = (RadioGroup) findViewById(R.id.sort_order);
         submitSort = (TextView) findViewById(R.id.submit_sort);
         for(int i=0;i<orderGroup.getChildCount();i++){
-            AppCompatRadioButton radio = (AppCompatRadioButton) orderGroup.getChildAt(i);
+            RadioButton radio = (RadioButton) orderGroup.getChildAt(i);
             radio.setTypeface(tf);
-            radio.setSupportButtonTintList(setColorStateList(
+             CompoundButtonCompat.setButtonTintList(radio, setColorStateList(
                     ContextCompat.getColor(this, R.color.accentGreenBtnDark)
             ));
         }

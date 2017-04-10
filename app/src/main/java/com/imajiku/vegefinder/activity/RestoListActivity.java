@@ -14,17 +14,18 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.CompoundButtonCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,7 +80,7 @@ public class RestoListActivity extends AppCompatActivity implements
     private TextView clear;
     private TextView submitFilter;
     private TextView submitSort;
-    private AppCompatCheckBox[] filterBox;
+    private CheckBox[] filterBox;
     private RadioGroup orderGroup;
     private boolean[] sortSelected;
     private LinearLayout[] sortButtonLayout;
@@ -174,7 +175,7 @@ public class RestoListActivity extends AppCompatActivity implements
         sortLayout = (ExpandableRelativeLayout) findViewById(R.id.layout_sort);
         filterLinearLayout.setOnClickListener(this);
         sortLinearLayout.setOnClickListener(this);
-        filterBox = new AppCompatCheckBox[FILTER_BOX_QTY];
+        filterBox = new CheckBox[FILTER_BOX_QTY];
         sortButtonLayout = new LinearLayout[SORT_BUTTON_QTY];
         sortSelected = new boolean[]{false, false, false, false};
 
@@ -184,13 +185,13 @@ public class RestoListActivity extends AppCompatActivity implements
         selectAll.setTypeface(tf);
         clear.setTypeface(tf);
 
-        filterBox[0] = (AppCompatCheckBox) findViewById(R.id.open_now);
-        filterBox[1] = (AppCompatCheckBox) findViewById(R.id.rate_8);
-        filterBox[2] = (AppCompatCheckBox) findViewById(R.id.bookmarked);
-        filterBox[3] = (AppCompatCheckBox) findViewById(R.id.been_here);
-        filterBox[4] = (AppCompatCheckBox) findViewById(R.id.vegan);
-        filterBox[5] = (AppCompatCheckBox) findViewById(R.id.vege);
-        filterBox[6] = (AppCompatCheckBox) findViewById(R.id.vegeready);
+        filterBox[0] = (CheckBox) findViewById(R.id.open_now);
+        filterBox[1] = (CheckBox) findViewById(R.id.rate_8);
+        filterBox[2] = (CheckBox) findViewById(R.id.bookmarked);
+        filterBox[3] = (CheckBox) findViewById(R.id.been_here);
+        filterBox[4] = (CheckBox) findViewById(R.id.vegan);
+        filterBox[5] = (CheckBox) findViewById(R.id.vege);
+        filterBox[6] = (CheckBox) findViewById(R.id.vegeready);
         submitFilter = (TextView) findViewById(R.id.submit_filter);
         if (pageType == PAGE_BROWSE || pageType == PAGE_SEARCH) {
             for (int i = 0; i < 4; i++) {
@@ -200,8 +201,8 @@ public class RestoListActivity extends AppCompatActivity implements
 
         for (int i = 0; i < FILTER_BOX_QTY; i++) {
             filterBox[i].setTypeface(tf);
-            filterBox[i].setSupportButtonTintList(setColorStateList(
-                    ContextCompat.getColor(this, R.color.darkGrey)
+            CompoundButtonCompat.setButtonTintList(filterBox[i], setColorStateList(
+                    ContextCompat.getColor(this, R.color.accentGreenBtnDark)
             ));
         }
         submitFilter.setTypeface(tf);
@@ -214,11 +215,16 @@ public class RestoListActivity extends AppCompatActivity implements
         orderGroup = (RadioGroup) findViewById(R.id.sort_order);
         submitSort = (TextView) findViewById(R.id.submit_sort);
         for(int i=0;i<orderGroup.getChildCount();i++){
-            AppCompatRadioButton radio = (AppCompatRadioButton) orderGroup.getChildAt(i);
+            RadioButton radio = (RadioButton) orderGroup.getChildAt(i);
             radio.setTypeface(tf);
-            radio.setSupportButtonTintList(setColorStateList(
+            CompoundButtonCompat.setButtonTintList(radio, setColorStateList(
                     ContextCompat.getColor(this, R.color.accentGreenBtnDark)
             ));
+        }
+        //if Browse Nearby, hide sort function
+        if(pageType == PAGE_BROWSE){
+            sortLinearLayout.setVisibility(View.GONE);
+            sortLayout.setVisibility(View.GONE);
         }
 
         // arrow

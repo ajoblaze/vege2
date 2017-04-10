@@ -126,14 +126,14 @@
                     android:layout_marginRight="@dimen/activity_margin"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatCheckBox
+                    <CheckBox
                         android:id="@+id/open_now"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/open_now" />
 
-                    <android.support.v7.widget.AppCompatCheckBox
+                    <CheckBox
                         android:id="@+id/rate_8"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -149,14 +149,14 @@
                     android:layout_marginRight="@dimen/activity_margin"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatCheckBox
+                    <CheckBox
                         android:id="@+id/bookmarked"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/bookmarked" />
 
-                    <android.support.v7.widget.AppCompatCheckBox
+                    <CheckBox
                         android:id="@+id/been_here"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -172,14 +172,14 @@
                     android:layout_marginRight="@dimen/activity_margin"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatCheckBox
+                    <CheckBox
                         android:id="@+id/vegan"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/vegan" />
 
-                    <android.support.v7.widget.AppCompatCheckBox
+                    <CheckBox
                         android:id="@+id/vege"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -195,14 +195,14 @@
                     android:layout_marginRight="@dimen/activity_margin"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatCheckBox
+                    <CheckBox
                         android:id="@+id/vegeready"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/vegeready" />
 
-                    <android.support.v7.widget.AppCompatCheckBox
+                    <CheckBox
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -342,7 +342,7 @@
                     android:layout_marginRight="@dimen/activity_margin"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatRadioButton
+                    <RadioButton
                         android:id="@+id/asc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -350,7 +350,7 @@
                         android:checked="true"
                         android:text="@string/ascending" />
 
-                    <android.support.v7.widget.AppCompatRadioButton
+                    <RadioButton
                         android:id="@+id/desc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
