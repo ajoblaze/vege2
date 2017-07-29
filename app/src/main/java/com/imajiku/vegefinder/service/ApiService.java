@@ -94,31 +94,48 @@ public interface ApiService {
     Call<StatusMessageResponse> sendContactUs(@Body ContactUsRequest request);
 
     //    PLACES
-    @GET("place/generate_place/{user_id}/{location}/{sort}/{filter}")
-    Call<RestoListResponse> browseNearby(
-            @Path ("user_id") String userId,
-            @Path ("location") String location,
-            @Path ("sort") String sort,
-            @Path ("filter") String filter
+//    @GET("place/generate_place/{user_id}/{location}/{sort}/{filter}")
+//    Call<RestoListResponse> browseNearby(
+//            @Path ("user_id") String userId,
+//            @Path ("location") String location,
+//            @Path ("sort") String sort,
+//            @Path ("filter") String filter
+//    );
+//
+//    @GET("place/generate_place/{location}/{sort}")
+//    Call<RestoListResponse> browseNearby(
+//            @Path ("location") String location,
+//            @Path ("sort") String sort
+//    );
+
+    @POST("place/generate_place")
+    Call<RestoListResponse> browseNearby(@Body SortFilterRequest request);
+
+//    @GET("place/might_like")
+//    Call<RestoListResponse> mightLike();
+
+    @GET("place/might_like_home/{user_id}")
+    Call<RestoListResponse> mightLike(
+            @Path ("user_id") String userId
     );
 
-    @GET("place/generate_place/{location}/{sort}")
-    Call<RestoListResponse> browseNearby(
-            @Path ("location") String location,
-            @Path ("sort") String sort
-    );
-
-    @GET("place/might_like")
-    Call<RestoListResponse> mightLike();
+    @POST("place/might_like_all")
+    Call<RestoListResponse> mightLike(@Body SortFilterRequest request);
 
     @POST("place/checkin")
     Call<CheckInResponse> checkIn(@Body CheckInRequest request);
 
+//    @POST("place/search_region")
+//    Call<RestoListResponse> findRegion(@Body FindRegionRequest request);
+//
+//    @POST("place/search_keyword")
+//    Call<RestoListResponse> findKeyword(@Body FindKeywordRequest request);
+
     @POST("place/search_region")
-    Call<RestoListResponse> findRegion(@Body FindRegionRequest request);
+    Call<RestoListResponse> findRegion(@Body SortFilterRequest request);
 
     @POST("place/search_keyword")
-    Call<RestoListResponse> findKeyword(@Body FindKeywordRequest request);
+    Call<RestoListResponse> findKeyword(@Body SortFilterRequest request);
 
     @POST("place/bookmark")
     Call<ToggleResponse> addBookmark(@Body ToggleRequest request);

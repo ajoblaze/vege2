@@ -24,6 +24,8 @@ public class RegisterResponse {
         private String code;
         @SerializedName("status")
         private String status;
+        @SerializedName("message")
+        private String message;
 
         public int getId() {
             return id;
@@ -43,6 +45,10 @@ public class RegisterResponse {
 
         public String getStatus() {
             return status;
+        }
+
+        public String getMessage() {
+            return message;
         }
     }
 }

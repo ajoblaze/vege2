@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.fragment.MapViewFragment;
+import com.imajiku.vegefinder.utility.Utility;
 
 public class MapActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,7 +32,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         initToolbar(getResources().getString(R.string.maps_and_directions));
 
         String title = getIntent().getStringExtra("title");

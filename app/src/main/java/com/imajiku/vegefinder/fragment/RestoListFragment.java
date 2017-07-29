@@ -2,7 +2,6 @@ package com.imajiku.vegefinder.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -70,7 +69,7 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
 
     @Override
     public void onLoadMore() {
-
+        mListener.onLoadMore();
     }
 
     @Override
@@ -90,18 +89,18 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
         mListener.removeBeenHere(r);
     }
 
-    public void setData(ArrayList<Resto> list, boolean isHideFlag) {
+    /**
+     * 0 = isHideFlag
+     * 1 = isLoadMore
+     * 2 = isBookmark
+     * 3 = isBeenHere
+     * */
+    public void setData(ArrayList<Resto> list, boolean[] params, int src) {
         if(adapter!=null){
-            adapter.setData(list, isHideFlag, false);
+            params[1] = params[1] && !list.isEmpty(); // if list is empty, no need to show load more
+            adapter.setData(list, params);
+            Log.e(TAG, "src: "+src);
         }
-    }
-
-    public void filter(boolean[] filterResult, boolean isSavedPlace) {
-        new RestoFilterTask(filterResult, isSavedPlace).execute();
-    }
-
-    public void sort(ArrayList<Resto> restoList, int[] sortResult, boolean isSavedPlace) {
-        new RestoSortTask(restoList, sortResult, isSavedPlace).execute();
     }
 
     public void updateBookmark(int placeId, boolean isBookmarked) {
@@ -120,144 +119,7 @@ public class RestoListFragment extends Fragment implements RestoListAdapter.Rest
         void removeBeenHere(Resto r);
 
         void toggleSpinner(boolean b);
-    }
 
-    /**
-     * Filter the Resto list
-     * parameter = boolean[] filterResult
-     *
-     * 0 => Open Now
-     * 1 => Rated 8+
-     * 2 => Bookmarked
-     * 3 => Been Here
-     * 4 => Vegan
-     * 5 => Vegetarian
-     */
-    class RestoFilterTask extends AsyncTask<Void, Void, ArrayList<Resto>> {
-
-        private final boolean[] filterResult;
-        private final boolean isHideFlag;
-
-        public RestoFilterTask(boolean[] filterResult, boolean isHideFlag) {
-            this.filterResult = filterResult;
-            this.isHideFlag = isHideFlag;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mListener.toggleSpinner(true);
-        }
-
-        @Override
-        protected ArrayList<Resto> doInBackground(Void... params) {
-            ArrayList<Resto> filteredList = new ArrayList<>();
-            for(Resto r : list){
-                if(filterResult[0]){
-                    //cek if open now
-                }
-                if(filterResult[1]){
-                    //cek if rated 8+
-                    if(r.getRating() < 8){
-                        continue;
-                    }
-                }
-                if(filterResult[2]){
-                    //cek if bookmarked
-                }
-                if(filterResult[3]){
-                    //cek if vegan
-                }
-                if(filterResult[4]){
-                    //cek if been here
-                }
-                if(filterResult[5]){
-                    //cek if vegetarian
-                }
-                filteredList.add(r);
-            }
-            return filteredList;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Resto> restoList) {
-            super.onPostExecute(restoList);
-            mListener.toggleSpinner(false);
-            setData(restoList, isHideFlag);
-        }
-    }
-
-    /**
-     * Sort the Resto list
-     * parameter = int[] sortResult
-     *
-     * index 0 => type of sort
-     * * 0 => by name (alphabetical)
-     * * 1 => by distance
-     * * 2 => by date
-     * * 3 => by price
-     * index 1 => order of sort
-     * * 0 => ascending
-     * * 1 => descending
-     */
-    class RestoSortTask extends AsyncTask<Void, Void, ArrayList<Resto>> {
-
-        private final int[] sortResult;
-        private final boolean isHideFlag;
-        private ArrayList<Resto> sortedList;
-
-        public RestoSortTask(ArrayList<Resto> list, int[] sortResult, boolean isSavedPlace) {
-            this.sortResult = sortResult;
-            sortedList = list;
-            this.isHideFlag = isSavedPlace;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            if(mListener != null) {
-                mListener.toggleSpinner(true);
-            }
-        }
-
-        @Override
-        protected ArrayList<Resto> doInBackground(Void... params) {
-            Collections.sort(sortedList, new Comparator<Resto>() {
-                @Override
-                public int compare(Resto r1, Resto r2) {
-                    Resto a, b;
-                    // order
-                    if(sortResult[1] == 0){ // ascending
-                        a = r1;
-                        b = r2;
-                    } else { // descending
-                        a = r2;
-                        b = r1;
-                    }
-                    // sort
-                    if (sortResult[0] == 0) {
-                        return a.getTitle().compareTo(b.getTitle());
-                    } else if (sortResult[0] == 1) {
-                        return Float.valueOf(a.getDistance()).compareTo(b.getDistance());
-                    } else if (sortResult[0] == 2) {
-                        return a.getDatePost().compareTo(b.getDatePost());
-                    } else if (sortResult[0] == 3) {
-                        return Integer.valueOf(a.getPriceStart()).compareTo(b.getPriceStart());
-                    } else {
-                        throw new IllegalArgumentException("Invalid Parameter : " + sortResult[0]);
-                    }
-                }
-            });
-            return sortedList;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Resto> restoList) {
-            super.onPostExecute(restoList);
-            if(mListener != null) {
-                mListener.toggleSpinner(false);
-            }
-            setData(restoList, isHideFlag);
-        }
+        void onLoadMore();
     }
 }

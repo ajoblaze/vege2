@@ -79,16 +79,27 @@ public class Resto implements Serializable{
     private String content;
     @SerializedName("average_rate")
     private String averageRate;
+    @SerializedName("average_cost")
+    private String averageCost;
     @SerializedName("status_bookmark")
     private String statusBookmark;
 
+    @SerializedName("rating")
+    String rating;
+    @SerializedName("review")
+    int review;
+    @SerializedName("distance")
+    String distanceStr;
+
     String imgPath;
     String name;
-    private float distance;
-    int rating;
+    private float distanceF;
     int price;
 
     public boolean isBookmarked() {
+        if(statusBookmark == null){
+            return false;
+        }
         return statusBookmark.equals("active");
     }
 
@@ -104,18 +115,33 @@ public class Resto implements Serializable{
 
     }
 
+    public String getAverageCost() {
+        if(averageCost == null){
+            return "0";
+        }
+        return averageCost;
+    }
+
+    public int getReview() {
+        return review;
+    }
+
+    public String getDistanceStr() {
+        return distanceStr+" ";
+    }
+
     public Resto(String imgPath, String name, int rating, int price) {
         this.imgPath = imgPath;
         this.name = name;
-        this.rating = rating;
+        this.rating = rating+"/10";
         this.price = price;
     }
 
-    public void setDistance(Location location) {
+    public void setDistanceF(Location location) {
         Location store = new Location("");
         store.setLongitude(Double.parseDouble(getLongitude()));
         store.setLatitude(Double.parseDouble(getLatitude()));
-        distance = location.distanceTo(store);
+        distanceF = location.distanceTo(store);
     }
 
     public String getImgPath() {
@@ -126,11 +152,11 @@ public class Resto implements Serializable{
         return name;
     }
 
-    public float getDistance() {
-        return distance/1000;
+    public float getDistanceF() {
+        return distanceF /1000;
     }
 
-    public int getRating() {
+    public String getRating() {
         return rating;
     }
 

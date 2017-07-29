@@ -48,6 +48,7 @@ import com.imajiku.vegefinder.pojo.News;
 import com.imajiku.vegefinder.pojo.Resto;
 import com.imajiku.vegefinder.pojo.RestoPreview;
 import com.imajiku.vegefinder.utility.CurrentUser;
+import com.imajiku.vegefinder.utility.Utility;
 
 import java.util.ArrayList;
 
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity
     private int userId;
     private ProgressBar progressBar;
     private int apiCallCounter = 0;
+    private FragmentTransaction ft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,12 +98,12 @@ public class MainActivity extends AppCompatActivity
             userId = CurrentUser.getId(this);
             presenter.getBookmarks(new SortFilterRequest(userId));
             addApiCounter(true);
+            presenter.getRecommendation(userId);
+            addApiCounter(true);
 //            presenter.getBeenHere(userId, "asc");
         }else{
             CurrentUser.setId(this, -1);
         }
-        presenter.getRecommendation();
-        addApiCounter(true);
         presenter.getNews();
         addApiCounter(true);
 
@@ -113,7 +115,7 @@ public class MainActivity extends AppCompatActivity
         placesFragment = (PlacesFragment) getSupportFragmentManager().findFragmentById(R.id.places_fragment);
         newsFragment = (NewsFragment) getSupportFragmentManager().findFragmentById(R.id.articles_fragment);
 
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        Typeface tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
 
         find = (Button) findViewById(R.id.find_specific);
         browse = (Button) findViewById(R.id.browse_nearby);
@@ -133,10 +135,12 @@ public class MainActivity extends AppCompatActivity
         browse.setTypeface(tf);
         myAccount.setTypeface(tf);
 
-        if(!isLogin){ // hide places & account
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.hide(placesFragment);
-            ft.commit();
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.hide(recommendFragment);
+        ft.hide(placesFragment);
+        ft.commit();
+
+        if(!isLogin){ // hide recommend, places & account
             myAccount.setVisibility(View.GONE);
         }
     }
@@ -225,28 +229,38 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onClick(View v) {
-        Intent i;
+    public boolean checkLocationAndPermission() {
         String[] permissions = new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.INTERNET
         };
+        if (isLocationEnabled(this)) {
+            if (hasPermissions(permissions)) {
+                return true;
+            } else {
+                requestPerms(permissions);
+            }
+        } else {
+            //show dialog
+            Toast.makeText(MainActivity.this, "Please turn on location to use this function", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent i;
         switch (v.getId()){
             case R.id.find_specific:
-                i = new Intent(MainActivity.this, FindPlaceActivity.class);
-                startActivity(i);
+                if(checkLocationAndPermission()) {
+                    i = new Intent(MainActivity.this, FindPlaceActivity.class);
+                    startActivity(i);
+                }
                 break;
             case R.id.browse_nearby:
-                if(isLocationEnabled(this)) {
-                    if(hasPermissions(permissions)) {
-                        browseNearbyPlaces();
-                    }else{
-                        requestPerms(permissions);
-                    }
-                }else{
-                    //show dialog
-                    Toast.makeText(MainActivity.this, "Please turn on location to use this", Toast.LENGTH_SHORT).show();
+                if(checkLocationAndPermission()) {
+                    browseNearbyPlaces();
                 }
                 break;
             case R.id.my_account:
@@ -294,7 +308,7 @@ public class MainActivity extends AppCompatActivity
         if (isAllowed) {
             switch (requestCode) {
                 case PERMISSION_NETWORK_REQUEST_CODE:
-                    browseNearbyPlaces();
+                    Toast.makeText(MainActivity.this, "Location permission enabled.", Toast.LENGTH_SHORT).show();
                     break;
             }
         } else {
@@ -394,11 +408,15 @@ public class MainActivity extends AppCompatActivity
         }
         recommendFragment.setData(recommendPreviewList);
         addApiCounter(false);
+        // show fragment
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.show(recommendFragment);
+        ft.commit();
     }
 
     @Override
     public void failedGetRecommendation() {
-        Toast.makeText(MainActivity.this, "Failed getting recommendation", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this, "Failed getting recommendation", Toast.LENGTH_SHORT).show();
         addApiCounter(false);
     }
 
@@ -413,11 +431,15 @@ public class MainActivity extends AppCompatActivity
         }
         placesFragment.setData(placesPreviewList);
         addApiCounter(false);
+        // show fragment
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.show(placesFragment);
+        ft.commit();
     }
 
     @Override
     public void failedGetBookmarks() {
-        Toast.makeText(MainActivity.this, "Failed getting bookmark data", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this, "Failed getting bookmark data", Toast.LENGTH_SHORT).show();
         addApiCounter(false);
     }
 

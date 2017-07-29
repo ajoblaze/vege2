@@ -23,6 +23,7 @@ import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.activity.NewsListActivity;
 import com.imajiku.vegefinder.adapter.PreviewListAdapter;
 import com.imajiku.vegefinder.pojo.RestoPreview;
+import com.imajiku.vegefinder.utility.Utility;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,7 @@ public class NewsFragment extends Fragment implements PreviewListAdapter.Preview
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news, container, false);
 
-        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/VDS_New.ttf");
+        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), Utility.regFont);
         TextView seeMore = (TextView) v.findViewById(R.id.see_more);
         seeMore.setOnClickListener(this);
         seeMore.setTypeface(tf);

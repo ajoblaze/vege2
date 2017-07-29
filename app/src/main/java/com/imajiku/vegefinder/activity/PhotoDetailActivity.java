@@ -28,6 +28,7 @@ import com.imajiku.vegefinder.model.model.PhotoListModel;
 import com.imajiku.vegefinder.model.presenter.PhotoListPresenter;
 import com.imajiku.vegefinder.model.view.PhotoListView;
 import com.imajiku.vegefinder.utility.CurrentUser;
+import com.imajiku.vegefinder.utility.Utility;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -54,7 +55,7 @@ public class PhotoDetailActivity extends AppCompatActivity implements PhotoListV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_detail);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         restoId = getIntent().getIntExtra("restoId", -1);

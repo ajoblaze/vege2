@@ -90,6 +90,7 @@ public class AccountModel {
 
     public void getBookmarks(SortFilterRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
+        request.setDefaultLoc("-8.687115,115.213868");
         Call<RestoListResponse> call = svc.getBookmarks(request);
 //        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
@@ -98,7 +99,7 @@ public class AccountModel {
                 if (response.isSuccessful()) {
                     ArrayList<Resto> data = response.body().getData();
                     presenter.successGetBookmarks(data);
-                    // TODO data can be array or class containing message and status -> error
+                    // TODO response (data) can be array or class containing message and status -> error
                 } else {
                     presenter.failedGetBookmarks();
                 }
@@ -113,6 +114,7 @@ public class AccountModel {
 
     public void getBeenHere(SortFilterRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
+        request.setDefaultLoc("-8.687115,115.213868");
         Call<RestoListResponse> call = svc.getBeenHere(request);
 //        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {

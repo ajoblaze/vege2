@@ -22,6 +22,10 @@ public class Utility {
     private static Retrofit retrofit;
     private static final int TIMEOUT = 120;
 
+    public static String regFont = "fonts/Dosis-Medium.otf";
+    public static String boldFont = "fonts/Dosis-Bold.otf";
+    public static String thinFont = "fonts/Dosis-Regular.otf";
+
     public static Retrofit buildRetrofit(){
         if(retrofit == null) {
             OkHttpClient client = new OkHttpClient.Builder()

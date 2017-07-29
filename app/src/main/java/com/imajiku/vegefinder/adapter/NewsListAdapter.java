@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.pojo.News;
+import com.imajiku.vegefinder.utility.Utility;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,9 +40,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsLi
     public NewsListAdapter(Context context, NewsListListener listener) {
         this.context = context;
         this.listener = listener;
-        tf = Typeface.createFromAsset(context.getAssets(), "fonts/VDS_New.ttf");
-        tfBold = Typeface.createFromAsset(context.getAssets(), "fonts/VDS_Bold_New.ttf");
-        tfThin = Typeface.createFromAsset(context.getAssets(), "fonts/VDS_Thin.ttf");
+        tf = Typeface.createFromAsset(context.getAssets(), Utility.regFont);
+        tfBold = Typeface.createFromAsset(context.getAssets(), Utility.boldFont);
+        tfThin = Typeface.createFromAsset(context.getAssets(), Utility.thinFont);
         list = new ArrayList<>();
     }
 

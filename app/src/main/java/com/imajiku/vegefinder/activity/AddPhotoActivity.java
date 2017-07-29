@@ -31,6 +31,7 @@ import com.imajiku.vegefinder.model.presenter.PhotoListPresenter;
 import com.imajiku.vegefinder.model.view.PhotoListView;
 import com.imajiku.vegefinder.utility.CurrentUser;
 import com.imajiku.vegefinder.utility.ImageDecoderHelper;
+import com.imajiku.vegefinder.utility.Utility;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class AddPhotoActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_photo);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         initToolbar(getResources().getString(R.string.title_add_photo));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 

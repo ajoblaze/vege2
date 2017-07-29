@@ -1,14 +1,17 @@
 package com.imajiku.vegefinder.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +33,7 @@ import com.imajiku.vegefinder.pojo.RestoImage;
 import com.imajiku.vegefinder.pojo.RestoMenu;
 import com.imajiku.vegefinder.pojo.Review;
 import com.imajiku.vegefinder.utility.CurrentUser;
+import com.imajiku.vegefinder.utility.Utility;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -52,7 +56,7 @@ public class RestoDetailActivity extends AppCompatActivity
     private String TAG = "exc";
     private RestoDetail restoDetail;
     private boolean[] buttonStatus = new boolean[2];
-    private LinearLayout photoLayout, reviewLayout;
+    private LinearLayout ratingLayout, photoLayout, reviewLayout;
     private Typeface tf, tfBold;
     private ProgressBar progressBar;
     private int apiCallCounter = 0;
@@ -66,15 +70,17 @@ public class RestoDetailActivity extends AppCompatActivity
         RestoDetailModel model = new RestoDetailModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
-        tfBold = Typeface.createFromAsset(getAssets(), "fonts/VDS_Bold_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
+        tfBold = Typeface.createFromAsset(getAssets(), Utility.boldFont);
         initToolbar();
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         restoDetail = null;
         restoId = getIntent().getIntExtra("restoId", -1);
+//        Log.e(TAG, "restoId: "+restoId);
         userId = CurrentUser.getId(this);
         banner = (ImageView) findViewById(R.id.resto_img);
+        ratingLayout = (LinearLayout) findViewById(R.id.rate_guest);
         rate = (TextView) findViewById(R.id.rating);
         guest = (TextView) findViewById(R.id.guest);
         restoHead[0] = (TextView) findViewById(R.id.resto_title);
@@ -219,6 +225,7 @@ public class RestoDetailActivity extends AppCompatActivity
                 startActivityForResult(i, 1);
                 break;
             case R.id.btn_add_review:
+//                addReviewDialog();
                 i = new Intent(RestoDetailActivity.this, AddReviewActivity.class);
                 i.putExtra("restoId", restoId);
                 startActivityForResult(i, 1);
@@ -255,6 +262,14 @@ public class RestoDetailActivity extends AppCompatActivity
             return false;
         }
         return true;
+    }
+
+    private void addReviewDialog(){
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.activity_add_review, null);
+        Dialog d = new AlertDialog.Builder(this)
+                .setView(dialogView).create();
+        d.show();
     }
 
     @Override
@@ -313,8 +328,8 @@ public class RestoDetailActivity extends AppCompatActivity
         if (restoDetail.getAvgRate() != null) {
             rate.setText(restoDetail.getAvgRate());
             guest.setText(restoDetail.getCountReview() + " guest" + (restoDetail.getCountReview() < 2 ? "" : "s"));
+            ratingLayout.setVisibility(View.VISIBLE);
         }
-        findViewById(R.id.rate_guest).setVisibility(View.VISIBLE);
 
         restoHead[0].setText(restoDetail.getTitle());
         restoHead[1].setText(restoDetail.getAddress());
@@ -357,7 +372,7 @@ public class RestoDetailActivity extends AppCompatActivity
     private void fillRestoContent(RestoDetail data) {
         StringBuilder builder;
         restoContentTitle[0].setText("TYPE");
-        restoContent[0].setText(Integer.toString(data.getType()));
+        restoContent[0].setText(data.getRestoTypeName()+"\n"+data.getTypeName());
         restoContentTitle[1].setText("AVERAGE COST");
         restoContent[1].setText(data.getAverageCost());
 
@@ -395,23 +410,6 @@ public class RestoDetailActivity extends AppCompatActivity
                 restoContent[i].setText(builder.toString());
                 continue;
             }
-//            if (!facility && data.getResto().getWifi() != 0 && data.getResto().getDelivery() != 0){
-//                facility = true;
-//                boolean wifi = false;
-//                restoContentTitle[i].setText("FACILITIES");
-//                builder = new StringBuilder();
-//                if(data.getResto().getWifi() == 1){
-//                    builder.append("Free Wifi");
-//                    wifi = true;
-//                }
-//                if(data.getResto().getDelivery() == 1){
-//                    if(wifi){
-//                        builder.append("\n");
-//                    }
-//                    builder.append("Delivery");
-//                }
-//                restoContent[i].setText(builder.toString());
-//            }
             if (menu && facility) {
                 break;
             }

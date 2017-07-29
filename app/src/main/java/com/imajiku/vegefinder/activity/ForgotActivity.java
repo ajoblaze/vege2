@@ -18,6 +18,7 @@ import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.model.model.ForgotModel;
 import com.imajiku.vegefinder.model.presenter.ForgotPresenter;
 import com.imajiku.vegefinder.model.view.ForgotView;
+import com.imajiku.vegefinder.utility.Utility;
 
 public class ForgotActivity extends AppCompatActivity implements View.OnClickListener, ForgotView {
 
@@ -38,7 +39,7 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
         ForgotModel model = new ForgotModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         title = (TextView) findViewById(R.id.forget_title);
@@ -90,18 +91,19 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void successForgot() {
+    public void successForgot(String message) {
         isSubmitting = false;
         progressBar.setVisibility(View.INVISIBLE);
         Intent i = new Intent(ForgotActivity.this, VerifyForgotActivity.class);
+        Toast.makeText(ForgotActivity.this, message, Toast.LENGTH_SHORT).show();
         startActivity(i);
     }
 
     @Override
-    public void failedForgot() {
+    public void failedForgot(String message) {
         isSubmitting = false;
         progressBar.setVisibility(View.INVISIBLE);
-        Toast.makeText(ForgotActivity.this, "Invalid email", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ForgotActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void hideKeyboard() {

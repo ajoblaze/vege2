@@ -2,7 +2,6 @@ package com.imajiku.vegefinder.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Movie;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -11,12 +10,10 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.imajiku.vegefinder.R;
+import com.imajiku.vegefinder.utility.ImageDecoderHelper;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import pl.droidsonroids.gif.GifDrawable;
 
@@ -33,12 +30,24 @@ public class SplashActivity extends AppCompatActivity {
         // hide status bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
-        try {
-            GifDrawable anim = new GifDrawable( getResources(), R.drawable.splash3);
-            duration = anim.getDuration();
-        } catch (IOException e) {
-            duration = 2000;
-        }
+        getScreenDim();
+        bg = (ImageView) findViewById(R.id.image);
+        bg.setImageBitmap(
+                ImageDecoderHelper.decodeSampledBitmapFromResource(
+                        getResources(),
+                        R.drawable.splash,
+                        dpWidth,
+                        dpHeight
+                )
+        );
+//        try {
+//            GifDrawable anim = new GifDrawable( getResources(), R.drawable.splash3);
+//            duration = anim.getDuration();
+//        } catch (IOException e) {
+//            duration = 2000;
+//        }
+
+        duration = 2000;
         handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -55,28 +64,4 @@ public class SplashActivity extends AppCompatActivity {
         dpHeight = (int) (displayMetrics.heightPixels / displayMetrics.density);
         dpWidth = (int) (displayMetrics.widthPixels / displayMetrics.density);
     }
-
-//    class ProductImageLoaderTask extends AsyncTask<Void, Void, Void> {
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            bitmap = ImageDecoderHelper.decodeSampledBitmapFromFile(
-//                    path.replace("thumb_", ""),
-//                    (int) ProductDetailActivity.this.getResources().getDimension(R.dimen.product_main_img_image_width),
-//                    (int) ProductDetailActivity.this.getResources().getDimension(R.dimen.product_main_img_image_height));
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void aVoid) {
-//            super.onPostExecute(aVoid);
-//            Picasso.with(this)
-//                    .load(profile.getImageUrl())
-//                    .noFade()
-//                    .fit()
-//                    .centerCrop()
-//                    .placeholder(R.drawable.empty_image)
-//                    .into(bg);
-//        }
-//    }
 }

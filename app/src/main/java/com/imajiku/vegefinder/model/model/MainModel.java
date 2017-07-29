@@ -41,7 +41,11 @@ public class MainModel {
                 if (response.isSuccessful()) {
                     if (response.body().getData() != null) {
                         ArrayList<News> news = response.body().getData();
-                        presenter.successGetNews(news);
+                        if(news != null) {
+                            presenter.successGetNews(news);
+                        }else{
+                            presenter.failedGetNews();
+                        }
                     } else {
                         presenter.failedGetNews();
                     }
@@ -57,16 +61,23 @@ public class MainModel {
         });
     }
 
-    public void getRecommendation() {
+    public void getRecommendation(int userId) {
         ApiService svc = retrofit.create(ApiService.class);
-        Call<RestoListResponse> call = svc.mightLike();
+        Call<RestoListResponse> call = svc.mightLike(userId+"");
 //        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
                 if (response.isSuccessful()) {
                     ArrayList<Resto> data = response.body().getData();
-                    presenter.successGetRecommendation(data);
+                    if(data !=null) {
+                        presenter.successGetRecommendation(data);
+                    }else{
+                        String error = response.body().getError().getMessage();
+                        if(error != null){
+                            presenter.failedGetRecommendation();
+                        }
+                    }
                 } else {
                     presenter.failedGetRecommendation();
                 }
@@ -104,6 +115,7 @@ public class MainModel {
 
     public void getBookmarks(SortFilterRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
+        request.setDefaultLoc("-8.687115,115.213868");
         Call<RestoListResponse> call = svc.getBookmarks(request);
 //        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
@@ -111,7 +123,14 @@ public class MainModel {
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
                 if (response.isSuccessful()) {
                     ArrayList<Resto> data = response.body().getData();
-                    presenter.successGetBookmarks(data);
+                    if(data !=null) {
+                        presenter.successGetBookmarks(data);
+                    }else{
+                        String error = response.body().getError().getMessage();
+                        if(error != null){
+                            presenter.failedGetBookmarks();
+                        }
+                    }
                 } else {
                     presenter.failedGetBookmarks();
                 }
@@ -126,6 +145,7 @@ public class MainModel {
 
     public void getBeenHere(SortFilterRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
+        request.setDefaultLoc("-8.687115,115.213868");
         Call<RestoListResponse> call = svc.getBeenHere(request);
 //        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
@@ -133,7 +153,14 @@ public class MainModel {
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
                 if (response.isSuccessful()) {
                     ArrayList<Resto> data = response.body().getData();
-                    presenter.successGetBeenHere(data);
+                    if(data !=null) {
+                        presenter.successGetBeenHere(data);
+                    }else{
+                        String error = response.body().getError().getMessage();
+                        if(error != null){
+                            presenter.failedGetBeenHere();
+                        }
+                    }
                 } else {
                     presenter.failedGetBeenHere();
                 }

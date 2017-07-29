@@ -16,9 +16,15 @@ public class StatusResponse {
     public class StatusResponseBody {
         @SerializedName("status")
         private String status;
+        @SerializedName("message")
+        private String message;
 
         public String getStatus() {
             return status;
+        }
+
+        public String getMessage() {
+            return message;
         }
     }
 }

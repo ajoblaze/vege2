@@ -29,13 +29,13 @@ public class RestoListPresenter {
         this.model = model;
     }
 
-    public void findByRegion(String countryId, String provinceId, String cityId, int userId){
-        model.findByRegion(countryId, provinceId, cityId, getUserIdString(userId));
-    }
-
-    public void findByKeyword(String keyword, int userId){
-        model.findByKeyword(keyword, getUserIdString(userId));
-    }
+//    public void findByRegion(String countryId, String provinceId, String cityId, int userId){
+//        model.findByRegion(countryId, provinceId, cityId, getUserIdString(userId));
+//    }
+//
+//    public void findByKeyword(String keyword, int userId){
+//        model.findByKeyword(keyword, getUserIdString(userId));
+//    }
 
     private String getUserIdString(int userId){
         if(userId != -1){
@@ -44,39 +44,17 @@ public class RestoListPresenter {
         return "-";
     }
 
-    public void browseNearby(int userId, String longitude, String latitude) {
-        browseNearby(userId, longitude, latitude, "distance", "asc", "");
-    }
-
-    public void browseNearby(int userId, String longitude, String latitude, String sortType, String order, String filter) {
-        if(sortType.equals("")){
-            sortType = "distance";
-        }
-        if(order.equals("")){
-            order = "asc";
-        }
-        model.browseNearby(getUserIdString(userId), longitude, latitude, sortType, order, filter);
-    }
-
-    public void successFind(ArrayList<Resto> data) {
-        view.successFind(data);
-    }
-
-    public void failedFind() {
-        view.failedFind();
+    public void browseNearby(SortFilterRequest request) {
+        model.browseNearby(request);
     }
 
     public void successBrowseNearby(ArrayList<Resto> data) {
 //        ArrayList<Resto> shortList = new ArrayList<>();
 //        for (int i=0;i<data.size();i++){
-//            Log.e("exc", "distance: "+data.get(i).getDistance());
-//            if(data.get(i).getDistance() <= 25);
+//            Log.e("exc", "distance: "+data.get(i).getDistanceF());
+//            if(data.get(i).getDistanceF() <= 25);
 //        }
         view.successBrowseNearby(data);
-    }
-
-    public void sortData(ArrayList<Resto> data, String order){
-        view.sortData(data, order);
     }
 
     public void setDistance(ArrayList<Resto> data, String longitude, String latitude){
@@ -84,32 +62,12 @@ public class RestoListPresenter {
         location.setLatitude(Double.parseDouble(latitude));
         location.setLongitude(Double.parseDouble(longitude));
         for(Resto r : data){
-            r.setDistance(location);
+            r.setDistanceF(location);
         }
     }
 
-    public void failedBrowseNearby() {
-        view.failedBrowseNearby();
-    }
-
-    public void getRecommendation() {
-        model.getRecommendation();
-    }
-
-    public void successGetRecommendation(ArrayList<Resto> list) {
-        if(list.size() > 20) {
-            ArrayList<Resto> shortList = new ArrayList<>();
-            for (int i = 0; i < 20; i++) {
-                shortList.add(list.get(i));
-            }
-            view.successGetRecommendation(shortList);
-        }else {
-            view.successGetRecommendation(list);
-        }
-    }
-
-    public void failedGetRecommendation() {
-        view.failedGetRecommendation();
+    public void failedBrowseNearby(String error) {
+        view.failedBrowseNearby(error);
     }
 
     public void changeBookmark(int userId, int placeId, boolean isBookmarked) {

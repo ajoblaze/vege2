@@ -36,8 +36,8 @@ public class MainPresenter {
         model.getNews();
     }
 
-    public void getRecommendation() {
-        model.getRecommendation();
+    public void getRecommendation(int userId) {
+        model.getRecommendation(userId);
     }
 
     private String getUserIdString(int userId){
@@ -56,7 +56,7 @@ public class MainPresenter {
     }
 
     public void successGetRecommendation(ArrayList<Resto> list) {
-        if(list.size()>5) {
+        if(list!=null && list.size()>5) {
             ArrayList<Resto> shortList = new ArrayList<>();
             for (int i = 0; i < 5; i++) {
                 shortList.add(list.get(i));

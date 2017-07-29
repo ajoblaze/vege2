@@ -18,6 +18,7 @@ import com.imajiku.vegefinder.model.presenter.ReviewListPresenter;
 import com.imajiku.vegefinder.model.view.ReviewListView;
 import com.imajiku.vegefinder.pojo.RestoDetail;
 import com.imajiku.vegefinder.utility.CurrentUser;
+import com.imajiku.vegefinder.utility.Utility;
 
 public class ReviewListActivity extends AppCompatActivity implements ReviewListView {
 
@@ -42,7 +43,7 @@ public class ReviewListActivity extends AppCompatActivity implements ReviewListV
         ReviewListModel model = new ReviewListModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         initToolbar(getString(R.string.title_review));

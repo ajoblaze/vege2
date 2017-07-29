@@ -21,6 +21,7 @@ import com.imajiku.vegefinder.model.model.BookModel;
 import com.imajiku.vegefinder.model.presenter.BookPresenter;
 import com.imajiku.vegefinder.model.view.BookView;
 import com.imajiku.vegefinder.utility.CurrentUser;
+import com.imajiku.vegefinder.utility.Utility;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -47,7 +48,7 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
         BookModel model = new BookModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         placeId = getIntent().getIntExtra("restoId", -1);

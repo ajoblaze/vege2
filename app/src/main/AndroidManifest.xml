@@ -79,9 +79,7 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <activity
-            android:name=".activity.AddReviewActivity"
-            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".activity.AddReviewActivity"/>
         <activity android:name=".activity.ReviewListActivity" />
         <activity android:name=".activity.SendMessageActivity" />
         <activity android:name=".activity.AccountActivity" />

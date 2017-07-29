@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.pojo.Resto;
+import com.imajiku.vegefinder.utility.Utility;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
     private Context context;
     private String TAG = "exc";
     private boolean isHideFlag;
+    private boolean isBookmark;
     private boolean isBeenHere;
     private boolean isLoadMore;
 
@@ -42,19 +44,26 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
     public RestoListAdapter(Context context, RestoListListener listener) {
         this.context = context;
         this.listener = listener;
-        tf = Typeface.createFromAsset(context.getAssets(), "fonts/VDS_New.ttf");
-        tfBold = Typeface.createFromAsset(context.getAssets(), "fonts/VDS_Bold_New.ttf");
+        tf = Typeface.createFromAsset(context.getAssets(), Utility.regFont);
+        tfBold = Typeface.createFromAsset(context.getAssets(), Utility.boldFont);
         list = new ArrayList<>();
     }
 
     /**
      * updates adapter with content
-     */
-    public void setData(ArrayList<Resto> list, boolean isHideFlag, boolean isBeenHere) {
+     *
+     * params
+     * 0 = isHideFlag
+     * 1 = isLoadMore
+     * 2 = isBookmark
+     * 3 = isBeenHere
+     * */
+    public void setData(ArrayList<Resto> list, boolean[] params) {
         this.list = list;
-        isLoadMore = true;
-        this.isHideFlag = isHideFlag;
-        this.isBeenHere = isBeenHere;
+        this.isHideFlag = params[0];
+        this.isLoadMore = params[1];
+        this.isBookmark = params[2];
+        this.isBeenHere = params[3];
         if(isLoadMore) {
             list.add(new Resto());
         }
@@ -102,6 +111,7 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
         View itemView = holder.itemView;
 
         if (isPositionLast(position)) {
+            holder.loadMore.setTypeface(tfBold);
             holder.loadMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -126,10 +136,24 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
                         .into(holder.image);
             }
             holder.name.setText(r.getMetaTitle());
-            holder.distance.setText(r.getDistance() + " ");
-            holder.price.setText(" Rp " + r.getPriceStart());
-            holder.rating.setText(r.getAverageRate());
-            holder.review.setText("20");
+            holder.distance.setText(r.getDistanceStr());
+
+            //hides distance to user
+//            if(isBookmark || isBeenHere){
+//                holder.restoLayouts[0].setVisibility(View.GONE);
+//            }
+
+            String rating = r.getRating();
+            int review = r.getReview();
+
+            if(review != 0 && rating != null && !rating.isEmpty()){
+                holder.restoLayouts[1].setVisibility(View.VISIBLE);
+                holder.rating.setText(r.getRating());
+                holder.review.setText(r.getReview() + "");
+            }
+            holder.restoLayouts[2].setVisibility(View.VISIBLE);
+            holder.price.setText(" Rp " + r.getAverageCost());
+
             if (isHideFlag) {
                 holder.flagLayout.setVisibility(View.GONE);
             } else {
@@ -216,6 +240,9 @@ public class RestoListAdapter extends RecyclerView.Adapter<RestoListAdapter.Rest
             super(itemView);
             if (isFooter) {
                 loadMore = (Button) itemView.findViewById(R.id.load_more);
+                if(isLoadMore && !list.isEmpty()) {
+                    loadMore.setVisibility(View.VISIBLE);
+                }
             } else {
                 image = (ImageView) itemView.findViewById(R.id.image);
                 name = (TextView) itemView.findViewById(R.id.name);

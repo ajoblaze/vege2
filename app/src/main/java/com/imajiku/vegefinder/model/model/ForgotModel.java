@@ -1,7 +1,5 @@
 package com.imajiku.vegefinder.model.model;
 
-import android.util.Log;
-
 import com.imajiku.vegefinder.model.presenter.ForgotPresenter;
 import com.imajiku.vegefinder.model.request.ForgotRequest;
 import com.imajiku.vegefinder.model.response.StatusResponse;
@@ -37,22 +35,22 @@ public class ForgotModel {
             public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getData() != null) {
-                        if (response.body().getData().getStatus().toLowerCase().equals("success")) {
-                            presenter.successForgot();
+                        if (response.body().getData().getStatus().equals("0")) {
+                            presenter.successForgot(response.body().getData().getMessage());
                         }else{
-                            presenter.failedForgot();
+                            presenter.failedForgot(response.body().getData().getMessage());
                         }
                     }else{
-                        presenter.failedForgot();
+                        presenter.failedForgot("Forgot password failed");
                     }
                 } else {
-                    presenter.failedForgot();
+                    presenter.failedForgot("Forgot password failed");
                 }
             }
 
             @Override
             public void onFailure(Call<StatusResponse> call, Throwable t) {
-                presenter.failedForgot();
+                presenter.failedForgot("Forgot password failed");
             }
         });
     }

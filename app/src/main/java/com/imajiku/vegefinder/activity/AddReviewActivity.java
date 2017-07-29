@@ -22,6 +22,7 @@ import com.imajiku.vegefinder.model.model.MessageModel;
 import com.imajiku.vegefinder.model.presenter.MessagePresenter;
 import com.imajiku.vegefinder.model.view.MessageView;
 import com.imajiku.vegefinder.utility.CurrentUser;
+import com.imajiku.vegefinder.utility.Utility;
 
 public class AddReviewActivity extends AppCompatActivity implements View.OnClickListener, MessageView {
 
@@ -43,7 +44,7 @@ public class AddReviewActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_review);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         initToolbar(getResources().getString(R.string.title_add_review));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 

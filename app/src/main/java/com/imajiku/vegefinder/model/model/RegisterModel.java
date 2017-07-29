@@ -36,19 +36,19 @@ public class RegisterModel {
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
                 if (response.isSuccessful()) {
                     RegisterResponse.RegisterResponseBody data = response.body().getData();
-                    if(data.getStatus().equals("success")) {
-                        presenter.successRegister(data.getId());
+                    if(data.getStatus().equals("0")) {
+                        presenter.successRegister(data.getId(), data.getMessage());
                     }else{
-                        presenter.failedRegister();
+                        presenter.failedRegister(data.getMessage());
                     }
                 } else {
-                    presenter.failedRegister();
+                    presenter.failedRegister("Register failed");
                 }
             }
 
             @Override
             public void onFailure(Call<RegisterResponse> call, Throwable t) {
-                presenter.failedRegister();
+                presenter.failedRegister("Register failed");
             }
         });
     }

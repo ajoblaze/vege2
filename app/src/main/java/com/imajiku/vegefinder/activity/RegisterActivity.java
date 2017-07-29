@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -19,6 +18,7 @@ import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.model.model.RegisterModel;
 import com.imajiku.vegefinder.model.presenter.RegisterPresenter;
 import com.imajiku.vegefinder.model.view.RegisterView;
+import com.imajiku.vegefinder.utility.Utility;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, RegisterView {
 
@@ -39,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         RegisterModel model = new RegisterModel(presenter);
         presenter.setModel(model);
 
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        Typeface tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         TextView title = (TextView) findViewById(R.id.title);
@@ -128,10 +128,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void successRegister(int id) {
+    public void successRegister(int id, String message) {
         progressBar.setVisibility(View.INVISIBLE);
         isSubmitting = false;
-        Toast.makeText(RegisterActivity.this, "Register Success", Toast.LENGTH_SHORT).show();
+        Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
         Intent i = new Intent(this, EditProfileActivity.class);
         i.putExtra("userId", id);
         i.putExtra("type", EditProfileActivity.REGISTER);
@@ -140,9 +140,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void failedRegister() {
+    public void failedRegister(String message) {
         progressBar.setVisibility(View.INVISIBLE);
         isSubmitting = false;
-        Toast.makeText(RegisterActivity.this, "Failed register", Toast.LENGTH_SHORT).show();
+        Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }

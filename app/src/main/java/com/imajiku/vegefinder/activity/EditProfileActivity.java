@@ -1,7 +1,6 @@
 package com.imajiku.vegefinder.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,7 +18,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -47,6 +45,7 @@ import com.imajiku.vegefinder.pojo.UserProfile;
 import com.imajiku.vegefinder.utility.CircularImageView;
 import com.imajiku.vegefinder.utility.CurrentUser;
 import com.imajiku.vegefinder.utility.ImageDecoderHelper;
+import com.imajiku.vegefinder.utility.Utility;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -107,7 +106,7 @@ public class EditProfileActivity extends AppCompatActivity implements
             userId = CurrentUser.getId(this);
         }
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         initToolbar(getResources().getString(R.string.title_profile));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
@@ -242,8 +241,10 @@ public class EditProfileActivity extends AppCompatActivity implements
                     .placeholder(R.drawable.empty_image)
                     .into(profPic);
         }
-        name.setText(profile.getName());
+        name.setText(profile.getFirstName());
         email.setText(profile.getEmail());
+        sex.setSelection(profile.getSex().equals("Male") ? 0 : 1);
+        pref.setSelection(profile.getPreference().equals("Vegan") ? 0 : profile.getPreference().equals("Vegetarian") ? 1 : 2);
     }
 
     private void initArray() {
@@ -291,7 +292,7 @@ public class EditProfileActivity extends AppCompatActivity implements
         String[] permissions;
         switch (v.getId()) {
             case R.id.fab_camera:
-                permissions = new String[]{Manifest.permission.CAMERA};
+                permissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
                 if(hasPermissions(permissions)) {
                     getImageFromCamera();
                 }else{
@@ -299,7 +300,7 @@ public class EditProfileActivity extends AppCompatActivity implements
                 }
                 break;
             case R.id.profPic:
-                permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
+                permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
                 if(hasPermissions(permissions)) {
                     getImageFromGallery();
                 }else{
@@ -432,7 +433,7 @@ public class EditProfileActivity extends AppCompatActivity implements
             return false;
         }
         // assume user wants to change password
-        ColorStateList oldColor = labels[2].getTextColors();
+        ColorStateList oldColor = labels[1].getTextColors();
         if(!oldP.equals(CurrentUser.getPassword(this))){
             Toast.makeText(EditProfileActivity.this, "Old Password doesn't match", Toast.LENGTH_LONG).show();
             labels[2].setTextColor(ContextCompat.getColor(this, R.color.red));
@@ -450,6 +451,16 @@ public class EditProfileActivity extends AppCompatActivity implements
                 return true;
             }
         }
+    }
+
+    private void clearPasswordField(){
+        oldPass.setText("");
+        newPass.setText("");
+        confPass.setText("");
+        ColorStateList oldColor = labels[1].getTextColors();
+        labels[2].setTextColor(oldColor);
+        labels[3].setTextColor(oldColor);
+        labels[4].setTextColor(oldColor);
     }
 
     public void addApiCounter(boolean isStart){
@@ -580,6 +591,7 @@ public class EditProfileActivity extends AppCompatActivity implements
     public void successResetPassword() {
         addApiCounter(false);
         isSubmitting = false;
+        clearPasswordField();
         Toast.makeText(EditProfileActivity.this, "Password changed successfully", Toast.LENGTH_SHORT).show();
     }
 

@@ -2,9 +2,8 @@ package com.imajiku.vegefinder.model.model;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.imajiku.vegefinder.model.presenter.RestoListPresenter;
-import com.imajiku.vegefinder.model.request.FindKeywordRequest;
-import com.imajiku.vegefinder.model.request.FindRegionRequest;
 import com.imajiku.vegefinder.model.request.SortFilterRequest;
 import com.imajiku.vegefinder.model.request.ToggleRequest;
 import com.imajiku.vegefinder.model.response.RestoListResponse;
@@ -27,6 +26,9 @@ public class RestoListModel {
 
     public static final String BOOKMARK = "bookmark";
     public static final String BEENHERE = "been here";
+    public static final String RECOMMEND = "recommendation";
+    public static final String SEARCH_R = "search region result";
+    public static final String SEARCH_K = "search keyword result";
     private static final String TAG = "exc";
     private RestoListPresenter presenter;
     private Retrofit retrofit;
@@ -36,130 +38,34 @@ public class RestoListModel {
         retrofit = Utility.buildRetrofit();
     }
 
-    public void findByRegion(String countryId, String provinceId, String cityId, String userId) {
-        FindRegionRequest request = new FindRegionRequest(countryId, provinceId, cityId, userId);
+    public void browseNearby(SortFilterRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
-        Call<RestoListResponse> call = svc.findRegion(request);
+        Call<RestoListResponse> call = svc.browseNearby(request);
 //        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
                 if (response.isSuccessful()) {
                     ArrayList<Resto> data = response.body().getData();
-                    presenter.successFind(data);
-                } else {
-                    presenter.failedFind();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RestoListResponse> call, Throwable t) {
-                presenter.failedFind();
-            }
-        });
-    }
-
-    public void findByKeyword(String keyword, String userId) {
-        FindKeywordRequest request = new FindKeywordRequest(keyword, userId);
-        ApiService svc = retrofit.create(ApiService.class);
-        Call<RestoListResponse> call = svc.findKeyword(request);
-//        Log.e(TAG, String.valueOf(call.request().url()));
-        call.enqueue(new Callback<RestoListResponse>() {
-            @Override
-            public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
-                if (response.isSuccessful()) {
-                    ArrayList<Resto> data = response.body().getData();
-                    presenter.successFind(data);
-                } else {
-                    presenter.failedFind();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RestoListResponse> call, Throwable t) {
-                presenter.failedFind();
-            }
-        });
-    }
-
-    public void browseNearby(String userId, final String longitude, final String latitude, final String sortType, final String order, String filter) {
-        String location = longitude + "," + latitude;
-        String sort;
-        if (sortType.equals("distance")) {
-            sort = "title-" + order; // any sortType will do
-        } else {
-            sort = sortType + "-" + order;
-        }
-        ApiService svc = retrofit.create(ApiService.class);
-        Call<RestoListResponse> call = svc.browseNearby(userId, location, sort, filter);
-//        Log.e(TAG, String.valueOf(call.request().url()));
-        call.enqueue(new Callback<RestoListResponse>() {
-            @Override
-            public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
-                if (response.isSuccessful()) {
-                    ArrayList<Resto> data = response.body().getData();
-                    presenter.setDistance(data, longitude, latitude);
-                    if (sortType.equals("distance")) {
-                        presenter.sortData(data, order);
-                    } else {
+                    if(data!=null) {
                         presenter.successBrowseNearby(data);
+                    }else{
+                        String error = response.body().getError().getMessage();
+                        if(error != null){
+                            presenter.failedBrowseNearby(error);
+                        }
                     }
                 } else {
-                    presenter.failedBrowseNearby();
+                    presenter.failedBrowseNearby("Failed getting data");
                 }
             }
 
             @Override
             public void onFailure(Call<RestoListResponse> call, Throwable t) {
-                presenter.failedBrowseNearby();
+                presenter.failedBrowseNearby("Failed getting data");
             }
         });
     }
-
-    public void getRecommendation() {
-        ApiService svc = retrofit.create(ApiService.class);
-        Call<RestoListResponse> call = svc.mightLike();
-//        Log.e(TAG, String.valueOf(call.request().url()));
-        call.enqueue(new Callback<RestoListResponse>() {
-            @Override
-            public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
-                if (response.isSuccessful()) {
-                    ArrayList<Resto> data = response.body().getData();
-                    presenter.successGetRecommendation(data);
-                } else {
-                    presenter.failedGetRecommendation();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RestoListResponse> call, Throwable t) {
-                presenter.failedGetRecommendation();
-            }
-        });
-    }
-
-//    public void getRecommendation(String userId, String latitude, String longitude) {
-//        String location = longitude + "," + latitude;
-//        ApiService svc = retrofit.create(ApiService.class);
-//        Call<RestoListResponse> call = svc.browseNearby(userId, location, "average_rate-desc", "");
-//        Log.e(TAG, String.valueOf(call.request().url()));
-//        call.enqueue(new Callback<RestoListResponse>() {
-//            @Override
-//            public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
-//                if (response.isSuccessful()) {
-//                    ArrayList<Resto> data = response.body().getData();
-//                    presenter.successGetRecommendation(data);
-//                } else {
-//                    presenter.failedGetRecommendation();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<RestoListResponse> call, Throwable t) {
-//                presenter.failedGetRecommendation();
-//            }
-//        });
-//    }
 
     public void changeBookmark(int userId, int placeId, final boolean isBookmarked) {
         ToggleRequest request = new ToggleRequest(userId, placeId);
@@ -234,23 +140,38 @@ public class RestoListModel {
     }
 
     public void getSortFilterList(final String type, SortFilterRequest request) {
+        request.setDefaultLoc("-8.687115,115.213868");
         ApiService svc = retrofit.create(ApiService.class);
         Call<RestoListResponse> call;
         if(type.equals(BOOKMARK)) {
             call = svc.getBookmarks(request);
         }else if(type.equals(BEENHERE)) {
             call = svc.getBeenHere(request);
+        }else if(type.equals(RECOMMEND)) {
+            call = svc.mightLike(request);
+        }else if(type.equals(SEARCH_R)) {
+            call = svc.findRegion(request);
+        }else if(type.equals(SEARCH_K)) {
+            call = svc.findKeyword(request);
         }else{
             presenter.failedGetSortFilterList(type);
             return;
         }
+//        Log.e(TAG, String.valueOf(call.request().url()));
+
+//        String json = new Gson().toJson(request);
+//        Log.e(TAG, "LOAD "+json);
 //        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<RestoListResponse>() {
             @Override
             public void onResponse(Call<RestoListResponse> call, Response<RestoListResponse> response) {
                 if (response.isSuccessful()) {
                     ArrayList<Resto> data = response.body().getData();
-                    presenter.successGetSortFilterList(data);
+                    if(data!=null){
+                        presenter.successGetSortFilterList(data);
+                    } else {
+                        presenter.failedGetSortFilterList(type);
+                    }
                 } else {
                     presenter.failedGetSortFilterList(type);
                 }
@@ -258,6 +179,7 @@ public class RestoListModel {
 
             @Override
             public void onFailure(Call<RestoListResponse> call, Throwable t) {
+//                Log.e(TAG, t.getMessage());
                 presenter.failedGetSortFilterList(type);
             }
         });

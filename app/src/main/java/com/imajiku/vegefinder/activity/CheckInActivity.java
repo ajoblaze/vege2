@@ -36,6 +36,7 @@ import com.imajiku.vegefinder.model.model.CheckInModel;
 import com.imajiku.vegefinder.model.presenter.CheckInPresenter;
 import com.imajiku.vegefinder.model.view.CheckInView;
 import com.imajiku.vegefinder.utility.CurrentUser;
+import com.imajiku.vegefinder.utility.Utility;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterCore;
@@ -83,7 +84,7 @@ public class CheckInActivity extends AppCompatActivity implements View.OnClickLi
 
         setupTwitter();
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         initToolbar("Check In");
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 

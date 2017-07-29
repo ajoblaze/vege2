@@ -31,6 +31,7 @@ import com.imajiku.vegefinder.model.presenter.NewsListPresenter;
 import com.imajiku.vegefinder.model.view.NewsListView;
 import com.imajiku.vegefinder.pojo.News;
 import com.imajiku.vegefinder.pojo.Resto;
+import com.imajiku.vegefinder.utility.Utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,7 +68,7 @@ public class NewsListActivity extends AppCompatActivity implements
         NewsListModel model = new NewsListModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         addApiCounter(true);

@@ -25,6 +25,7 @@ import com.imajiku.vegefinder.model.model.RegionModel;
 import com.imajiku.vegefinder.model.presenter.RegionPresenter;
 import com.imajiku.vegefinder.model.view.RegionView;
 import com.imajiku.vegefinder.pojo.Resto;
+import com.imajiku.vegefinder.utility.Utility;
 
 import java.util.ArrayList;
 
@@ -54,7 +55,7 @@ public class FindPlaceActivity extends AppCompatActivity implements RegionView, 
         RegionModel model = new RegionModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         title = (TextView) findViewById(R.id.find_title);
@@ -137,8 +138,7 @@ public class FindPlaceActivity extends AppCompatActivity implements RegionView, 
                     changeBorder(provinceSpinner, true);
                     changeBorder(keywordText, false);
                 }else{
-                    i.putExtra("page", RestoListActivity.PAGE_SEARCH);
-                    i.putExtra("type", "region");
+                    i.putExtra("page", RestoListActivity.PAGE_SEARCH_R);
                     i.putExtra("country", String.valueOf(presenter.getCountryId(currCountry)));
                     i.putExtra("province", String.valueOf(presenter.getProvinceId(currProvince)));
                     if (currCity.equals(ALL_CITY)) {
@@ -156,8 +156,7 @@ public class FindPlaceActivity extends AppCompatActivity implements RegionView, 
                     changeBorder(keywordText, true);
                     changeBorder(provinceSpinner, false);
                 } else {
-                    i.putExtra("page", RestoListActivity.PAGE_SEARCH);
-                    i.putExtra("type", "keyword");
+                    i.putExtra("page", RestoListActivity.PAGE_SEARCH_K);
                     i.putExtra("keyword", keyword);
                     startActivity(i);
                 }

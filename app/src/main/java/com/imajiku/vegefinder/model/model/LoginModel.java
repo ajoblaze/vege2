@@ -30,28 +30,29 @@ public class LoginModel {
         LoginRequest request = new LoginRequest(email, password);
         ApiService svc = retrofit.create(ApiService.class);
         Call<LoginResponse> call = svc.login(request);
+        Log.e("exc", String.valueOf(call.request().url()));
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
                     LoginResponse.LoginResponseBody data = response.body().getData();
                     if (data != null) {
-                        if (data.getStatus().toLowerCase().equals("success")) {
-                            presenter.successLogin(data.getUserId(), password);
+                        if (data.getStatus().equals("0")) {
+                            presenter.successLogin(data.getUserId(), password, data.getMessage());
                         }else{
-                            presenter.failedLogin();
+                            presenter.failedLogin(data.getMessage());
                         }
                     } else {
-                        presenter.failedLogin();
+                        presenter.failedLogin("Login failed");
                     }
                 } else {
-                    presenter.failedLogin();
+                    presenter.failedLogin("Login failed");
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                presenter.failedLogin();
+                presenter.failedLogin("Login failed");
             }
         });
     }

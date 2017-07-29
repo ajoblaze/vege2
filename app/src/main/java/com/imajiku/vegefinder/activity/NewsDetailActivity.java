@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.pojo.News;
+import com.imajiku.vegefinder.utility.Utility;
 import com.squareup.picasso.Picasso;
 
 import uk.co.deanwild.flowtextview.FlowTextView;
@@ -29,7 +30,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_detail);
         News n = (News) getIntent().getSerializableExtra("news");
 
-        tfThin = Typeface.createFromAsset(getAssets(), "fonts/VDS_Thin.ttf");
+        tfThin = Typeface.createFromAsset(getAssets(), Utility.regFont);
 
         initToolbar(n.getTitle());
         image = (ImageView) findViewById(R.id.news_image);

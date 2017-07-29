@@ -25,16 +25,16 @@ public class ForgotPresenter {
         this.model = model;
     }
 
-    public void successForgot() {
-        view.successForgot();
+    public void successForgot(String s) {
+        view.successForgot(s);
     }
 
     public void forget(String emailContent) {
         model.forgotPassword(emailContent);
     }
 
-    public void failedForgot() {
-        view.failedForgot();
+    public void failedForgot(String s) {
+        view.failedForgot(s);
     }
 }
 

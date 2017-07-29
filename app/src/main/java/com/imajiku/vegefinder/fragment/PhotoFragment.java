@@ -24,6 +24,7 @@ import com.imajiku.vegefinder.activity.RestoDetailActivity;
 import com.imajiku.vegefinder.adapter.ImageListAdapter;
 import com.imajiku.vegefinder.adapter.PreviewListAdapter;
 import com.imajiku.vegefinder.pojo.RestoImage;
+import com.imajiku.vegefinder.utility.Utility;
 
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public class PhotoFragment extends Fragment implements View.OnClickListener, Ima
     private ArrayList<String> list;
     private String TAG="exc";
     private int restoId, userId;
-    private TextView emptyPhoto;
+    private TextView emptyPhoto, seeMore;
 
     public PhotoFragment() {
         // Required empty public constructor
@@ -45,8 +46,8 @@ public class PhotoFragment extends Fragment implements View.OnClickListener, Ima
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_photo, container, false);
 
-        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/VDS_New.ttf");
-        TextView seeMore = (TextView) v.findViewById(R.id.see_more);
+        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), Utility.regFont);
+        seeMore = (TextView) v.findViewById(R.id.see_more);
         seeMore.setOnClickListener(this);
         seeMore.setTypeface(tf);
         TextView label = (TextView) v.findViewById(R.id.photo_label);
@@ -116,7 +117,8 @@ public class PhotoFragment extends Fragment implements View.OnClickListener, Ima
         this.userId = userId;
         if(list.isEmpty()){
             emptyPhoto.setVisibility(View.VISIBLE);
-        }else {
+            seeMore.setVisibility(View.GONE);
+        } else {
             setData(list);
         }
     }

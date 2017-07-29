@@ -51,6 +51,7 @@ import com.imajiku.vegefinder.model.request.SortFilterRequest;
 import com.imajiku.vegefinder.model.view.RestoListView;
 import com.imajiku.vegefinder.pojo.Resto;
 import com.imajiku.vegefinder.utility.CurrentUser;
+import com.imajiku.vegefinder.utility.Utility;
 
 import java.util.ArrayList;
 
@@ -64,7 +65,8 @@ public class RestoListActivity extends AppCompatActivity implements
     public static final int PAGE_RECOMMEND = 21;
     public static final int PAGE_BOOKMARK = 22;
     public static final int PAGE_BEENHERE = 23;
-    public static final int PAGE_SEARCH = 24;
+    public static final int PAGE_SEARCH_R = 24;
+    public static final int PAGE_SEARCH_K = 25;
     private static final int REQUEST_CHECK_SETTINGS = 8008;
     private static final int FILTER_BOX_QTY = 7;
     private static final int SORT_BUTTON_QTY = 4;
@@ -84,7 +86,8 @@ public class RestoListActivity extends AppCompatActivity implements
     private RadioGroup orderGroup;
     private boolean[] sortSelected;
     private LinearLayout[] sortButtonLayout;
-    private String[] sortText = {"title", "distance", "date_post", "average_cost"};
+//    private String[] sortText = {"title", "distance", "date_post", "average_cost"};
+    private String[] sortText = {"alphabet", "distance", "date", "price"};
     private int currSelectedSort = -1;
     private RestoListPresenter presenter;
     private int pageType, filterCode;
@@ -99,6 +102,9 @@ public class RestoListActivity extends AppCompatActivity implements
     private int userId;
     private int apiCallCounter = 0;
     private ProgressBar progressBar;
+    private SortFilterRequest currRequest;
+    private String consumeType="";
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,47 +122,44 @@ public class RestoListActivity extends AppCompatActivity implements
         RestoListModel model = new RestoListModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
-        Intent intent = getIntent();
+        intent = getIntent();
         userId = CurrentUser.getId(this);
         pageType = intent.getIntExtra("page", PAGE_BROWSE);
+
+        currRequest = new SortFilterRequest(userId);
         switch (pageType) {
-            case PAGE_RECOMMEND:
-                initToolbar("You Might Like");
-                presenter.getRecommendation();
+            case PAGE_BOOKMARK:
+                initToolbar("Saved Places");
                 hasBrowsedNearby = false;
                 break;
-            case PAGE_BOOKMARK:
-                presenter.getSortFilterList(RestoListModel.BOOKMARK, new SortFilterRequest(userId));
-                addApiCounter(true);
-                initToolbar("Saved Places");
-                break;
             case PAGE_BEENHERE:
-                presenter.getSortFilterList(RestoListModel.BEENHERE, new SortFilterRequest(userId));
-                addApiCounter(true);
                 initToolbar("Visited Places");
+                hasBrowsedNearby = false;
+                break;
+            case PAGE_RECOMMEND:
+                initToolbar("You Might Like");
+                hasBrowsedNearby = false;
+//                presenter.getRecommendation(new SortFilterRequest(userId));
                 break;
             case PAGE_BROWSE:
                 initToolbar("Nearby Places");
                 hasBrowsedNearby = false;
                 break;
-            case PAGE_SEARCH: {
+            case PAGE_SEARCH_R: {
                 initToolbar("Find a Specific Place");
-                String type = intent.getStringExtra("type");
-                if (type.equals("region")) {
-                    String countryId = intent.getStringExtra("country");
-                    String provinceId = intent.getStringExtra("province");
-                    String cityId = intent.getStringExtra("city");
-                    presenter.findByRegion(countryId, provinceId, cityId, userId);
-                    addApiCounter(true);
-                } else if (type.equals("keyword")) {
-                    String keyword = intent.getStringExtra("keyword");
-                    presenter.findByKeyword(keyword, userId);
-                    addApiCounter(true);
+                hasBrowsedNearby = false;
+//                presenter.findByRegion(countryId, provinceId, cityId, userId);
                 }
-            }
+                break;
+            case PAGE_SEARCH_K: {
+                initToolbar("Find a Specific Place");
+                hasBrowsedNearby = false;
+//                presenter.findByKeyword(keyword, userId);
+                }
+                break;
         }
 
         restoListFragment = (RestoListFragment) getSupportFragmentManager().findFragmentById(R.id.resto_list_fragment);
@@ -193,7 +196,7 @@ public class RestoListActivity extends AppCompatActivity implements
         filterBox[5] = (CheckBox) findViewById(R.id.vege);
         filterBox[6] = (CheckBox) findViewById(R.id.vegeready);
         submitFilter = (TextView) findViewById(R.id.submit_filter);
-        if (pageType == PAGE_BROWSE || pageType == PAGE_SEARCH) {
+        if (pageType == PAGE_BROWSE || pageType == PAGE_SEARCH_R || pageType == PAGE_SEARCH_K) {
             for (int i = 0; i < 4; i++) {
                 filterBox[i].setVisibility(View.GONE);
             }
@@ -243,6 +246,47 @@ public class RestoListActivity extends AppCompatActivity implements
         }
         submitSort.setOnClickListener(this);
         submitSort.setTypeface(tf);
+    }
+
+    private void loadPageData(){
+        currRequest.setLoc(mLongitudeText + "," + mLatitudeText);
+        switch(pageType) {
+            case PAGE_BOOKMARK:
+                addApiCounter(true);
+                presenter.getSortFilterList(RestoListModel.BOOKMARK, currRequest);
+                consumeType = RestoListModel.BOOKMARK;
+                break;
+            case PAGE_BEENHERE:
+                addApiCounter(true);
+                presenter.getSortFilterList(RestoListModel.BEENHERE, currRequest);
+                consumeType = RestoListModel.BEENHERE;
+                break;
+            case PAGE_BROWSE:
+                addApiCounter(true);
+                presenter.browseNearby(new SortFilterRequest(userId, mLongitudeText+","+mLatitudeText, "no", "no", "no"));
+                break;
+            case PAGE_RECOMMEND:
+                addApiCounter(true);
+                presenter.getSortFilterList(RestoListModel.RECOMMEND, currRequest);
+                consumeType = RestoListModel.RECOMMEND;
+                break;
+            case PAGE_SEARCH_R:
+                String countryId = intent.getStringExtra("country");
+                String provinceId = intent.getStringExtra("province");
+                String cityId = intent.getStringExtra("city");
+                consumeType = RestoListModel.SEARCH_R;
+                currRequest.setRegionId(countryId, provinceId, cityId);
+                addApiCounter(true);
+                presenter.getSortFilterList(RestoListModel.SEARCH_R, currRequest);
+                break;
+            case PAGE_SEARCH_K:
+                String keyword = intent.getStringExtra("keyword");
+                consumeType = RestoListModel.SEARCH_K;
+                currRequest.setKeyword(keyword);
+                addApiCounter(true);
+                presenter.getSortFilterList(RestoListModel.SEARCH_K, currRequest);
+                break;
+        }
     }
 
     public void initToolbar(String title) {
@@ -318,83 +362,58 @@ public class RestoListActivity extends AppCompatActivity implements
                 break;
             case R.id.submit_filter:
                 filterLayout.collapse();
-                if (pageType == PAGE_BOOKMARK || pageType == PAGE_BEENHERE) {
+                if (pageType == PAGE_BOOKMARK || pageType == PAGE_BEENHERE || pageType == PAGE_RECOMMEND || pageType == PAGE_SEARCH_R || pageType == PAGE_SEARCH_K) {
                     sortFilter();
                 } else {
                     if (pageType == PAGE_BROWSE) {
                         addApiCounter(true);
-                        presenter.browseNearby(
+                        presenter.browseNearby(new SortFilterRequest(
                                 userId,
-                                mLongitudeText,
-                                mLatitudeText,
-                                (currSelectedSort == -1) ? "" : sortText[currSelectedSort],
-                                (orderGroup.getCheckedRadioButtonId() == R.id.asc) ? "asc" : "desc",
-                                getFilter()
-                        );
-                    }else if(pageType == PAGE_RECOMMEND){
-                        addApiCounter(true);
-                        presenter.getRecommendation();
+                                mLongitudeText + "," + mLatitudeText,
+                                boolToYesNo(filterBox[4].isChecked()),
+                                boolToYesNo(filterBox[5].isChecked()),
+                                boolToYesNo(filterBox[6].isChecked())
+                        ));
                     }
                 }
                 break;
             case R.id.submit_sort:
-                sortLayout.collapse();
-                if (pageType == PAGE_BOOKMARK || pageType == PAGE_BEENHERE) {
-                    sortFilter();
-                } else {
-                    if (pageType == PAGE_BROWSE) {
-                        addApiCounter(true);
-                        presenter.browseNearby(
-                                userId,
-                                mLongitudeText,
-                                mLatitudeText,
-                                (currSelectedSort == -1) ? "" : sortText[currSelectedSort],
-                                (orderGroup.getCheckedRadioButtonId() == R.id.asc) ? "asc" : "desc",
-                                getFilter()
-                        );
-                    } else {
-                        if (mLastLocation == null) {
-                            if(currSelectedSort == 1) {
-                                Toast.makeText(RestoListActivity.this, "Please turn on your location to sort by distance", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            if (currSelectedSort == 1) {
-                                for (Resto r : restoList) {
-                                    r.setDistance(mLastLocation);
-                                }
-                            }
-                            boolean isHideFlag = (userId == -1 || pageType == PAGE_BOOKMARK);
-                            restoListFragment.sort(restoList, getSortResult(), isHideFlag);
-                        }
+                if(currSelectedSort == -1){
+                    Toast.makeText(RestoListActivity.this, "Please choose sort type", Toast.LENGTH_SHORT).show();
+                }else {
+                    sortLayout.collapse();
+                    if (pageType == PAGE_BOOKMARK || pageType == PAGE_BEENHERE || pageType == PAGE_RECOMMEND || pageType == PAGE_SEARCH_R || pageType == PAGE_SEARCH_K) {
+                        sortFilter();
                     }
+//                    else {
+//                        if (pageType == PAGE_BROWSE) {
+//                            addApiCounter(true);
+//                            presenter.browseNearby(
+//                                    userId,
+//                                    mLongitudeText,
+//                                    mLatitudeText,
+//                                    (currSelectedSort == -1) ? "" : sortText[currSelectedSort],
+//                                    (orderGroup.getCheckedRadioButtonId() == R.id.asc) ? "asc" : "desc",
+//                                    getFilter()
+//                            );
+//                        }
+//                    }
                 }
                 break;
         }
     }
 
+    // unify all pages that use SortFilterRequest
     private void sortFilter() {
-        String type = null;
-        if (pageType == PAGE_BOOKMARK) {
-            type = RestoListModel.BOOKMARK;
-        } else if (pageType == PAGE_BEENHERE) {
-            type = RestoListModel.BEENHERE;
-        }
-        String loc = "";
-        String sortType = (currSelectedSort == -1) ? "" : sortText[currSelectedSort];
+        String sortType = (currSelectedSort == -1) ? "alphabet" : sortText[currSelectedSort];
         String sortOrder = (orderGroup.getCheckedRadioButtonId() == R.id.asc) ? "asc" : "desc";
-        if (sortType.equals("distance")) {
-            if (mLastLocation == null) {
-                Toast.makeText(RestoListActivity.this, "Please turn on your location to sort by distance", Toast.LENGTH_SHORT).show();
-                return;
-            } else {
-                loc = mLastLocation.getLatitude() + "," + mLastLocation.getLongitude();
-            }
-        }
         addApiCounter(true);
-        presenter.getSortFilterList(type, new SortFilterRequest(
+
+        // assigns values according to selected sortfilter menu
+        currRequest.assign(
                 userId,
                 sortType,
-                loc,
+                mLongitudeText + "," + mLatitudeText,
                 sortOrder,
                 boolToYesNo(filterBox[0].isChecked()),
                 boolToYesNo(filterBox[2].isChecked()),
@@ -403,7 +422,8 @@ public class RestoListActivity extends AppCompatActivity implements
                 boolToYesNo(filterBox[4].isChecked()),
                 boolToYesNo(filterBox[5].isChecked()),
                 boolToYesNo(filterBox[6].isChecked())
-        ));
+        );
+        presenter.getSortFilterList(consumeType, currRequest);
     }
 
     private String boolToYesNo(boolean b) {
@@ -450,22 +470,6 @@ public class RestoListActivity extends AppCompatActivity implements
             return "vegeready";
         }
         return "";
-    }
-
-    private int[] getSortResult() {
-        int[] sortResult = new int[2];
-        sortResult[0] = currSelectedSort;
-        sortResult[1] =
-                (orderGroup.getCheckedRadioButtonId() == R.id.asc) ? 0 : 1;
-        return sortResult;
-    }
-
-    private boolean[] getFilterResult() {
-        boolean[] filterResult = new boolean[FILTER_BOX_QTY];
-        for (int i = 0; i < FILTER_BOX_QTY; i++) {
-            filterResult[i] = filterBox[i].isChecked();
-        }
-        return filterResult;
     }
 
     private void changeSortButton(int index) {
@@ -530,6 +534,18 @@ public class RestoListActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onLoadMore() {
+        addApiCounter(true);
+        if(currRequest == null){
+            currRequest = new SortFilterRequest(userId);
+        }
+        currRequest.setPage(currRequest.getPage()+1);
+//        String json = new Gson().toJson(currRequest);
+//        Log.e(TAG, "LOAD "+json);
+        presenter.getSortFilterList(consumeType, currRequest);
+    }
+
+    @Override
     protected void onStart() {
         googleApiClient.connect();
         isRequestingLocationUpdates = true;
@@ -552,22 +568,13 @@ public class RestoListActivity extends AppCompatActivity implements
         super.onStop();
     }
 
-    @Override
-    public void successFind(ArrayList<Resto> data) {
-        addApiCounter(false);
-        restoList = data;
-        filterLayout.setVisibility(View.VISIBLE);
-        sortLayout.setVisibility(View.VISIBLE);
-        boolean isHideFlag = (userId == -1);
-        restoListFragment.sort(data, new int[]{0, 0}, isHideFlag);
-    }
-
-    @Override
-    public void failedFind() {
-        addApiCounter(false);
-        Toast.makeText(RestoListActivity.this, "Failed search places", Toast.LENGTH_SHORT).show();
-    }
-
+    /**
+     * params
+     * 0 = isHideFlag
+     * 1 = isLoadMore
+     * 2 = isBookmark
+     * 3 = isBeenHere
+     * */
     @Override
     public void successBrowseNearby(ArrayList<Resto> data) {
         addApiCounter(false);
@@ -576,40 +583,14 @@ public class RestoListActivity extends AppCompatActivity implements
         sortLayout.setVisibility(View.VISIBLE);
         restoList = data;
         boolean isHideFlag = userId == -1; // if is not logged in, hide flag
-        restoListFragment.setData(restoList, isHideFlag);
+        boolean[] params = new boolean[]{isHideFlag, false, false, false};
+        restoListFragment.setData(restoList, params, 1);
     }
 
     @Override
-    public void failedBrowseNearby() {
+    public void failedBrowseNearby(String error) {
         addApiCounter(false);
-        Toast.makeText(RestoListActivity.this, "Failed getting data", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void successGetRecommendation(ArrayList<Resto> list) {
-        addApiCounter(false);
-        hasBrowsedNearby = true;
-        filterLayout.setVisibility(View.VISIBLE);
-        sortLayout.setVisibility(View.VISIBLE);
-        restoList = list;
-//        Toast.makeText(RestoListActivity.this, "Bookmark has not been set", Toast.LENGTH_SHORT).show();
-        restoListFragment.setData(restoList, true);
-    }
-
-    @Override
-    public void failedGetRecommendation() {
-        addApiCounter(false);
-        Toast.makeText(RestoListActivity.this, "Failed getting data", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void sortData(ArrayList<Resto> data, String order) {
-        addApiCounter(false);
-        filterLayout.setVisibility(View.VISIBLE);
-        sortLayout.setVisibility(View.VISIBLE);
-        int o = order.equals("asc") ? 0 : 1;
-        boolean isHideFlag = (userId == -1);
-        restoListFragment.sort(data, new int[]{1, o}, isHideFlag);
+        Toast.makeText(RestoListActivity.this, error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -639,20 +620,35 @@ public class RestoListActivity extends AppCompatActivity implements
         Toast.makeText(RestoListActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * params
+     * 0 = isHideFlag
+     * 1 = isLoadMore
+     * 2 = isBookmark
+     * 3 = isBeenHere
+     * */
     @Override
     public void successGetSortFilterList(ArrayList<Resto> list) {
         addApiCounter(false);
+        hasBrowsedNearby = true;
         filterLayout.setVisibility(View.VISIBLE);
         sortLayout.setVisibility(View.VISIBLE);
         restoList = list;
         boolean isHideFlag = (userId == -1 || pageType == PAGE_BOOKMARK); // if not logged in or bookmark, hide flag
-        restoListFragment.setData(restoList, isHideFlag);
+        boolean[] params = new boolean[]{
+                isHideFlag,
+                true,
+                pageType == PAGE_BOOKMARK,
+                pageType == PAGE_BEENHERE
+        };
+        restoListFragment.setData(restoList, params, 2);
     }
 
     @Override
     public void failedGetSortFilterList(String type) {
         addApiCounter(false);
-        Toast.makeText(RestoListActivity.this, "Failed getting " + type, Toast.LENGTH_SHORT).show();
+        Toast.makeText(RestoListActivity.this, "No " + type + " data", Toast.LENGTH_SHORT).show();
+        successGetSortFilterList(new ArrayList<Resto>());
     }
 
     @Override
@@ -676,10 +672,8 @@ public class RestoListActivity extends AppCompatActivity implements
         if (mLastLocation != null) {
             mLatitudeText = String.valueOf(mLastLocation.getLatitude());
             mLongitudeText = String.valueOf(mLastLocation.getLongitude());
-            if (pageType == PAGE_BROWSE) {
-                presenter.browseNearby(userId, mLongitudeText, mLatitudeText);
-                addApiCounter(true);
-            }
+            hasBrowsedNearby = true;
+            loadPageData();
         }
 
         if (isRequestingLocationUpdates) {
@@ -748,22 +742,25 @@ public class RestoListActivity extends AppCompatActivity implements
 
     @Override
     public void onLocationChanged(Location location) {
+        addApiCounter(false);
         updateLocation();
-        if (mLastLocation != null && !hasBrowsedNearby) {
-            if (pageType == PAGE_BROWSE) {
-                presenter.browseNearby(userId, mLongitudeText, mLatitudeText);
-                addApiCounter(true);
+        if (mLastLocation != null) {
+            //so that it doesnt rehit API every time ur phone move
+            if(!hasBrowsedNearby) {
                 hasBrowsedNearby = true;
+                loadPageData();
             }
         }
     }
 
     @Override
     public void onConnectionSuspended(int i) {
+        addApiCounter(false);
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        addApiCounter(false);
     }
 
     private void createLocationRequest() {

@@ -1,16 +1,19 @@
 package com.imajiku.vegefinder.activity;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +32,7 @@ import com.imajiku.vegefinder.pojo.Resto;
 import com.imajiku.vegefinder.pojo.UserProfile;
 import com.imajiku.vegefinder.utility.CircularImageView;
 import com.imajiku.vegefinder.utility.CurrentUser;
+import com.imajiku.vegefinder.utility.Utility;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -37,6 +41,9 @@ public class AccountActivity extends AppCompatActivity implements AccountView, V
 
     private static final int LAYOUT_QTY = 7;
     private static final int COUNT_QTY = 2;
+    private static final int PERMISSION_UPPER = 900;
+    private static final int PERMISSION_NETWORK_REQUEST_CODE = 901;
+    private static final int PERMISSION_LOWER = 902;
     private static final String TAG = "exc";
     private static final int EDIT_PROFILE = 11;
     private AccountPresenter presenter;
@@ -61,7 +68,7 @@ public class AccountActivity extends AppCompatActivity implements AccountView, V
         AccountModel model = new AccountModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
 
         initToolbar(getString(R.string.title_account));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
@@ -129,9 +136,9 @@ public class AccountActivity extends AppCompatActivity implements AccountView, V
         userId = CurrentUser.getId(this);
         presenter.getProfile(userId);
         addApiCounter(true);
-        presenter.getBookmarks(new SortFilterRequest(userId));
+        presenter.getBookmarks(new SortFilterRequest(userId, 99));
         addApiCounter(true);
-        presenter.getBeenHere(new SortFilterRequest(userId));
+        presenter.getBeenHere(new SortFilterRequest(userId, 99));
         addApiCounter(true);
     }
 
@@ -154,9 +161,9 @@ public class AccountActivity extends AppCompatActivity implements AccountView, V
         super.onActivityResult(requestCode, resultCode, data);
         presenter.getProfile(userId);
         addApiCounter(true);
-        presenter.getBookmarks(new SortFilterRequest(userId));
+        presenter.getBookmarks(new SortFilterRequest(userId, 99));
         addApiCounter(true);
-        presenter.getBeenHere(new SortFilterRequest(userId));
+        presenter.getBeenHere(new SortFilterRequest(userId, 99));
         addApiCounter(true);
     }
 
@@ -197,16 +204,21 @@ public class AccountActivity extends AppCompatActivity implements AccountView, V
                 break;
             case R.id.bookmark_layout:
                 if(!counts[0].getText().toString().equals("0")) {
-                    i = new Intent(AccountActivity.this, RestoListActivity.class);
-                    i.putExtra("page", RestoListActivity.PAGE_BOOKMARK);
-                    startActivity(i);
+                    if(checkLocationAndPermission()) {
+                        i = new Intent(AccountActivity.this, RestoListActivity.class);
+                        i.putExtra("page", RestoListActivity.PAGE_BOOKMARK);
+                        startActivity(i);
+                    }
+
                 }
                 break;
             case R.id.been_here_layout:
                 if(!counts[1].getText().toString().equals("0")) {
-                    i = new Intent(AccountActivity.this, RestoListActivity.class);
-                    i.putExtra("page", RestoListActivity.PAGE_BEENHERE);
-                    startActivity(i);
+                    if(checkLocationAndPermission()) {
+                        i = new Intent(AccountActivity.this, RestoListActivity.class);
+                        i.putExtra("page", RestoListActivity.PAGE_BEENHERE);
+                        startActivity(i);
+                    }
                 }
                 break;
             case R.id.feedback_layout:
@@ -237,6 +249,67 @@ public class AccountActivity extends AppCompatActivity implements AccountView, V
         }
     }
 
+    public boolean checkLocationAndPermission() {
+        String[] permissions = new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.INTERNET
+        };
+        if (MainActivity.isLocationEnabled(this)) {
+            if (hasPermissions(permissions)) {
+                return true;
+            } else {
+                requestPerms(permissions);
+            }
+        } else {
+            //show dialog
+            Toast.makeText(AccountActivity.this, "Please turn on location to use this function", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+    // CHECK PERMISSION FOR MARSHMALLOW
+    private boolean hasPermissions(String[] permissions) {
+        int res;
+        for (String perms : permissions) {
+            res = checkCallingOrSelfPermission(perms);
+            if (!(res == PackageManager.PERMISSION_GRANTED)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void requestPerms(String[] permissions) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(permissions, PERMISSION_NETWORK_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        boolean isAllowed = false;
+        if (requestCode > PERMISSION_UPPER && requestCode < PERMISSION_LOWER) {
+            for (int res : grantResults) {
+                isAllowed = (res == PackageManager.PERMISSION_GRANTED);
+                if (isAllowed) {
+                    break;
+                }
+            }
+        }
+        if (isAllowed) {
+            switch (requestCode) {
+                case PERMISSION_NETWORK_REQUEST_CODE:
+                    Toast.makeText(AccountActivity.this, "Location permission enabled.", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Toast.makeText(AccountActivity.this, "Location permission denied.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     @Override
     public void successGetProfile(UserProfile profile) {
         addApiCounter(false);
@@ -250,7 +323,7 @@ public class AccountActivity extends AppCompatActivity implements AccountView, V
                     .placeholder(R.drawable.empty_image)
                     .into(profPic);
         }
-        name.setText(profile.getName());
+        name.setText(profile.getFirstName());
     }
 
     @Override

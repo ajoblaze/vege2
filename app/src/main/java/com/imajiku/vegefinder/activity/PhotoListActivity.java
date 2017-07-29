@@ -23,6 +23,7 @@ import com.imajiku.vegefinder.model.model.PhotoListModel;
 import com.imajiku.vegefinder.model.presenter.PhotoListPresenter;
 import com.imajiku.vegefinder.model.view.PhotoListView;
 import com.imajiku.vegefinder.utility.CurrentUser;
+import com.imajiku.vegefinder.utility.Utility;
 
 import java.util.ArrayList;
 
@@ -45,7 +46,7 @@ public class PhotoListActivity extends AppCompatActivity implements ImageListAda
         PhotoListModel model = new PhotoListModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         initToolbar(getResources().getString(R.string.photos));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 

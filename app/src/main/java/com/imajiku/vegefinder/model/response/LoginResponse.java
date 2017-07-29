@@ -20,6 +20,8 @@ public class LoginResponse {
         private int userId;
         @SerializedName("email")
         private String email;
+        @SerializedName("message")
+        private String message;
 
         public String getStatus() {
             return status;
@@ -31,6 +33,10 @@ public class LoginResponse {
 
         public String getEmail() {
             return email;
+        }
+
+        public String getMessage() {
+            return message;
         }
     }
 }

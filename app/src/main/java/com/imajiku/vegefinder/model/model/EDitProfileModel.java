@@ -58,6 +58,7 @@ public class EditProfileModel {
     public void updateProfile(EditProfileRequest request) {
         ApiService svc = retrofit.create(ApiService.class);
         Call<StatusResponse> call = svc.updateProfile(request);
+        Log.e(TAG, String.valueOf(call.request().url()));
         call.enqueue(new Callback<StatusResponse>() {
             @Override
             public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {

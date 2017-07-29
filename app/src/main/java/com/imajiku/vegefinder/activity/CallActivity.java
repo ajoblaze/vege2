@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.adapter.ListAdapter;
 import com.imajiku.vegefinder.pojo.Resto;
+import com.imajiku.vegefinder.utility.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class CallActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         initToolbar("Call");
 
         TextView title = (TextView) findViewById(R.id.title);

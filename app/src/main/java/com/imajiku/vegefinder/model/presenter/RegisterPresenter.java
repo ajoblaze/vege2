@@ -27,12 +27,12 @@ public class RegisterPresenter {
         model.register(name, email, password);
     }
 
-    public void successRegister(int id) {
-        view.successRegister(id);
+    public void successRegister(int id, String message) {
+        view.successRegister(id, message);
     }
 
-    public void failedRegister() {
-        view.failedRegister();
+    public void failedRegister(String message) {
+        view.failedRegister(message);
     }
 }
 

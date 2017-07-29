@@ -51,14 +51,14 @@ public class LoginPresenter {
         return (Context) view;
     }
 
-    public void successLogin(int userId, String password) {
+    public void successLogin(int userId, String password, String s) {
         CurrentUser.setId(context, userId);
         CurrentUser.setPassword(context, password);
-        view.successLogin(userId);
+        view.successLogin(userId, s);
     }
 
-    public void failedLogin() {
-        view.failedLogin();
+    public void failedLogin(String s) {
+        view.failedLogin(s);
     }
 
     public void logout() {

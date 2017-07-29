@@ -20,6 +20,7 @@ import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.model.model.MessageModel;
 import com.imajiku.vegefinder.model.presenter.MessagePresenter;
 import com.imajiku.vegefinder.model.view.MessageView;
+import com.imajiku.vegefinder.utility.Utility;
 
 public class ContactUsActivity extends AppCompatActivity implements View.OnClickListener, MessageView {
 
@@ -39,7 +40,7 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
         MessageModel model = new MessageModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         initToolbar(getResources().getString(R.string.title_contact_us));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 

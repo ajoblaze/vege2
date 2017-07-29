@@ -20,6 +20,7 @@ import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.activity.RestoListActivity;
 import com.imajiku.vegefinder.adapter.PreviewListAdapter;
 import com.imajiku.vegefinder.pojo.RestoPreview;
+import com.imajiku.vegefinder.utility.Utility;
 
 import java.util.ArrayList;
 
@@ -39,7 +40,7 @@ public class PlacesFragment extends Fragment implements PreviewListAdapter.Previ
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_places, container, false);
 
-        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/VDS_New.ttf");
+        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), Utility.regFont);
         TextView seeMore = (TextView) v.findViewById(R.id.see_more);
         seeMore.setOnClickListener(this);
         seeMore.setTypeface(tf);
@@ -103,9 +104,11 @@ public class PlacesFragment extends Fragment implements PreviewListAdapter.Previ
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.see_more: {
-                Intent i = new Intent(getActivity(), RestoListActivity.class);
-                i.putExtra("page", RestoListActivity.PAGE_BOOKMARK);
-                startActivity(i);
+                if(mListener.checkLocationAndPermission()) {
+                    Intent i = new Intent(getActivity(), RestoListActivity.class);
+                    i.putExtra("page", RestoListActivity.PAGE_BOOKMARK);
+                    startActivity(i);
+                }
             }
             break;
         }
@@ -113,6 +116,8 @@ public class PlacesFragment extends Fragment implements PreviewListAdapter.Previ
 
     public interface PlacesListener {
         void onPlaces(int uri);
+
+        boolean checkLocationAndPermission();
     }
 
 //    public void populate(){

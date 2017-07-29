@@ -21,14 +21,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
+//import com.facebook.AccessToken;
+//import com.facebook.AccessTokenTracker;
+//import com.facebook.CallbackManager;
+//import com.facebook.FacebookCallback;
+//import com.facebook.FacebookException;
+//import com.facebook.FacebookSdk;
+//import com.facebook.login.LoginManager;
+//import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -42,8 +42,7 @@ import com.imajiku.vegefinder.model.model.LoginModel;
 import com.imajiku.vegefinder.model.presenter.LoginPresenter;
 import com.imajiku.vegefinder.model.view.LoginView;
 import com.imajiku.vegefinder.utility.CurrentUser;
-
-import java.util.Arrays;
+import com.imajiku.vegefinder.utility.Utility;
 
 public class LoginActivity extends AppCompatActivity implements
         View.OnClickListener,
@@ -60,17 +59,18 @@ public class LoginActivity extends AppCompatActivity implements
     private TextView register, forgot, skipText;
     private Button fbLogin, gplusLogin;
     private LoginPresenter presenter;
-    private AccessTokenTracker accessTokenTracker;
+//    private AccessTokenTracker accessTokenTracker;
     private GoogleApiClient googleApiClient;
     private String TAG = "exc";
-    private CallbackManager callbackManager;
+//    private CallbackManager callbackManager;
     private ProgressBar progressBar;
     private boolean isLoggingIn;
+    private int apiCallCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+//        FacebookSdk.sdkInitialize(getApplicationContext());
 
 //        try {
 //            PackageInfo info = getPackageManager().getPackageInfo(
@@ -93,14 +93,14 @@ public class LoginActivity extends AppCompatActivity implements
         LoginModel model = new LoginModel(presenter);
         presenter.setModel(model);
 
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        Typeface tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         if (presenter.getCurrentLogin() > -1 && CurrentUser.getId(this) > -1) {
-            successLogin(CurrentUser.getId(this));
+            successLogin(CurrentUser.getId(this), "");
         }
 
-        setupFbLogin();
+//        setupFbLogin();
         gplusLogin();
 
         username = (EditText) findViewById(R.id.username_field);
@@ -171,9 +171,9 @@ public class LoginActivity extends AppCompatActivity implements
         switch (v.getId()) {
             case R.id.login_button:
                 if(!isLoggingIn) {
-                    isLoggingIn = true;
                     if (!getString(username).equals("") && !getString(pass).equals("")) {
-                        progressBar.setVisibility(View.VISIBLE);
+                        isLoggingIn = true;
+                        addApiCounter(true);
                         presenter.login(NORMAL, getString(username), getString(pass));
                     }
                 }
@@ -191,15 +191,15 @@ public class LoginActivity extends AppCompatActivity implements
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                 break;
             case R.id.fb_button:
-                if (!checkIfFbLoggedIn()) {
-                    LoginManager.getInstance().logInWithReadPermissions(
-                            LoginActivity.this,
-                            Arrays.asList("user_photos", "email", "user_birthday", "public_profile")
-                    );
-                } else {
-                    LoginManager.getInstance().logOut();
-                    presenter.logout();
-                }
+//                if (!checkIfFbLoggedIn()) {
+//                    LoginManager.getInstance().logInWithReadPermissions(
+//                            LoginActivity.this,
+//                            Arrays.asList("user_photos", "email", "user_birthday", "public_profile")
+//                    );
+//                } else {
+//                    LoginManager.getInstance().logOut();
+//                    presenter.logout();
+//                }
                 break;
             case R.id.gplus_button:
                 signIn();
@@ -216,9 +216,27 @@ public class LoginActivity extends AppCompatActivity implements
         }
     }
 
+    public void addApiCounter(boolean isStart){
+        if(isStart){
+            apiCallCounter++;
+        }else{
+            if(apiCallCounter > 0) {
+                apiCallCounter--;
+            }
+        }
+        if(apiCallCounter == 1){
+            progressBar.setVisibility(View.VISIBLE);
+        }else if(apiCallCounter == 0){
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+    }
+
     @Override
-    public void successLogin(int userId) {
-        progressBar.setVisibility(View.INVISIBLE);
+    public void successLogin(int userId, String message) {
+        addApiCounter(false);
+        if(!message.isEmpty()) {
+            Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+        }
         isLoggingIn = false;
         CurrentUser.setId(this, userId);
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
@@ -229,12 +247,14 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void failedLogin() {
-        progressBar.setVisibility(View.INVISIBLE);
+    public void failedLogin(String message) {
+        addApiCounter(false);
+        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
         isLoggingIn = false;
         Toast.makeText(LoginActivity.this, "Your email has not been verified", Toast.LENGTH_SHORT).show();
     }
 
+    /*
     public boolean checkIfFbLoggedIn() {
         // check if user is logged in
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -289,6 +309,7 @@ public class LoginActivity extends AppCompatActivity implements
             }
         };
     }
+    */
 
     public void gplusLogin() {// Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -312,7 +333,7 @@ public class LoginActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+//        callbackManager.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {

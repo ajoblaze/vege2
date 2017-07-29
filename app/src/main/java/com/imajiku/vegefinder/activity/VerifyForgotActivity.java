@@ -18,6 +18,7 @@ import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.model.model.VerifyForgotModel;
 import com.imajiku.vegefinder.model.presenter.VerifyForgotPresenter;
 import com.imajiku.vegefinder.model.view.VerifyForgotView;
+import com.imajiku.vegefinder.utility.Utility;
 
 public class VerifyForgotActivity extends AppCompatActivity implements View.OnClickListener, VerifyForgotView {
 
@@ -38,7 +39,7 @@ public class VerifyForgotActivity extends AppCompatActivity implements View.OnCl
         VerifyForgotModel model = new VerifyForgotModel(presenter);
         presenter.setModel(model);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         title = (TextView) findViewById(R.id.vf_title);

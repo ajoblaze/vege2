@@ -66,8 +66,12 @@ public class RestoDetail{
     private String phone;
     @SerializedName("restaurant_type")
     private int restoType;
+    @SerializedName("name_restaurant_type")
+    private String restoTypeName;
     @SerializedName("type")
     private int type;
+    @SerializedName("name_type")
+    private String typeName;
     @SerializedName("facilities")
     private ArrayList<RestoFacility> restoFacility;
     @SerializedName("menu")
@@ -268,7 +272,14 @@ public class RestoDetail{
         return type;
     }
 
-//    public int getFacilities() {
+    public String getRestoTypeName() {
+        return restoTypeName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+    //    public int getFacilities() {
 //        return facilities;
 //    }
 

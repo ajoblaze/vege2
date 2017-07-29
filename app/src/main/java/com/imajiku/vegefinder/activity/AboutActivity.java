@@ -5,11 +5,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.imajiku.vegefinder.R;
+import com.imajiku.vegefinder.utility.Utility;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -23,13 +25,23 @@ public class AboutActivity extends AppCompatActivity {
         initToolbar("About");
 
         LinearLayout aboutLayout = (LinearLayout) findViewById(R.id.about_layout);
-        tf = Typeface.createFromAsset(getAssets(), "fonts/VDS_New.ttf");
+        tf = Typeface.createFromAsset(getAssets(), Utility.regFont);
 
         for(int ii = 0; ii < aboutLayout.getChildCount(); ii++){
             if(aboutLayout.getChildAt(ii) instanceof TextView){
                 ((TextView)aboutLayout.getChildAt(ii)).setTypeface(tf);
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void initToolbar(String title) {

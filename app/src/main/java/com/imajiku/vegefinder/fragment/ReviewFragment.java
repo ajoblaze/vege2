@@ -22,6 +22,7 @@ import com.imajiku.vegefinder.R;
 import com.imajiku.vegefinder.activity.ReviewListActivity;
 import com.imajiku.vegefinder.adapter.ReviewListAdapter;
 import com.imajiku.vegefinder.pojo.Review;
+import com.imajiku.vegefinder.utility.Utility;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -39,7 +40,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private ArrayList<Review> list;
     private String TAG="exc";
     private int restoId, userId;
-    private TextView emptyReview;
+    private TextView emptyReview, seeMore;
 
     public ReviewFragment() {
         // Required empty public constructor
@@ -50,8 +51,8 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_review, container, false);
 
-        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/VDS_New.ttf");
-        TextView seeMore = (TextView) v.findViewById(R.id.see_more);
+        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), Utility.regFont);
+        seeMore = (TextView) v.findViewById(R.id.see_more);
         seeMore.setOnClickListener(this);
         seeMore.setTypeface(tf);
         TextView label = (TextView) v.findViewById(R.id.review_label);
@@ -123,6 +124,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         this.restoId = restoId;
         if(list.isEmpty()){
             emptyReview.setVisibility(View.VISIBLE);
+            seeMore.setVisibility(View.GONE);
         }else {
             setData(list);
         }
